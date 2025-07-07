@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: right-bite
+  profiles:
+    active: dev
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+      enabled: true
+
+server:
+  port: 8080
+
