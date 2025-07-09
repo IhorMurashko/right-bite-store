@@ -1,3 +1,4 @@
+jwt.secret.key: f8G7YxZ2KmL9QaP5RsDcVb3WNeJh4Tu1
 spring:
   application:
     name: right-bite
