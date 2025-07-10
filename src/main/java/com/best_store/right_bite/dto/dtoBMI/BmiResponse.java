@@ -10,13 +10,13 @@ import java.util.List;
  * @param category - the BMI category based on the calculated BMI value
  * @param healthRisk - a string describing the health risk associated with the BMI category
  * @param recomendationsList - a list of health recommendations based on the BMI category given by AI
- * @param items - a list of products suggested based on the BMI category and AI
+ * @param items - a list of products suggested based on the BMI category
  */
 public record BmiResponse(
         double bmi,
         BMICategory category,
         String healthRisk,
         List<String> recomendationsList
-//        List<Item> items
+//        List<Product> items
 ) {
 }

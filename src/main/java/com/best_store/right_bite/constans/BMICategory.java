@@ -3,6 +3,10 @@ package com.best_store.right_bite.constans;
 
 import lombok.Getter;
 
+/**
+ * Enum representing different BMI categories.
+ * Each category corresponds to a specific range of BMI values.
+ */
 @Getter
 public enum BMICategory {
     UNDERWEIGHT("Underweight"),

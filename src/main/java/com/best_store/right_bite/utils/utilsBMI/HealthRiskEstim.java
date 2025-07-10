@@ -3,6 +3,9 @@ package com.best_store.right_bite.utils.utilsBMI;
 import com.best_store.right_bite.constans.BMICategory;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility class to estimate health risks based on BMI category.
+ */
 @UtilityClass
 public class HealthRiskEstim {
     public String calculateHealthRisk(BMICategory bmi) {

@@ -6,10 +6,12 @@ import com.best_store.right_bite.constans.BMICategory;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;
 import com.best_store.right_bite.dto.dtoBMI.BmiResponse;
 import com.best_store.right_bite.utils.utilsBMI.BmiCalculator;
+import com.best_store.right_bite.utils.utilsBMI.CaloriesByType;
 import com.best_store.right_bite.utils.utilsBMI.HealthRiskEstim;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -26,6 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class BMIServiceImpl implements BMIService {
+
+//    @Autowired
+//    private CatalogService catalogService;
 
     /**
      * The Groq is used to get recommendations based on the BMI category.
@@ -55,11 +60,12 @@ public class BMIServiceImpl implements BMIService {
         String healthRisk = HealthRiskEstim.calculateHealthRisk(bmiCategory);
         log.info("Health conditions: {}", healthRisk);
 
-//        int calories = CaloriesBMI.getCaloriesByBMI(bmiCategory);
+        int calories = CaloriesByType.getCaloriesByType(bmiCategory);
+//        List<Product> response = catalogService.getItemsByCalories(calories).stream()
+//                .limit(5)
+//                .toList();
 
-//        List<Item> recItems =
-
-        return new BmiResponse(bmi, bmiCategory, healthRisk, recommendations);
+        return new BmiResponse(bmi, bmiCategory, healthRisk, recommendations); // add List of products to response
     }
 
 

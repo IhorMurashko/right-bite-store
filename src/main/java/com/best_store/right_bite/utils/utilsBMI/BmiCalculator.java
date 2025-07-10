@@ -3,6 +3,9 @@ package com.best_store.right_bite.utils.utilsBMI;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility class to calculate Body Mass Index (BMI).
+ */
 @UtilityClass
 public class BmiCalculator {
 
