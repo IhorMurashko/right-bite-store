@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/1-create-tables.sql
+  - include:
+      file: db/changelog/1-1-change-create-structure.sql
