@@ -17,10 +17,6 @@ public class RedisBlackListTokenServiceImpl implements RedisBlackListTokenServic
     private final StringRedisTemplate redisTemplate;
     private final ClaimsProvider claimsProvider;
 
-    public RedisRevokeToken(StringRedisTemplate redisTemplate, ClaimsProvider claimsProvider) {
-        this.redisTemplate = redisTemplate;
-        this.claimsProvider = claimsProvider;
-    }
 
     @Override
     public void saveToken(@NonNull String... tokens) {
