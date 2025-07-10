@@ -179,6 +179,12 @@
             <version>${spring-boot-docker-compose.version}</version>
         </dependency>
 
+        <!--OPEN-AI-STARTER-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     </dependencies>
 

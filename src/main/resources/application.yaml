@@ -1,3 +1,8 @@
+#30 min
+accessTokenAvailableValidityPeriodInSec: 1800
+#30 days
+refreshTokenAvailableValidityPeriodInSec: 2592000
+
 spring:
   application:
     name: right-bite
@@ -6,7 +11,7 @@ spring:
   docker:
     compose:
       lifecycle-management: start_and_stop
-      enabled: true
+      enabled: false
   ai:
     openai:
       api-key: ${GROQ_API_KEY}

@@ -3,8 +3,11 @@ package com.best_store.right_bite.service.serviceBMI;
 import com.best_store.right_bite.BmiInterpreter.BmiInterpreterFactory;
 import com.best_store.right_bite.BmiInterpreter.InterpreterBMI;
 import com.best_store.right_bite.constans.BMICategory;
+import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;
 import com.best_store.right_bite.dto.dtoBMI.BmiResponse;
+import com.best_store.right_bite.model.catalog.Product;
+import com.best_store.right_bite.service.catalog.CatalogService;
 import com.best_store.right_bite.utils.utilsBMI.BmiCalculator;
 import com.best_store.right_bite.utils.utilsBMI.CaloriesByType;
 import com.best_store.right_bite.utils.utilsBMI.HealthRiskEstim;
@@ -29,8 +32,8 @@ import java.util.List;
 @Slf4j
 public class BMIServiceImpl implements BMIService {
 
-//    @Autowired
-//    private CatalogService catalogService;
+    @Autowired
+    private CatalogService catalogService;
 
     /**
      * The Groq is used to get recommendations based on the BMI category.
@@ -61,11 +64,12 @@ public class BMIServiceImpl implements BMIService {
         log.info("Health conditions: {}", healthRisk);
 
         int calories = CaloriesByType.getCaloriesByType(bmiCategory);
-//        List<Product> response = catalogService.getItemsByCalories(calories).stream()
-//                .limit(5)
-//                .toList();
+        List<ProductDTO> response = catalogService.getAllProduct().stream()
+                .filter(product -> product.getKcal() <= calories)
+                .limit(5)
+                .toList();
 
-        return new BmiResponse(bmi, bmiCategory, healthRisk, recommendations); // add List of products to response
+        return new BmiResponse(bmi, bmiCategory, healthRisk, recommendations,response);
     }
 
 
