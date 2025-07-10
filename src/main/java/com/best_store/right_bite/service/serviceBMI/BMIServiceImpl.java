@@ -84,7 +84,6 @@ public class BMIServiceImpl implements BMIService {
             case UNDERWEIGHT -> "Suggest 5 high-calorie, healthy foods for a person who is underweight.(Short response)";
             case NORMAL_WEIGHT -> "Suggest 5 balanced, healthy foods for someone with normal BMI.(Short response)";
             case OVERWEIGHT -> "Suggest 5 light and healthy foods for someone who is overweight.(Short response)";
-            case OBESE -> "Suggest 5 vegetables or low-calorie foods for someone who is obese.(Short response)";
         };
 
         String result = chatModel.call(prompt);

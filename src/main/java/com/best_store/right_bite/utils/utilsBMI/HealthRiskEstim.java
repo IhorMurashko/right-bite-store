@@ -13,10 +13,8 @@ public class HealthRiskEstim {
             return "You are underweight, which can lead to nutritional deficiencies and weakened immune function.";
         } else if (bmi == BMICategory.NORMAL_WEIGHT) {
             return "You have a normal weight, which is generally associated with lower health risks.";
-        } else if (bmi == BMICategory.OVERWEIGHT) {
-            return "You are overweight, which may increase your risk of heart disease, diabetes, and other health issues.";
         } else {
-            return "You are obese, which significantly increases your risk of serious health conditions such as heart disease, diabetes, and certain cancers.";
+            return "You are overweight, which may increase your risk of heart disease, diabetes, and other health issues.";
         }
     }
 }

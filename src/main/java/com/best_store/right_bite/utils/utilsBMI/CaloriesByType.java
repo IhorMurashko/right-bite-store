@@ -13,7 +13,6 @@ public class CaloriesByType {
             case UNDERWEIGHT -> 2700;
             case NORMAL_WEIGHT -> 2200;
             case OVERWEIGHT -> 1800;
-            case OBESE -> 1500;
         };
     }
 }

@@ -11,8 +11,7 @@ import lombok.Getter;
 public enum BMICategory {
     UNDERWEIGHT("Underweight"),
     NORMAL_WEIGHT("Normal"),
-    OVERWEIGHT("Overweight"),
-    OBESE("Obese");
+    OVERWEIGHT("Overweight");
 
 
     private final String category;
