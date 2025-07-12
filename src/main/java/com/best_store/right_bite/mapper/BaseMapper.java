@@ -1,11 +1,8 @@
 package com.best_store.right_bite.mapper;
 
-import org.mapstruct.Mapper;
-
 import java.util.List;
 import java.util.Set;
 
-@Mapper
 public interface BaseMapper<E, D> {
 
     E toEntity(D d);

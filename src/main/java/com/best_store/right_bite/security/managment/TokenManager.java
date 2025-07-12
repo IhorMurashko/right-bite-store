@@ -12,4 +12,6 @@ public interface TokenManager {
                          @NonNull TokenType tokenType, @NonNull Long lifePeriodTokenInSecond);
 
     TokenDto generateDefaultClaimsToken(@NonNull AbstractUser user);
+
+    Map<String, Object> generateDefaultUserClaims(@NonNull AbstractUser user);
 }

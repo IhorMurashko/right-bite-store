@@ -1,7 +1,6 @@
-#30 min
-accessTokenAvailableValidityPeriodInSec: 1800
-#30 days
-refreshTokenAvailableValidityPeriodInSec: 2592000
+tokens:
+  access-token-available-validity-period-in-sec: 900
+  refresh-token-available-validity-period-in-sec: 2592000
 
 spring:
   application:
@@ -12,7 +11,7 @@ spring:
     compose:
       lifecycle-management: start_and_stop
       enabled: true
-
 server:
   port: 8080
+  forward-headers-strategy: framework
 

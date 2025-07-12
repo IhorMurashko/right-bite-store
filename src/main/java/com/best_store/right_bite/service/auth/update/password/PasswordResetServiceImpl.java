@@ -1,4 +1,4 @@
-package com.best_store.right_bite.service.auth.remindPassword;
+package com.best_store.right_bite.service.auth.update.password;
 
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.user.UserNotFoundException;

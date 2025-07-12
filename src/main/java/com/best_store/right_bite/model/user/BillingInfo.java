@@ -1,6 +1,6 @@
 package com.best_store.right_bite.model.user;
 
-import com.best_store.right_bite.util.CardNumberEncryptor;
+import com.best_store.right_bite.util.user.CardNumberEncryptor;
 import jakarta.persistence.*;
 import lombok.*;
 

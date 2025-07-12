@@ -1,6 +1,9 @@
 package com.best_store.right_bite.service.auth.registration;
 
+import com.best_store.right_bite.constant.notification.NotificationChannel;
+import com.best_store.right_bite.constant.notification.NotificationType;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
+import com.best_store.right_bite.dto.notification.DefaultNotification;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.model.user.User;
@@ -50,5 +53,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         userCrudService.save(user);
         log.info("User {} saved successfully", email);
+
+        DefaultNotification congratulationLetter = new DefaultNotification(
+                NotificationType.REGISTRATION,
+                NotificationChannel.EMAIL,
+                email,
+                null,
+                null
+        );
+
+        notificationDispatcherService.send(congratulationLetter);
     }
 }

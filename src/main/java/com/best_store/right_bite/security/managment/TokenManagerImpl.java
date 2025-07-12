@@ -6,7 +6,7 @@ import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
-import com.best_store.right_bite.util.TokensPropertiesDispatcher;
+import com.best_store.right_bite.util.auth.TokensPropertiesDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -31,13 +31,9 @@ public class TokenManagerImpl implements TokenManager {
 
     @Override
     public TokenDto generateDefaultClaimsToken(@NonNull AbstractUser user) {
-        Map<String, Object> claims = Map.of(
-                TokenClaimsConstants.USERNAME_CLAIM, user.getEmail(),
-                //todo: utils role parser
-                TokenClaimsConstants.ROLES_CLAIM, user.getRoles().stream()
-                        .map(role -> role.getName().name())
-                        .collect(Collectors.toList())
-        );
+
+        Map<String, Object> claims = generateDefaultUserClaims(user);
+
         String accessToken = jwtProvider.generateToken(String.valueOf(user.getId()),
                 tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec(),
                 claims,
@@ -50,4 +46,15 @@ public class TokenManagerImpl implements TokenManager {
         );
         return new TokenDto(accessToken, refreshToken);
     }
+
+    @Override
+    public Map<String, Object> generateDefaultUserClaims(@NonNull AbstractUser user) {
+        return Map.of(
+                TokenClaimsConstants.USERNAME_CLAIM, user.getEmail(),
+                TokenClaimsConstants.ROLES_CLAIM, user.getRoles().stream()
+                        .map(role -> role.getName().name())
+                        .collect(Collectors.toList())
+        );
+    }
+
 }
