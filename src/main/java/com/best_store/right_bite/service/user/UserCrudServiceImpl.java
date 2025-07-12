@@ -5,7 +5,7 @@ import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
-import com.best_store.right_bite.util.UserFieldAdapter;
+import com.best_store.right_bite.util.user.UserFieldAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -75,5 +75,13 @@ public class UserCrudServiceImpl implements UserCrudService {
     public boolean isUserExistById(@NonNull long id) {
         log.debug("Check if user with id: {} exists", id);
         return userRepository.existsById(id);
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED,
+            propagation = Propagation.REQUIRED)
+    @Override
+    public void resetPasswordByEmail(@NonNull String email, @NonNull String newEncodedPassword) {
+        userRepository.updateUserPassword(UserFieldAdapter.toLower(email), newEncodedPassword);
+        log.info("Reset user by email: {}", email);
     }
 }

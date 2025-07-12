@@ -19,4 +19,6 @@ public interface UserCrudService {
     boolean isEmailExist(@NonNull String email);
 
     boolean isUserExistById(@NonNull long id);
+
+    void resetPasswordByEmail(@NonNull String email, @NonNull String newEncodedPassword);
 }
