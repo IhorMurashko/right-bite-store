@@ -2,6 +2,8 @@ package com.best_store.right_bite.exeptionHandler;
 
 import com.best_store.right_bite.dto.exception.ErrorResponseDto;
 import com.best_store.right_bite.exception.auth.CredentialsException;
+import com.best_store.right_bite.exception.auth.InvalidTokenException;
+import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
@@ -34,6 +36,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CredentialsException.class)
     public ResponseEntity<ErrorResponseDto> handleCredentialsException(CredentialsException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(RefreshTokenAccessException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAccountIsNotAvailableException(RefreshTokenAccessException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAccountIsNotAvailableException(InvalidTokenException ex, HttpServletRequest request) {
         return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
     }
 

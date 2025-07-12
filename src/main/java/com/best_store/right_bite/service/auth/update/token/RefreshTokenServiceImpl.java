@@ -52,7 +52,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             log.debug("refresh token type: {}", tokenType);
             if (!Objects.equals(tokenType, TokenType.REFRESH.name())) {
                 log.error("Invalid refresh token for");
-                //todo: exception handler
                 throw new RefreshTokenAccessException(
                         String.format(
                                 ExceptionMessageProvider.TOKEN_ACCESS_EXCEPTION, tokenType
@@ -93,7 +92,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 return new TokenDto(refreshToken, newAccessToken);
             }
         } else {
-            //todo: exception handler
             throw new InvalidTokenException(
                     String.format(
                             ExceptionMessageProvider.INVALID_TOKEN
