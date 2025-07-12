@@ -29,7 +29,8 @@ spring:
       client:
         registration:
           google:
-
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -39,8 +40,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: i.murashko0911@gmail.com
-    password: bngf mhxr xxvp sisb
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:

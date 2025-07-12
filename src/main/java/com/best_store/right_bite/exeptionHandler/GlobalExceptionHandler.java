@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CredentialsException.class)
     public ResponseEntity<ErrorResponseDto> handleCredentialsException(CredentialsException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(UserAccountIsNotAvailableException.class)

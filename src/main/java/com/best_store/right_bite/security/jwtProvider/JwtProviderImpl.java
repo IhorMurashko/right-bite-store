@@ -1,10 +1,12 @@
 package com.best_store.right_bite.security.jwtProvider;
 
+import com.best_store.right_bite.security.constant.HeaderConstants;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.util.DateConstructorUtil;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -68,5 +70,29 @@ public class JwtProviderImpl implements JwtProvider {
             log.warn("Invalid token: {}", ex.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Extracts the JWT token from the Authorization header of the request.
+     * <p>
+     * The method expects the header to begin with the string "Bearer ".
+     * If the header is absent or does not follow this format, a warning is logged and {@code null} is returned.
+     *
+     * @param request the HttpServletRequest from which the token is to be extracted
+     * @return the JWT token string if present and well-formed; {@code null} otherwise
+     */
+    @Override
+    public String extractTokenFromHeader(@NonNull HttpServletRequest request) {
+        final String requestToken = request.getHeader(HeaderConstants.HEADER_AUTHENTICATION);
+
+        if (requestToken == null) {
+            log.warn("There is no Authorization header");
+            return null;
+        }
+        if (!requestToken.startsWith(HeaderConstants.BEARER_PREFIX)) {
+            log.warn("Token does not begin with Bearer");
+            return null;
+        }
+        return requestToken.substring(7);
     }
 }

@@ -49,7 +49,7 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
         try {
             if (request.getHeader(HeaderConstants.HEADER_AUTHENTICATION) != null) {
 
-                final String token = extractToken(request);
+                final String token = jwtProvider.extractTokenFromHeader(request);
 
                 if (token != null && jwtProvider.validateToken(token)) {
                     if (revokedTokenService.isTokenRevoked(token)) {
@@ -104,28 +104,5 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
                     String.format(SecurityExceptionMessageProvider.TOKEN_RESPONSE_TEMPLATE, ex.getMessage())
             );
         }
-    }
-
-    /**
-     * Extracts the JWT token from the Authorization header of the request.
-     * <p>
-     * The method expects the header to begin with the string "Bearer ".
-     * If the header is absent or does not follow this format, a warning is logged and {@code null} is returned.
-     *
-     * @param request the HttpServletRequest from which the token is to be extracted
-     * @return the JWT token string if present and well-formed; {@code null} otherwise
-     */
-    private String extractToken(HttpServletRequest request) {
-        final String requestToken = request.getHeader(HeaderConstants.HEADER_AUTHENTICATION);
-
-        if (requestToken == null) {
-            log.warn("There is no Authorization header");
-            return null;
-        }
-        if (!requestToken.startsWith(HeaderConstants.BEARER_PREFIX)) {
-            log.warn("Token does not begin with Bearer");
-            return null;
-        }
-        return requestToken.substring(7);
     }
 }

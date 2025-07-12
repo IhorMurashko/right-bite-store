@@ -1,6 +1,8 @@
 package com.best_store.right_bite.security.jwtProvider;
 
 import com.best_store.right_bite.security.constant.TokenType;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.lang.NonNull;
 
 import java.util.Map;
 
@@ -32,4 +34,7 @@ public interface JwtProvider {
      * @return true if token is valid; false otherwise
      */
     boolean validateToken(String token);
+
+     String extractTokenFromHeader(@NonNull HttpServletRequest request);
+
 }

@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,31 +47,31 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
 
         if (jwtProvider.validateToken(refreshToken)) {
-            TokenType tokenType = claimsProvider.extractClaimFromToken(refreshToken, claims ->
-                    claims.get(TokenClaimsConstants.TOKEN_TYPE_CLAIM, TokenType.class));
+            String tokenType = claimsProvider.extractClaimFromToken(refreshToken, claims ->
+                    claims.get(TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class));
             log.debug("refresh token type: {}", tokenType);
-            if (tokenType != TokenType.REFRESH) {
+            if (!Objects.equals(tokenType, TokenType.REFRESH.name())) {
                 log.error("Invalid refresh token for");
                 //todo: exception handler
                 throw new RefreshTokenAccessException(
                         String.format(
-                                ExceptionMessageProvider.TOKEN_ACCESS_EXCEPTION, tokenType.name()
+                                ExceptionMessageProvider.TOKEN_ACCESS_EXCEPTION, tokenType
                         )
                 );
             }
-
-            String userId = claimsProvider.extractClaimFromToken(refreshToken, claims ->
-                    claims.get(TokenClaimsConstants.USER_ID_CLAIM, String.class));
-            log.debug("refresh token user id: {}", userId);
-
-            User user = userCrudService.findById(Long.valueOf(userId));
-            log.info("user with id {} was found", userId);
-
             Claims claims = Jwts.parser()
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(refreshToken)
                     .getPayload();
+
+//            String userId = claimsProvider.extractClaimFromToken(tokenType, Claims::getSubject);
+            String userId = claims.getSubject();
+            log.debug("refresh token user id: {}", userId);
+
+            User user = userCrudService.findById(Long.valueOf(userId));
+            log.info("user with id {} was found", userId);
+
 
             Date refreshTokenExpiration = claims.getExpiration();
             Instant expirationInstant = refreshTokenExpiration.toInstant();
