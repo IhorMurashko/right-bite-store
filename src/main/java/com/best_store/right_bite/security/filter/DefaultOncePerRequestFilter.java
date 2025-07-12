@@ -2,10 +2,14 @@ package com.best_store.right_bite.security.filter;
 
 import com.best_store.right_bite.security.blackListTokenCache.RevokeTokenService;
 import com.best_store.right_bite.security.claims.ClaimsProvider;
+import com.best_store.right_bite.security.constant.HeaderConstants;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
+import com.best_store.right_bite.security.exception.InvalidTokenTypeException;
 import com.best_store.right_bite.security.exception.SecurityExceptionMessageProvider;
+import com.best_store.right_bite.security.exception.TokenRevokedException;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
+import com.best_store.right_bite.security.principal.JwtPrincipal;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,51 +47,62 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            final String token = extractToken(request);
+            if (request.getHeader(HeaderConstants.HEADER_AUTHENTICATION) != null) {
 
-            if (token != null && jwtProvider.validateToken(token)) {
-                if (revokedTokenService.isTokenRevoked(token)) {
-                    log.error("Token has benn revoked {}", token);
-                    throw new JwtException(SecurityExceptionMessageProvider
-                            .TOKEN_WAS_REVOKED);
+                final String token = extractToken(request);
+
+                if (token != null && jwtProvider.validateToken(token)) {
+                    if (revokedTokenService.isTokenRevoked(token)) {
+                        log.error("Token has benn revoked {}", token);
+                        throw new TokenRevokedException(SecurityExceptionMessageProvider
+                                .TOKEN_WAS_REVOKED);
+                    }
+                    String tokenType = claimsProvider.extractClaimFromToken(token,
+                            claims -> claims.get(
+                                    TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class)
+                    );
+
+                    if (tokenType != null && tokenType.equalsIgnoreCase(TokenType.REFRESH.name())) {
+                        log.debug("Request with refreshed token {}", token);
+                        throw new InvalidTokenTypeException(String.format(
+                                SecurityExceptionMessageProvider.INVALID_TOKEN_TYPE, tokenType
+                        ));
+                    }
+
+                    Long id = claimsProvider.extractClaimFromToken(token,
+                            claims -> claims.get(
+                                    TokenClaimsConstants.USER_ID_CLAIM, Long.class));
+                    String email = claimsProvider.extractClaimFromToken(token,
+                            claims -> claims.get(
+                                    TokenClaimsConstants.USERNAME_CLAIM, String.class));
+
+                    List<?> rawRoles = claimsProvider.extractClaimFromToken(token,
+                            claims -> claims.get("roles", List.class));
+
+                    List<String> roles = rawRoles.stream()
+                            .filter(String.class::isInstance)
+                            .map(String.class::cast)
+                            .toList();
+
+                    Set<GrantedAuthority> authorities = roles.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toSet());
+                    log.debug("Authorities: {}", authorities);
+
+                    Authentication auth = new UsernamePasswordAuthenticationToken(new JwtPrincipal(id, email),
+                            null, authorities);
+                    log.info("Set authentication in context holder for {}", id);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
                 }
-                String tokenType = claimsProvider.extractClaimFromToken(token,
-                        claims -> claims.get(
-                                TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class)
-                );
-
-                if (tokenType != null && tokenType.equalsIgnoreCase(TokenType.REFRESH.name())) {
-                    log.debug("Request with refreshed token {}", token);
-                    throw new JwtException(String.format(
-                            SecurityExceptionMessageProvider.INVALID_TOKEN_TYPE, tokenType
-                    ));
-                }
-
-                Long id = claimsProvider.extractClaimFromToken(token,
-                        claims -> claims.get(
-                                TokenClaimsConstants.USER_ID_CLAIM, Long.class));
-
-                List<String> roles = claimsProvider.extractClaimFromToken(token,
-                        claims -> claims.get(TokenClaimsConstants.ROLES_CLAIM, List.class));
-
-                Set<GrantedAuthority> authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toSet());
-                log.debug("Authorities: {}", authorities);
-
-                Authentication auth = new UsernamePasswordAuthenticationToken(id, null, authorities);
-                log.info("Set authentication in context holder for {}", id);
-                SecurityContextHolder.getContext().setAuthentication(auth);
-
             }
-        } catch (JwtException ex) {
-            //todo: constant variables
-            log.warn("JWT exception: {}", ex.getMessage());
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"" + ex.getMessage() + "\"}");
-        } finally {
             filterChain.doFilter(request, response);
+        } catch (JwtException ex) {
+            log.warn("JWT exception on [{}]: {}", request.getRequestURI(), ex.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(
+                    String.format(SecurityExceptionMessageProvider.TOKEN_RESPONSE_TEMPLATE, ex.getMessage())
+            );
         }
     }
 
@@ -100,13 +116,13 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
      * @return the JWT token string if present and well-formed; {@code null} otherwise
      */
     private String extractToken(HttpServletRequest request) {
-        final String requestToken = request.getHeader("Authorization");
+        final String requestToken = request.getHeader(HeaderConstants.HEADER_AUTHENTICATION);
 
         if (requestToken == null) {
             log.warn("There is no Authorization header");
             return null;
         }
-        if (!requestToken.startsWith("Bearer ")) {
+        if (!requestToken.startsWith(HeaderConstants.BEARER_PREFIX)) {
             log.warn("Token does not begin with Bearer");
             return null;
         }

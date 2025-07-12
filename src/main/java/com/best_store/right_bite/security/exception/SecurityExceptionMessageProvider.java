@@ -14,4 +14,6 @@ public class SecurityExceptionMessageProvider {
             = "Error: Access denied";
     public final String UNAUTHORIZED_EXCEPTION_MESSAGE
             = "Error: Unauthorized";
+    public static final String TOKEN_RESPONSE_TEMPLATE = "{\"error\": \"%s\"}";
+
 }

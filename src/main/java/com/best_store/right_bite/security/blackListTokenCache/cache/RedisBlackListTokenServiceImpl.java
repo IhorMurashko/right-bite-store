@@ -12,15 +12,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RedisBlackListTokenServiceImpl implements RedisBlackListTokenService {
+public class RedisBlackListTokenServiceImpl implements BlackListTokenService {
 
     private final StringRedisTemplate redisTemplate;
     private final ClaimsProvider claimsProvider;
-
-    public RedisRevokeToken(StringRedisTemplate redisTemplate, ClaimsProvider claimsProvider) {
-        this.redisTemplate = redisTemplate;
-        this.claimsProvider = claimsProvider;
-    }
 
     @Override
     public void saveToken(@NonNull String... tokens) {

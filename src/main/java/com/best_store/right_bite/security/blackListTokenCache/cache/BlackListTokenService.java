@@ -10,7 +10,7 @@ import org.springframework.lang.NonNull;
  * Implementations must ensure TTL-based expiry to avoid permanent storage.
  * </p>
  */
-public interface RedisBlackListTokenService {
+public interface BlackListTokenService {
     /**
      * Saves one or more tokens to the revoked store.
      *

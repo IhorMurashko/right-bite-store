@@ -2,12 +2,11 @@ package com.best_store.right_bite.security.jwtProvider;
 
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
-import com.best_store.right_bite.util.DateConstructorUtil;
+import com.best_store.right_bite.security.util.DateConstructorUtil;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
