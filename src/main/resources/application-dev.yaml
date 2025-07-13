@@ -29,8 +29,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
@@ -38,8 +38,8 @@ spring:
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     properties:
@@ -51,12 +51,8 @@ spring:
 
 logging:
   level:
-    root: DEBUG # всё приложение в режиме DEBUG
-    org.springframework: INFO # можно оставить INFO, иначе много шума
-    org.springframework.boot.autoconfigure: INFO # покажет, какие автоконфигурации включаются
-    org.springframework.data.redis: DEBUG # Redis-соединения
-    io.lettuce.core: WARN # понижаем шум от клиента Redis (или DEBUG, если нужно)
-    com.bestStore: DEBUG # твой код
-    sun: info
-    javax.management: info
-    com.zaxxer: info
+    root: INFO               # Основной уровень логирования
+    com.bestStore: DEBUG     # Включаем DEBUG для своего кода
+    org.springframework.web: WARN
+    org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)
