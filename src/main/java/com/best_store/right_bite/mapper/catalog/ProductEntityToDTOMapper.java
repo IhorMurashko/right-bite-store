@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
+@Component("ProductEntityToDTO")
 @RequiredArgsConstructor
 public class ProductEntityToDTOMapper implements BaseMapper<Product, ProductDTO> {
 
