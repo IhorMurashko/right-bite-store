@@ -4,7 +4,7 @@ import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.model.catalog.Category;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("CategoryEntityToDTO")
 public class CategoryEntityToDTOMapper implements BaseMapper<Category, CategoryDTO>{
     @Override
     public CategoryDTO map(Category obj) {
