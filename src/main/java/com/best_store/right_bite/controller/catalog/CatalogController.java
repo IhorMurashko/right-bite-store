@@ -6,9 +6,7 @@ import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 
-import com.best_store.right_bite.service.catalog.BrandService;
-import com.best_store.right_bite.service.catalog.CatalogService;
-import com.best_store.right_bite.service.catalog.CategoryService;
+import com.best_store.right_bite.service.catalog.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;

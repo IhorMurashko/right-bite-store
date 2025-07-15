@@ -1,21 +1,33 @@
 package com.best_store.right_bite.mapper.catalog;
 
 
-import com.best_store.right_bite.dto.catalog.ProductDTO;
-import com.best_store.right_bite.model.catalog.Product;
+import com.best_store.right_bite.dto.catalog.*;
+import com.best_store.right_bite.model.catalog.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
-@Component
+@Component("ProductEntityToDTO")
 @RequiredArgsConstructor
 public class ProductEntityToDTOMapper implements BaseMapper<Product, ProductDTO> {
-    private final BrandEntityToDTOMapper brandEntityToDTOMapper;
-    private final ProductSalesEntityToDTOMapper productSalesEntityToDTOMapper;
-    private final ImageEntityToDTOMapper imageEntityToDTOMapper;
-    private final CategoryEntityToDTOMapper categoryEntityToDTOMapper;
-    private final ProducerEntityToDTOMapper producerEntityToDTOMapper;
+
+    @Qualifier("BrandEntityToDTO")
+    private final BaseMapper<Brand, BrandDTO> brandEntityToDTOMapper;
+
+    @Qualifier("ProductSalesEntityToDTO")
+    private final BaseMapper<ProductSales, ProductSalesDTO> productSalesEntityToDTOMapper;
+
+    @Qualifier("ImageEntityToDTO")
+    private final BaseMapper<Image, ImageDTO> imageEntityToDTOMapper;
+
+    @Qualifier("CategoryEntityToDTO")
+    private final BaseMapper<Category, CategoryDTO> categoryEntityToDTOMapper;
+
+    @Qualifier("ProducerEntityToDTO")
+    private final BaseMapper<Producer, ProducerDTO> producerEntityToDTOMapper;
+
 
     @Override
     public ProductDTO map(Product obj) {

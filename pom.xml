@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,7 +26,15 @@
             </roles>
             <url>https://www.linkedin.com/in/ihor-murashko/</url>
         </developer>
-        <developer/>
+
+        <developer>
+            <name>Evgeny Loshonkov</name>
+            <email>loshonkov@inbox.ru</email>
+            <roles>
+                <role>dev</role>
+            </roles>
+            <url>https://www.linkedin.com/in/evgeny-loshonkov-76a58a274/</url>
+        </developer>
     </developers>
 
     <properties>
@@ -36,10 +43,12 @@
 
         <!--    DATABASE   -->
         <flyway.version>10.20.1</flyway.version>
-        <liquibase.version>4.29.0</liquibase.version>
         <h2.version>2.3.232</h2.version>
-        <postgresql.version>42.7.5</postgresql.version>
+        <postgresql.version>42.7.7</postgresql.version>
 
+        <!--    CACHE   -->
+        <spring-boot-starter-data-redis.redis>3.4.5</spring-boot-starter-data-redis.redis>
+        <caffeine.version>3.2.0</caffeine.version>
 
         <!--    DOCS   -->
         <springdoc-openapi-starter-webmvc-ui.version>2.8.6</springdoc-openapi-starter-webmvc-ui.version>
@@ -54,14 +63,13 @@
         <mapstruct-processor.version>1.6.3</mapstruct-processor.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
-<!--        &lt;!&ndash;    SECURITY   &ndash;&gt;-->
-<!--        <jjwt.version>0.12.6</jjwt.version>-->
+        <!--    SECURITY   -->
+        <jjwt.version>0.12.6</jjwt.version>
 
     </properties>
 
 
     <profiles>
-
         <profile>
             <id>dev</id>
             <activation>
@@ -69,45 +77,43 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>${h2.version}</version>
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
-
         <profile>
             <id>prod</id>
             <dependencies>
                 <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-core</artifactId>
+                    <version>${flyway.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-database-postgresql</artifactId>
+                    <version>${flyway.version}</version>
+                </dependency>
+                <dependency>
                     <groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
+                    <version>${postgresql.version}</version>
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
-
     </profiles>
 
     <dependencies>
 
         <!--    WEB   -->
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
-
-        <dependency>
             <artifactId>spring-boot-starter-web</artifactId>
             <groupId>org.springframework.boot</groupId>
         </dependency>
-
-        <dependency>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <groupId>org.springframework.boot</groupId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -163,6 +169,20 @@
         </dependency>
 
 
+        <!-- CACHE -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
+
         <!-- DOCS -->
         <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
         <dependency>
@@ -179,11 +199,32 @@
             <version>${spring-boot-docker-compose.version}</version>
         </dependency>
 
-        <!--OPEN-AI-STARTER-->
+        <!--    SECURITY -->
         <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-openai</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-client -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
 
     </dependencies>
@@ -216,7 +257,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -229,8 +269,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 
