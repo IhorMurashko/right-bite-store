@@ -16,6 +16,7 @@ import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint
  * @author Ihor Murashko
  */
 
+//TODO пытаться разрешить конфликты, что бы всё заработало.
 @Schema(name = "credentials for registration using email and password")
 public record RegistrationCredentialsDto(
         @Schema(description = "user's email",
