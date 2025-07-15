@@ -6,9 +6,7 @@ import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 
-import com.best_store.right_bite.service.catalog.BrandServiceImpl;
-import com.best_store.right_bite.service.catalog.CatalogServiceImpl;
-import com.best_store.right_bite.service.catalog.CategoryServiceImpl;
+import com.best_store.right_bite.service.catalog.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +18,9 @@ import java.util.List;
 @RequestMapping("/api/v1/catalog")
 public class CatalogController {
 
-    private final CatalogServiceImpl catalogService;
-    private final CategoryServiceImpl categoryService;
-    private final BrandServiceImpl brandService;
+    private final CatalogService catalogService;
+    private final CategoryService categoryService;
+    private final BrandService brandService;
 
     @GetMapping()
     public List<ProductDTO> getAllProduct()
