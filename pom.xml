@@ -26,7 +26,15 @@
             </roles>
             <url>https://www.linkedin.com/in/ihor-murashko/</url>
         </developer>
-        <developer/>
+
+        <developer>
+            <name>Evgeny Loshonkov</name>
+            <email>loshonkov@inbox.ru</email>
+            <roles>
+                <role>dev</role>
+            </roles>
+            <url>https://www.linkedin.com/in/evgeny-loshonkov-76a58a274/</url>
+        </developer>
     </developers>
 
     <properties>
@@ -160,6 +168,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <!-- CACHE -->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
         <dependency>
@@ -217,7 +226,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-
+        <!--OPEN-AI-STARTER-->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
