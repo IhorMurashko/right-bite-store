@@ -11,6 +11,8 @@ spring:
     username: h2
     password: h2
     url: jdbc:h2:mem:h2db;
+  liquibase:
+    change-log: classpath:/db/changelog/changelog-master.yaml
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -56,3 +58,4 @@ logging:
     org.springframework.web: WARN
     org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)
+
