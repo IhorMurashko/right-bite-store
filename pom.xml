@@ -26,7 +26,15 @@
             </roles>
             <url>https://www.linkedin.com/in/ihor-murashko/</url>
         </developer>
-        <developer/>
+
+        <developer>
+            <name>Evgeny Loshonkov</name>
+            <email>loshonkov@inbox.ru</email>
+            <roles>
+                <role>dev</role>
+            </roles>
+            <url>https://www.linkedin.com/in/evgeny-loshonkov-76a58a274/</url>
+        </developer>
     </developers>
 
     <properties>
@@ -159,6 +167,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 
         <!-- CACHE -->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
