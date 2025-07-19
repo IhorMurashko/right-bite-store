@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.catalog;
 
 import com.best_store.right_bite.dto.catalog.BrandDTO;
-import com.best_store.right_bite.mapper.catalog.BaseMapper;
+import com.best_store.right_bite.mapper.catalog.BrandMapper;
 import com.best_store.right_bite.model.catalog.Brand;
 import com.best_store.right_bite.repository.catalog.BrandRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,9 @@ public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
 
-    @Qualifier("BrandEntityToDTO")
-    private final BaseMapper<Brand, BrandDTO> brandEntityToDTOMapper;
+    private final BrandMapper brandMapper;
 
     public List<BrandDTO> getAllBrands() {
-        return  brandRepository.findAll().stream().map(brandEntityToDTOMapper::map).collect(Collectors.toList());
+        return  brandRepository.findAll().stream().map(brandMapper::toDTO).collect(Collectors.toList());
     }
-
-
-
 }

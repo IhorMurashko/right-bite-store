@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -15,15 +16,16 @@ import java.util.Set;
 public class ProductDTO {
     Long id;
     String productName;
-    Double price;
+    BigDecimal price;
     String description;
     Integer kcal;
-    BrandDTO brand;
     Integer quantityInStock;
     Double rating;
     Integer ratingCount;
 
+
     List<ProductSalesDTO> productSales;
+    BrandDTO brand;
     List<ImageDTO> images;
     Set<CategoryDTO> categories;
     ProducerDTO producer;
