@@ -14,4 +14,3 @@ spring:
       enabled: false #i've turned up it to false to resolve all problem with docker
 server:
   port: 8080
-
