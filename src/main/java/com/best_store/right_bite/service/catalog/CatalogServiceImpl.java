@@ -57,8 +57,6 @@ public class CatalogServiceImpl implements CatalogService {
                 .collect(Collectors.toList());
     }
 
-
-
     private void applySorting(List<ProductDTO> products, ProductFilterRequest f) {
         String sortBy = f.getSortBy();
         Comparator<ProductDTO> comparator = null;

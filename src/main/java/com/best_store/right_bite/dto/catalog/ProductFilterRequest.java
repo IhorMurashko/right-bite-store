@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 @Schema(description = "The object of product filtering")
 public class ProductFilterRequest {
 
-
     @Schema(description = "category of product", example = "Хлебобулочные изделия")
     private String categoryName;
 
@@ -30,7 +29,7 @@ public class ProductFilterRequest {
     @Schema(description = "sort by parameters", example = "priceAsc, priceDesc, rating, popular")
     private String sortBy; // "priceAsc", "priceDesc", "rating", "popular"
 
-    @Schema(description = "Number page", example = "2")
+    @Schema(description = "Number page", example = "0")
     private int page = 0;
 
     @Schema(description = "count of items in page", example = "10")
