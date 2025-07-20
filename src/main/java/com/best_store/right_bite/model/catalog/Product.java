@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -17,13 +18,15 @@ public class Product extends Base {
 
 
     String productName;
-    Double price;
+    BigDecimal price;
     String description;
     Integer kcal;
     Integer quantityInStock;
 
     Double rating;
     Integer ratingCount;
+
+
 
     @OneToMany(mappedBy = "product")
     List<ProductSales> productSales;

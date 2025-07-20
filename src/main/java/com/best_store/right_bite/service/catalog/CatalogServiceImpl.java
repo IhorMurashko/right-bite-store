@@ -5,7 +5,7 @@ package com.best_store.right_bite.service.catalog;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
-import com.best_store.right_bite.mapper.catalog.BaseMapper;
+import com.best_store.right_bite.mapper.catalog.ProductMapper;
 import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,11 @@ public class CatalogServiceImpl implements CatalogService {
 
     private final ProductRepository catalogRepository;
 
-    @Qualifier("ProductEntityToDTO")
-    private final BaseMapper<Product, ProductDTO> productEntityToDTOMapper;
+    private final ProductMapper productEntityToDTOMapper;
 
     public List<ProductDTO> getAllProduct() {
-        return catalogRepository.findAll().stream().map(productEntityToDTOMapper::map).toList();
+        return catalogRepository.findAll().stream().map(productEntityToDTOMapper::toDTO).toList();
     }
-
 
 
     public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest)
@@ -47,16 +45,16 @@ public class CatalogServiceImpl implements CatalogService {
 
     private List<ProductDTO> applyFilters(List<ProductDTO> products, ProductFilterRequest f) {
         return products.stream()
-                .filter(p -> f.getAZ() == null || p.getProductName().charAt(0) == f.getAZ())
+                .filter(p -> f.getAZ() == null ||
+                        Character.toLowerCase(p.getProductName().trim().charAt(0)) == Character.toLowerCase(f.getAZ())
+                )
                 .filter(p -> f.getCategoryName() == null || p.getCategories().stream()
-                        .anyMatch(c -> c.getCategory_name().equalsIgnoreCase(f.getCategoryName())))
+                        .anyMatch(c -> c.getCategoryName().equalsIgnoreCase(f.getCategoryName())))
                 .filter(p -> f.getBrand() == null || p.getBrand().getBrandName().equalsIgnoreCase(f.getBrand()))
-                .filter(p -> f.getPriceFrom() == null || p.getPrice() >= f.getPriceFrom())
-                .filter(p -> f.getPriceTo() == null || p.getPrice() <= f.getPriceTo())
+                .filter(p -> f.getPriceFrom() == null || p.getPrice().compareTo(f.getPriceFrom()) >= 0)
+                .filter(p -> f.getPriceTo() == null || p.getPrice().compareTo(f.getPriceTo()) <= 0)
                 .collect(Collectors.toList());
     }
-
-
 
     private void applySorting(List<ProductDTO> products, ProductFilterRequest f) {
         String sortBy = f.getSortBy();
