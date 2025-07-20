@@ -10,9 +10,9 @@ import lombok.experimental.UtilityClass;
 public class CaloriesByType {
     public int getCaloriesByType(BMICategory bmiCategory) {
         return switch (bmiCategory) {
-            case UNDERWEIGHT -> 2700;
-            case NORMAL_WEIGHT -> 2200;
-            case OVERWEIGHT -> 1800;
+            case UNDERWEIGHT -> 270;
+            case NORMAL_WEIGHT -> 220;
+            case OVERWEIGHT -> 180;
         };
     }
 }
