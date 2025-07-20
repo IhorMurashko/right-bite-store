@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(
                 title = "Right Bite Store API",
                 version = "0.0.1-SNAPSHOT",
-                description = "Backend API for Right Bite Online Store. Built using Spring Boot & Microservices.",
+                description = "Backend API for Right Bite Online Store. Built using Spring Boot.",
                 contact = @Contact(
                         name = "Ihor Murashko",
                         email = "i.murashko0911@gmail.com"
@@ -21,8 +21,7 @@ import org.springframework.context.annotation.Configuration;
         ),
         servers = {
                 @Server(url = "http://localhost:8080", description = "Local Dev Server"),
-                //todo: add prod server
-//                @Server(url = "https://api.rightbite.store", description = "Production Server")
+                @Server(url = "https://right-bite-store.onrender.com", description = "Test Server")
         }
 )
 @SecurityScheme(
