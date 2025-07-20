@@ -1,5 +1,6 @@
 package com.best_store.right_bite.dto.catalog;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,7 +10,8 @@ import java.math.BigDecimal;
 @Schema(description = "The object of product filtering")
 public class ProductFilterRequest {
 
-    //TODO fix problem with category name
+
+    @Schema(description = "category of product", example = "Хлебобулочные изделия")
     private String categoryName;
 
     @Schema(description = "brand of product", example = "Biona")
@@ -21,7 +23,8 @@ public class ProductFilterRequest {
     @Schema(description = "range price to ", example = "25")
     private BigDecimal priceTo;
 
-    @Schema(description = "sort by first letter", example = "a")
+    @Schema(description = "sort by first letter", example = "х")
+    @JsonProperty("aZ")
     private Character aZ;
 
     @Schema(description = "sort by parameters", example = "priceAsc, priceDesc, rating, popular")

@@ -46,9 +46,11 @@ public class CatalogServiceImpl implements CatalogService {
 
     private List<ProductDTO> applyFilters(List<ProductDTO> products, ProductFilterRequest f) {
         return products.stream()
-                .filter(p -> f.getAZ() == null || p.getProductName().charAt(0) == f.getAZ())
+                .filter(p -> f.getAZ() == null ||
+                        Character.toLowerCase(p.getProductName().trim().charAt(0)) == Character.toLowerCase(f.getAZ())
+                )
                 .filter(p -> f.getCategoryName() == null || p.getCategories().stream()
-                        .anyMatch(c -> c.getCategory_name().equalsIgnoreCase(f.getCategoryName())))
+                        .anyMatch(c -> c.getCategoryName().equalsIgnoreCase(f.getCategoryName())))
                 .filter(p -> f.getBrand() == null || p.getBrand().getBrandName().equalsIgnoreCase(f.getBrand()))
                 .filter(p -> f.getPriceFrom() == null || p.getPrice().compareTo(f.getPriceFrom()) >= 0)
                 .filter(p -> f.getPriceTo() == null || p.getPrice().compareTo(f.getPriceTo()) <= 0)
