@@ -1,7 +1,8 @@
-#30 min
-accessTokenAvailableValidityPeriodInSec: 1800
-#30 days
-refreshTokenAvailableValidityPeriodInSec: 2592000
+tokens:
+  #30 min
+  accessTokenAvailableValidityPeriodInSec: 1800
+  #30 days
+  refreshTokenAvailableValidityPeriodInSec: 2592000
 
 spring:
   application:
@@ -11,7 +12,7 @@ spring:
   docker:
     compose:
       lifecycle-management: start_and_stop
-      enabled: false #i've turned up it to false to resolve all problem with docker
+      enabled: true
 server:
   port: 8080
 
