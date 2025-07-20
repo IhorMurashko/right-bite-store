@@ -33,7 +33,6 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
 
-
     public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest)
     {
         List<ProductDTO> allProduct = getAllProduct();
