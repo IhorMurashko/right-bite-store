@@ -2,7 +2,7 @@ package com.best_store.right_bite.service.catalog;
 
 
 import com.best_store.right_bite.dto.catalog.CategoryDTO;
-import com.best_store.right_bite.mapper.catalog.BaseMapper;
+import com.best_store.right_bite.mapper.catalog.CategoryMapper;
 import com.best_store.right_bite.model.catalog.Category;
 import com.best_store.right_bite.repository.catalog.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Qualifier("CategoryEntityToDTO")
-    private final BaseMapper<Category, CategoryDTO> categoryEntityToDTOMapper;
+    private final CategoryMapper categoryEntityToDTOMapper;
 
     public List<CategoryDTO> getAllCategory() {
-        return categoryRepository.findAll().stream().map(categoryEntityToDTOMapper::map).collect(Collectors.toList());
+        return categoryRepository.findAll().stream().map(categoryEntityToDTOMapper::toDTO).collect(Collectors.toList());
     }
 
 }

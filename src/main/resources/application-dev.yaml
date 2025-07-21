@@ -10,12 +10,10 @@ spring:
     driver-class-name: org.h2.Driver
     username: h2
     password: h2
-    url: jdbc:h2:mem:h2db;
-  liquibase:
-    change-log: classpath:/db/changelog/changelog-master.yaml
+    url: jdbc:h2:mem:h2db
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create-drop #create-drop
     show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
@@ -50,7 +48,11 @@ spring:
           auth: true
           starttls:
             enable: true
-
+  flyway:
+    enabled: true
+    locations:
+      - classpath:db/migration/catalog
+    baseline-on-migrate: true
 logging:
   level:
     root: INFO               # Основной уровень логирования
@@ -58,4 +60,5 @@ logging:
     org.springframework.web: WARN
     org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)
+    org.flywaydb.core: DEBUG
 
