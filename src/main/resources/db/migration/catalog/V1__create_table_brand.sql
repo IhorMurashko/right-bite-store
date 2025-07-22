@@ -1,5 +1,0 @@
-
-CREATE TABLE IF NOT EXISTS Brand  (
-    id BIGSERIAL PRIMARY KEY,
-    brand_name VARCHAR(123) NOT NULL
-);

@@ -16,19 +16,22 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Concrete user entity representing a system user with extended profile data.
+ * JPA entity representing an application user with extended profile details.
  *
- * <p>Extends {@link AbstractUser} to include personal information such as name,
- * contact details, and address.</p>
- * <p>
- * Fields:
- * - firstName, lastName: user's full name
- * - phoneNumber: optional contact phone
- * - country, city, streetName, houseNumber, zipCode: address data
- * <p>
- * This entity is persisted in the "users" table.
+ * <p>Extends {@link AbstractUser} to include personal and address information.</p>
  *
- * @author Ihot Murashko
+ * <p>Stored in the {@code users} table. Also maintains a one-to-many relationship
+ * with {@link BillingInfo} for billing records.</p>
+ *
+ * <p>Additional fields include:</p>
+ * <ul>
+ *     <li><b>firstName</b>, <b>lastName</b> — optional full name</li>
+ *     <li><b>imageUrl</b> — optional avatar image URL</li>
+ *     <li><b>phoneNumber</b> — optional contact number</li>
+ *     <li><b>country</b>, <b>city</b>, <b>streetName</b>, <b>houseNumber</b>, <b>zipCode</b> — address fields</li>
+ * </ul>
+ *
+ * @author Ihor Murashko
  */
 
 @Entity

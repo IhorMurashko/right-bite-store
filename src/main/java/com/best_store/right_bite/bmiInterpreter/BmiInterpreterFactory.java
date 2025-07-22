@@ -1,4 +1,4 @@
-package com.best_store.right_bite.BmiInterpreter;
+package com.best_store.right_bite.bmiInterpreter;
 
 
 import com.best_store.right_bite.constans.Gender;

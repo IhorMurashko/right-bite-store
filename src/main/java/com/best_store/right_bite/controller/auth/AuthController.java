@@ -24,8 +24,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@Tag(name = "Authentication controller",
-        description = "registration, login, logout operations")
+/**
+ * REST controller responsible for authentication-related operations:
+ * registration, login, and logout.
+ *
+ * <p>Exposes endpoints under the base path <code>/api/v1/auth</code>.</p>
+ *
+ * <p>Includes access control using {@link PreAuthorize} annotations to restrict access
+ * based on authentication state.</p>
+ *
+ * <p>Relies on {@link RegistrationService}, {@link AuthenticationService},
+ * {@link RevokeTokenService}, and {@link JwtProvider}.</p>
+ *
+ * <p>Documented with OpenAPI/Swagger annotations.</p>
+ *
+ * @author Ihor
+ */
+@Tag(
+        name = "Authentication controller",
+        description = "registration, login, logout operations"
+)
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -36,6 +54,17 @@ public class AuthController {
     private final RevokeTokenService revokeTokenService;
     private final JwtProvider jwtProvider;
 
+    /**
+     * Registers a new user using email and password.
+     *
+     * <p>Should be called without any JWT token in the request.
+     * Only anonymous users are allowed.</p>
+     *
+     * <p>Returns 201 CREATED on success, or 400 BAD REQUEST on validation failure.</p>
+     *
+     * @param credentialsDto DTO with email, password, and confirmation password.
+     * @return 201 Created if successful.
+     */
     @Operation(
             summary = "registration",
             description = "registration using email and password. request can't contains any jwt token.",

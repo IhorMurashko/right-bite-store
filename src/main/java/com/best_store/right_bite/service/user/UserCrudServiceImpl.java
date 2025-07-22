@@ -13,7 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
+/**
+ * Implementation of {@link UserCrudService} using JPA repository.
+ *
+ * <p>Provides transactional CRUD operations and utility methods on {@link User} entities.
+ * Email fields are normalized to lowercase before queries.</p>
+ *
+ * <p>Logging is used to trace user lifecycle events and debug existence checks.</p>
+ *
+ * <p>Transactional boundaries are explicitly defined for mutating operations.</p>
+ *
+ * @see UserRepository
+ * @see UserFieldAdapter
+ * @see UserNotFoundException
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,16 +52,14 @@ public class UserCrudServiceImpl implements UserCrudService {
                 ));
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED,
-            propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public User save(@NonNull User user) {
         log.info("Save user with email: {}", user.getEmail());
         return userRepository.save(user);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED,
-            propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteById(@NonNull long id) {
         User user = findById(id);
@@ -56,8 +67,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         userRepository.delete(user);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED,
-            propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteByEmail(@NonNull String email) {
         User user = findByEmail(email);
@@ -77,8 +87,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         return userRepository.existsById(id);
     }
 
-    @Transactional(isolation = Isolation.READ_COMMITTED,
-            propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void resetPasswordByEmail(@NonNull String email, @NonNull String newEncodedPassword) {
         userRepository.updateUserPassword(UserFieldAdapter.toLower(email), newEncodedPassword);

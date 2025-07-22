@@ -7,18 +7,16 @@ tokens:
 spring:
   application:
     name: right-bite
-  profiles:
-    active: dev
   docker:
     compose:
       lifecycle-management: start_and_stop
       enabled: true
   ai:
     openai:
-      api-key: ${GROQ_API_KEY}
-      base-url: "https://api.groq.com/openai"
+      api-key: ${API_KEY}
+      base-url: ${BASE_URL}
       chat:
         options:
-          model: "llama3-70b-8192"
+          model: ${API_MODEL}
 server:
   port: 8080

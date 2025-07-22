@@ -1,12 +1,11 @@
 package com.best_store.right_bite.service.serviceBMI;
 
-import com.best_store.right_bite.BmiInterpreter.BmiInterpreterFactory;
-import com.best_store.right_bite.BmiInterpreter.InterpreterBMI;
+import com.best_store.right_bite.bmiInterpreter.BmiInterpreterFactory;
+import com.best_store.right_bite.bmiInterpreter.InterpreterBMI;
 import com.best_store.right_bite.constans.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;
 import com.best_store.right_bite.dto.dtoBMI.BmiResponse;
-import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.service.catalog.CatalogService;
 import com.best_store.right_bite.utils.utilsBMI.BmiCalculator;
 import com.best_store.right_bite.utils.utilsBMI.CaloriesByType;

@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(CredentialsException.class)
@@ -41,12 +41,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RefreshTokenAccessException.class)
     public ResponseEntity<ErrorResponseDto> handleUserAccountIsNotAvailableException(RefreshTokenAccessException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponseDto> handleUserAccountIsNotAvailableException(InvalidTokenException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
     }
 
     @ExceptionHandler(UserAccountIsNotAvailableException.class)
