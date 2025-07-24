@@ -1,139 +1,189 @@
-INSERT INTO roles (id, name, description)
-VALUES (1, 'ROLE_ADMIN', 'admin role');
 
-INSERT INTO roles (id, name, description)
-VALUES (2, 'ROLE_USER', 'standard user role');
-
-
--- ======= CREATE TABLES =======
 CREATE TABLE IF NOT EXISTS Brand  (
-id BIGSERIAL PRIMARY KEY,
-brand_name VARCHAR(123) NOT NULL
+                                      id BIGSERIAL PRIMARY KEY,
+                                      brand_name VARCHAR(123) NOT NULL
+);
+CREATE TYPE auth_provider AS ENUM ('LOCAL', 'GOOGLE');
+
+CREATE TYPE role_name AS ENUM ('ROLE_ADMIN', 'ROLE_USER');
+
+CREATE SEQUENCE roles_seq START WITH 1 INCREMENT BY 1;
+
+
+
+CREATE TABLE IF NOT EXISTS roles
+(
+    id          BIGINT PRIMARY KEY DEFAULT nextval('roles_seq'),
+    name        role_name NOT NULL UNIQUE,
+    description TEXT
+);
+
+CREATE SEQUENCE users_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id                         BIGINT PRIMARY KEY                   DEFAULT nextval('users_seq'),
+    email                      VARCHAR(255)                NOT NULL UNIQUE,
+    password                   VARCHAR(255),
+    auth_provider              auth_provider               NOT NULL,
+    oauth_id                   VARCHAR(255),
+
+    is_account_non_expired     BOOLEAN                     NOT NULL DEFAULT true,
+    is_account_non_locked      BOOLEAN                     NOT NULL DEFAULT true,
+    is_credentials_non_expired BOOLEAN                     NOT NULL DEFAULT true,
+    is_enabled                 BOOLEAN                     NOT NULL DEFAULT true,
+
+    created_at                 TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at                 TIMESTAMP WITHOUT TIME ZONE          DEFAULT NOW(),
+
+    first_name                 VARCHAR(255),
+    last_name                  VARCHAR(255),
+    image_url                  TEXT,
+    phone_number               VARCHAR(50),
+    country                    VARCHAR(100),
+    city                       VARCHAR(100),
+    street_name                VARCHAR(255),
+    house_number               VARCHAR(50),
+    zip_code                   VARCHAR(20)
+);
+
+
+CREATE TABLE IF NOT EXISTS user_roles
+(
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_user_roles_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS billing_info
+(
+    id           BIGSERIAL PRIMARY KEY,
+    name_on_card VARCHAR(255),
+    card_number  TEXT,
+    expire_date  VARCHAR(10),
+    user_id      BIGINT,
+    CONSTRAINT fk_billing_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Category(
-id BIGSERIAL PRIMARY KEY,
-category_name VARCHAR(123) NOT NULL,
-image VARCHAR(123) NOT NULL
+                                       id BIGSERIAL PRIMARY KEY,
+                                       category_name VARCHAR(123) NOT NULL,
+                                       image VARCHAR(123) NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS Producer(
-id BIGSERIAL PRIMARY KEY,
-producer_name VARCHAR(123) NOT NULL
+                                       id BIGSERIAL PRIMARY KEY,
+                                       producer_name VARCHAR(123) NOT NULL
 );
-
 CREATE TABLE IF NOT EXISTS Product(
-id BIGSERIAL PRIMARY KEY,
-product_name VARCHAR(123) NOT NULL,
-price NUMERIC(10,2) NOT NULL,
-description TEXT NOT NULL,
-kcal INTEGER NOT NULL,
-quantity_in_stock INTEGER DEFAULT 0,
-rating DOUBLE PRECISION DEFAULT 0,
-rating_count INTEGER DEFAULT 0,
-brand_id BIGINT REFERENCES BRAND(ID),
-producer_id BIGINT REFERENCES PRODUCER(ID)
+                                      id BIGSERIAL PRIMARY KEY,
+                                      product_name VARCHAR(123) NOT NULL,
+                                      price NUMERIC(10,2) NOT NULL,
+                                      description TEXT NOT NULL,
+                                      kcal INTEGER NOT NULL,
+                                      quantity_in_stock INTEGER DEFAULT 0,
+                                      rating DOUBLE PRECISION DEFAULT 0,
+                                      rating_count INTEGER DEFAULT 0,
+                                      brand_id BIGINT REFERENCES BRAND(ID),
+                                      producer_id BIGINT REFERENCES PRODUCER(ID)
 );
-
-CREATE TABLE IF NOT EXISTS Image(
-id BIGSERIAL PRIMARY KEY,
-url VARCHAR(200) NOT NULL,
-product_id BIGINT REFERENCES Product(id)
+CREATE TABLE IF NOT EXISTS Product(
+                                      id BIGSERIAL PRIMARY KEY,
+                                      product_name VARCHAR(123) NOT NULL,
+                                      price NUMERIC(10,2) NOT NULL,
+                                      description TEXT NOT NULL,
+                                      kcal INTEGER NOT NULL,
+                                      quantity_in_stock INTEGER DEFAULT 0,
+                                      rating DOUBLE PRECISION DEFAULT 0,
+                                      rating_count INTEGER DEFAULT 0,
+                                      brand_id BIGINT REFERENCES BRAND(ID),
+                                      producer_id BIGINT REFERENCES PRODUCER(ID)
 );
-
 CREATE TABLE IF NOT EXISTS Product_sales(
-id BIGSERIAL PRIMARY KEY,
-quantity INTEGER NOT NULL DEFAULT 0,
-sale_date DATE,
-product_id BIGINT REFERENCES Product(id)
+                                            id BIGSERIAL PRIMARY KEY,
+                                            quantity INTEGER NOT NULL DEFAULT 0,
+                                            sale_date TIMESTAMP(6),
+                                            product_id BIGINT REFERENCES Product(id)
 );
-
 CREATE TABLE IF NOT EXISTS Product_category(
-product_id BIGINT REFERENCES Product(id),
-category_id BIGINT REFERENCES Category(id),
-PRIMARY KEY (product_id, category_id)
+                                               product_id BIGINT REFERENCES Product(id),
+                                               category_id BIGINT REFERENCES Category(id),
+                                               PRIMARY KEY (product_id, category_id)
 );
 
--- ======= ALTERS =======
+
 ALTER TABLE brand ADD UNIQUE(brand_name);
 ALTER TABLE Category ADD UNIQUE(category_name);
 ALTER TABLE Producer ADD UNIQUE(producer_name);
 
--- ======= INSERT PRODUCER =======
-INSERT INTO producer (producer_name) VALUES
-('Nestle'),
-('Mars'),
-('Oils'),
-('Test'),
-('BioWorld');
+INSERT INTO  producer  (producer_name) VALUES
+                                           ('Nestle'),
+                                           ('Mars'),
+                                           ('Oils'),
+                                           ('Test'),
+                                           ('BioWorld');
 
--- ======= INSERT BRAND =======
 INSERT INTO brand (brand_name) VALUES
-('Biona'),
-('LaSelva'),
-('IsoaBia'),
-('Terrarton'),
-('NaturLine');
-
--- ======= INSERT CATEGORY =======
+                                   ('Biona'),
+                                   ('LaSelva'),
+                                   ('IsoaBia'),
+                                   ('Terrarton'),
+                                   ('NaturLine');
 INSERT INTO category (category_name, image) VALUES
-('Молочные продукты', 'milk.jpg'),
-('Хлебобулочные изделия', 'bread.jpg'),
-('Напитки', 'drink.jpg'),
-('Орехи и сухофрукты', 'nuts.jpg'),
-('Масла', 'oil.jpg'),
-('Сладости', 'sweets.jpg'),
-('Фрукты и овощи', 'veggies.jpg'),
-('Мясо и рыба', 'meat.jpg');
+                                                ('Молочные продукты', 'milk.jpg'),
+                                                ('Хлебобулочные изделия', 'bread.jpg'),
+                                                ('Напитки', 'drink.jpg'),
+                                                ('Орехи и сухофрукты', 'nuts.jpg'),
+                                                ('Масла', 'oil.jpg'),
+                                                ('Сладости', 'sweets.jpg'),
+                                                ('Фрукты и овощи', 'veggies.jpg'),
+                                                ('Мясо и рыба', 'meat.jpg');
 
--- ======= INSERT PRODUCT =======
 INSERT INTO product (product_name, price, description, quantity_in_stock, kcal, rating, rating_count, producer_id, brand_id) VALUES
-('Молоко', 23.30, 'Пастеризованное молоко отборного качества', 100, 65, 5.6, 32, 1, 1),
-('Хлеб', 10.30, 'Ржаной хлеб с тмином', 200, 230, 4.8, 27, 2, 1),
-('Чай', 22.60, 'Чёрный байховый чай без добавок', 150, 0, 4.1, 15, 4, 3),
-('Орехи', 15.00, 'Микс из орехов и сухофруктов', 120, 500, 4.5, 12, 3, 2),
-('Шоколад', 12.50, 'Молочный шоколад с орехами', 80, 400, 4.7, 19, 2, 2),
-('Миндальное молоко', 18.90, 'Растительное молоко без сахара', 90, 30, 4.9, 22, 1, 3),
-('Йогурт', 9.80, 'Натуральный йогурт без добавок', 75, 90, 4.6, 18, 1, 1),
-('Сыр', 25.00, 'Пармезан выдержанный', 60, 300, 4.4, 11, 5, 4),
-('Сок', 14.70, 'Томатный сок', 140, 20, 4.2, 14, 4, 4),
-('Оливковое масло', 35.00, 'Extra Virgin Olive Oil', 50, 0, 5.0, 29, 3, 5);
+                                                                                                                                 ('Молоко', 23.30, 'Пастеризованное молоко отборного качества', 100, 65, 5.6, 32, 1, 1),
+                                                                                                                                 ('Хлеб', 10.30, 'Ржаной хлеб с тмином', 200, 230, 4.8, 27, 2, 1),
+                                                                                                                                 ('Чай', 22.60, 'Чёрный байховый чай без добавок', 150, 0, 4.1, 15, 4, 3),
+                                                                                                                                 ('Орехи кешью', 55.00, 'Жареные орехи кешью без соли', 300, 650, 4.2, 10, 3, 2),
+                                                                                                                                 ('Шоколад горький', 44.90, 'Шоколад 70% какао, без сахара', 180, 520, 4.9, 53, 2, 2),
+                                                                                                                                 ('Миндальное молоко', 33.50, 'Растительное молоко без лактозы', 90, 31, 4.5, 22, 1, 1),
+                                                                                                                                 ('Йогурт клубничный', 18.20, 'Натуральный йогурт с кусочками клубники', 120, 150, 4.6, 41, 1, 1),
+                                                                                                                                 ('Сыр пармезан', 78.40, 'Выдержанный сыр твердых сортов', 80, 410, 5.0, 66, 3, 4),
+                                                                                                                                 ('Томатный сок', 25.00, 'Свежевыжатый сок из органических томатов', 130, 42, 4.3, 19, 4, 3),
+                                                                                                                                 ('Оливковое масло', 92.70, 'Extra Virgin холодного отжима', 200, 884, 4.7, 37, 3, 2);
 
--- ======= INSERT PRODUCT_CATEGORY =======
 INSERT INTO product_category (product_id, category_id) VALUES
-(1, 1), -- Молоко -> Молочка
-(2, 2), -- Хлеб -> Хлебобулка
-(3, 3), -- Чай -> Напитки
-(4, 4), -- Орехи -> Орехи и сухофрукты
-(5, 6), -- Шоколад -> Сладости
-(6, 1), -- Миндальное молоко -> Молочка
-(7, 1), -- Йогурт -> Молочка
-(8, 1), -- Сыр -> Молочка
-(9, 3), -- Сок -> Напитки
-(10, 5);-- Масло -> Масла
+                                                           (1, 7), -- молоко -> молочка
+                                                           (2, 8), -- хлеб -> хлеб
+                                                           (3, 4), -- чай -> напитки
+                                                           (4, 2), -- орехи -> орехи
+                                                           (5, 1), -- шоколад -> сладости
+                                                           (6, 3), -- миндальное молоко -> молочка
+                                                           (7, 4), -- йогурт -> молочка
+                                                           (8, 5), -- сыр -> молочка
+                                                           (9, 6), -- сок -> напитки
+                                                           (10, 7);
 
--- ======= INSERT IMAGE =======
 INSERT INTO image (url, product_id) VALUES
-('https://example.com/images/milk.jpg', 1),
-('https://example.com/images/bread.jpg', 2),
-('https://example.com/images/tea.jpg', 3),
-('https://example.com/images/nuts.jpg', 4),
-('https://example.com/images/chocolate.jpg', 5),
-('https://example.com/images/almond_milk.jpg', 6),
-('https://example.com/images/yogurt.jpg', 7),
-('https://example.com/images/parmesan.jpg', 8),
-('https://example.com/images/tomato_juice.jpg', 9),
-('https://example.com/images/olive_oil.jpg', 10);
+                                        ('https://example.com/images/milk.jpg', 1),
+                                        ('https://example.com/images/bread.jpg', 2),
+                                        ('https://example.com/images/tea.jpg', 3),
+                                        ('https://example.com/images/nuts.jpg', 4),
+                                        ('https://example.com/images/chocolate.jpg', 5),
+                                        ('https://example.com/images/almond_milk.jpg', 6),
+                                        ('https://example.com/images/yogurt.jpg', 7),
+                                        ('https://example.com/images/parmesan.jpg', 8),
+                                        ('https://example.com/images/tomato_juice.jpg', 9),
+                                        ('https://example.com/images/olive_oil.jpg', 10);
 
--- ======= INSERT PRODUCT_SALES =======
 INSERT INTO product_sales (product_id, quantity, sale_date) VALUES
-(1, 55, '2024-07-01'),
-(2, 15, '2024-07-02'),
-(3, 40, '2024-07-03'),
-(4, 5,  '2024-07-04'),
-(5, 13, '2024-07-05'),
-(6, 18, '2024-07-06'),
-(7, 22, '2024-07-07'),
-(8, 6,  '2024-07-08'),
-(9, 33, '2024-07-09'),
-(10, 9, '2024-07-10');
+                                                                (1,55, '2024-07-01 10:00:00'),
+                                                                (2, 15, '2024-07-02 11:30:00'),
+                                                                (3, 40, '2024-07-03 12:45:00'),
+                                                                (4, 5,  '2024-07-04 13:00:00'),
+                                                                (5, 13, '2024-07-05 09:20:00'),
+                                                                (6, 18, '2024-07-06 08:40:00'),
+                                                                (7, 22, '2024-07-07 15:10:00'),
+                                                                (8, 6,  '2024-07-08 16:30:00'),
+                                                                (9, 33, '2024-07-09 17:50:00'),
+                                                                (10, 9, '2024-07-10 18:15:00');
