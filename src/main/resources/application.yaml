@@ -5,6 +5,8 @@ tokens:
   refreshTokenAvailableValidityPeriodInSec: 2592000
 
 spring:
+  profiles:
+    active: dev
   application:
     name: right-bite
   docker:

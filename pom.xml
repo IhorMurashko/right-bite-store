@@ -84,8 +84,17 @@
                     <version>${h2.version}</version>
                     <scope>runtime</scope>
                 </dependency>
+
+                <dependency>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-core</artifactId>
+                    <version>${flyway.version}</version>
+                </dependency>
+
+
             </dependencies>
         </profile>
+
         <profile>
             <id>prod</id>
             <dependencies>
@@ -136,6 +145,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
 
         <!--    MAIL   -->
         <dependency>
