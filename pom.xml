@@ -16,6 +16,12 @@
     <name>right-bite</name>
     <description>right-bite backend</description>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
 
     <developers>
         <developer>
@@ -103,6 +109,7 @@
                     <artifactId>flyway-core</artifactId>
                     <version>${flyway.version}</version>
                 </dependency>
+
                 <dependency>
                     <groupId>org.flywaydb</groupId>
                     <artifactId>flyway-database-postgresql</artifactId>
@@ -126,6 +133,8 @@
     </profiles>
 
     <dependencies>
+
+
 
         <!--    WEB   -->
         <dependency>

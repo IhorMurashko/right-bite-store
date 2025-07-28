@@ -66,7 +66,7 @@ public class BmiContoller {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid input data",
+                    description = "Invalid input data.sql",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class),

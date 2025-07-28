@@ -1,8 +1,8 @@
-INSERT INTO roles (id, name, description)
-VALUES (1, 'ROLE_ADMIN', 'admin role');
-
-INSERT INTO roles (id, name, description)
-VALUES (2, 'ROLE_USER', 'standard user role');
+-- INSERT INTO roles (id, name, description)
+-- VALUES (1, 'ROLE_ADMIN', 'admin role');
+--
+-- INSERT INTO roles (id, name, description)
+-- VALUES (2, 'ROLE_USER', 'standard user role');
 
 
 -- ======= CREATE TABLES =======
@@ -77,14 +77,14 @@ INSERT INTO brand (brand_name) VALUES
 
 -- ======= INSERT CATEGORY =======
 INSERT INTO category (category_name, image) VALUES
-('Молочные продукты', 'milk.jpg'),
-('Хлебобулочные изделия', 'bread.jpg'),
-('Напитки', 'drink.jpg'),
-('Орехи и сухофрукты', 'nuts.jpg'),
-('Масла', 'oil.jpg'),
-('Сладости', 'sweets.jpg'),
-('Фрукты и овощи', 'veggies.jpg'),
-('Мясо и рыба', 'meat.jpg');
+('Молочные продукты', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/milks_mjkzj7.jpg'),
+('Хлебобулочные изделия', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700457/breads_ff2paq.jpg'),
+('Напитки', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/drinks_xdbzku.jpg'),
+('Орехи и сухофрукты', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/suhofruits_orog97.jpg'),
+('Масла', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/oils_wki6le.jpg'),
+('Сладости', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/candyes_qqnums.jpg'),
+('Фрукты и овощи', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/Vegetables_csgzxm.jpg'),
+('Мясо и рыба', 'https://res.cloudinary.com/dm1hjg8io/image/upload/v1753700458/meat_wz26ds.jpg');
 
 -- ======= INSERT PRODUCT =======
 INSERT INTO product (product_name, price, description, quantity_in_stock, kcal, rating, rating_count, producer_id, brand_id) VALUES

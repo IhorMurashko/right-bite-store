@@ -36,7 +36,7 @@ public interface BaseNotification {
     String subject();
 
     @Schema(
-            description = "Optional key-value map containing template data or dynamic fields for rendering the notification."
+            description = "Optional key-value map containing template data.sql or dynamic fields for rendering the notification."
     )
     @Nullable
     Map<NotificationDataKey, Object> data();

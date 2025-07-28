@@ -25,7 +25,7 @@ import java.util.Set;
  * <p>This assembler centralizes the logic of creating users from:
  * <ul>
  *   <li>Registration form input (email + password)</li>
- *   <li>OAuth2 provider data (e.g. Google)</li>
+ *   <li>OAuth2 provider data.sql (e.g. Google)</li>
  * </ul>
  *
  * <p>Encodes passwords, assigns default roles, and normalizes user fields (like email).</p>
@@ -68,11 +68,11 @@ public class UserAssembler {
     /**
      * Creates a new {@link User} from an OAuth2 user object (e.g. from Google).
      *
-     * <p>Email is extracted and normalized. OAuth2-specific data like first name,
+     * <p>Email is extracted and normalized. OAuth2-specific data.sql like first name,
      * last name, image URL, and OAuth ID are set if present.</p>
      *
      * @param oAuth2User the user object returned by the OAuth2 provider
-     * @return a new {@link User} entity with OAuth2 profile data
+     * @return a new {@link User} entity with OAuth2 profile data.sql
      */
     public User create(@NonNull OAuth2User oAuth2User) {
         String email = UserFieldAdapter.toLower(Objects.requireNonNull(

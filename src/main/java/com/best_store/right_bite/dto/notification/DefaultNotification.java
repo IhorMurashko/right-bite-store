@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Schema(
         name = "DefaultNotification",
-        description = "Standard notification data structure used to send messages via different channels."
+        description = "Standard notification data.sql structure used to send messages via different channels."
 )
 public record DefaultNotification(
 
@@ -41,7 +41,7 @@ public record DefaultNotification(
         String subject,
 
         @Schema(
-                description = "Optional map of dynamic data used to fill notification templates."
+                description = "Optional map of dynamic data.sql used to fill notification templates."
         )
         @Nullable
         Map<NotificationDataKey, Object> data

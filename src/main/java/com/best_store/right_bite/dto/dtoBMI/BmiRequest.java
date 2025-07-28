@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * BmiRequest is a data transfer object that represents the request for calculating BMI.
+ * BmiRequest is a data.sql transfer object that represents the request for calculating BMI.
  * @param age age of the person in years
  * @param gender gender of person MALE FEMAlE
  * @param weightKg weight of the person in kilograms
