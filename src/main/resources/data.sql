@@ -114,16 +114,39 @@ INSERT INTO product_category (product_id, category_id) VALUES
 
 -- ======= INSERT IMAGE =======
 INSERT INTO image (url, product_id) VALUES
-('https://example.com/images/milk.jpg', 1),
-('https://example.com/images/bread.jpg', 2),
-('https://example.com/images/tea.jpg', 3),
-('https://example.com/images/nuts.jpg', 4),
-('https://example.com/images/chocolate.jpg', 5),
-('https://example.com/images/almond_milk.jpg', 6),
-('https://example.com/images/yogurt.jpg', 7),
-('https://example.com/images/parmesan.jpg', 8),
-('https://example.com/images/tomato_juice.jpg', 9),
-('https://example.com/images/olive_oil.jpg', 10);
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703395/1-0_plli9q.jpg', 1),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703405/1-1_o15wpd.jpg', 1),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703412/2-0_prae2j.jpg', 2),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703412/2-0_prae2j.jpg', 2),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703400/3-0_aksqiv.jpg', 3),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703401/3-2_flcjre.jpg', 3),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703409/4-0_wmpjam.jpg', 4),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703406/4-4_kyphya.jpg', 4),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703402/4-2_x4efas.jpg', 4),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703399/4-3_azvogs.jpg', 4),
+
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703402/5-0_gng7eh.jpg', 5),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703408/6-0_mqloox.jpg', 6),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703404/6-1_dfkulg.jpg', 6),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703391/7-0_bqshtf.jpg', 7),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703391/7-1_ddlske.jpg', 7),
+
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703392/8-1_pofufr.jpg', 8),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703392/8-0_jlhnds.jpg', 8),
+
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703393/9-0_n8wrri.jpg', 9),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703411/9-1_rvfifa.jpg', 9),
+
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703394/10-0_w3xgvg.jpg', 10),
+('https://res.cloudinary.com/dm1hjg8io/image/upload/v1753703394/10-1_bckrvq.jpg', 10);
 
 -- ======= INSERT PRODUCT_SALES =======
 INSERT INTO product_sales (product_id, quantity, sale_date) VALUES
