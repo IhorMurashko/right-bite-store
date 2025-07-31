@@ -6,6 +6,6 @@ RUN mvn clean package -Pdev -DskipTests -Dmaven.test.skip=true
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-ENV SPRING_PROFILES_ACTIVE=dev
+ENV SPRING_PROFILES_ACTIVE=prod
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
