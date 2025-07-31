@@ -26,11 +26,22 @@ public class DelegationRevokeTokenService implements RevokeTokenService {
 
     private final BlackListTokenService blackListTokenService;
 
+    /**
+     * Revokes given tokens by saving them in the blacklist store.
+     *
+     * @param token tokens to revoke
+     */
     @Override
     public void revokeToken(@NonNull String... token) {
         blackListTokenService.saveToken(token);
     }
 
+    /**
+     * Checks whether a token is revoked by querying the blacklist store.
+     *
+     * @param token token to check
+     * @return true if revoked, false otherwise
+     */
     @Override
     public boolean isTokenRevoked(@NonNull String token) {
         return blackListTokenService.isTokenPresent(token);
