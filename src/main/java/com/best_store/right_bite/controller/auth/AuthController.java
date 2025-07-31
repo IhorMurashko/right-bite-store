@@ -2,9 +2,13 @@ package com.best_store.right_bite.controller.auth;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
+import com.best_store.right_bite.exception.auth.CredentialsException;
+import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.security.blackListTokenCache.RevokeTokenService;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
+import com.best_store.right_bite.security.oauht2.GoogleOAuthSuccessHandler;
 import com.best_store.right_bite.service.auth.login.AuthenticationService;
 import com.best_store.right_bite.service.auth.registration.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -86,8 +90,19 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * Handles user sign-in using email and password.
+     * <p>
+     * This endpoint is intended for anonymous users only and must not be called with an existing JWT token.
+     *
+     * @param authRequest the authentication credentials (email and password)
+     * @return a response containing generated access and refresh tokens
+     * @throws CredentialsException               if password doesn't match
+     * @throws UserNotFoundException              if user with given email is not found
+     * @throws UserAccountIsNotAvailableException if the user account is expired, locked or disabled
+     */
     @Operation(
-            summary = "sing in",
+            summary = "google sing in",
             description = "sign in using email and password. request can't contains any jwt token.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "authentication credentials",
@@ -109,6 +124,16 @@ public class AuthController {
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
     }
 
+    /**
+     * Initiates Google OAuth2 login flow by redirecting to Google's OAuth2 authorization endpoint.
+     * <p>
+     * This endpoint must be accessed anonymously (no existing JWT token).
+     * On success, the user will be authenticated via OAuth2 and
+     * the {@link GoogleOAuthSuccessHandler} will issue JWT tokens.
+     *
+     * @param response the HTTP response used to redirect the client
+     * @throws IOException if redirection fails
+     */
     @Operation(
             summary = "sing in",
             description = "sign in using google. request can't contains any jwt token.",
@@ -124,6 +149,15 @@ public class AuthController {
         response.sendRedirect("/oauth2/authorization/google");
     }
 
+    /**
+     * Logs out the current authenticated user by revoking the JWT token.
+     *
+     * <p>The request must contain a valid JWT token in the Authorization header.
+     * The token is extracted and marked as revoked to prevent further use.</p>
+     *
+     * @param request the HTTP servlet request containing the Authorization header with JWT token
+     * @return HTTP 204 No Content on successful logout
+     */
     @Operation(
             summary = "logout",
             description = "logout. request must contains jwt token.",

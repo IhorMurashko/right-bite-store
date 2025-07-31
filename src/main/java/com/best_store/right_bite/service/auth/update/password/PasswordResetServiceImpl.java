@@ -2,9 +2,9 @@ package com.best_store.right_bite.service.auth.update.password;
 
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
-import com.best_store.right_bite.service.user.UserCrudService;
-import com.best_store.right_bite.util.auth.RandomPasswordGenerator;
-import com.best_store.right_bite.util.user.UserFieldAdapter;
+import com.best_store.right_bite.service.user.crud.UserCrudService;
+import com.best_store.right_bite.utils.auth.RandomPasswordGenerator;
+import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;

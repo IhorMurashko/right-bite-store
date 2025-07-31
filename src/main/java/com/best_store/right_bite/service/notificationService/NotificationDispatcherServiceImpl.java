@@ -1,10 +1,11 @@
 package com.best_store.right_bite.service.notificationService;
 
-import com.best_store.right_bite.dto.notification.BaseNotification;
 import com.best_store.right_bite.notification.NotificationSender;
+import com.best_store.right_bite.notification.data.BaseNotification;
+import com.best_store.right_bite.notification.data.NotificationData;
 import com.best_store.right_bite.notification.sender.factory.SenderFactory;
-import com.best_store.right_bite.util.notification.contentBuilder.NotificationContentBuilder;
-import com.best_store.right_bite.util.notification.factory.NotificationLetterBuilderFactory;
+import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
+import com.best_store.right_bite.utils.notification.factory.NotificationLetterBuilderFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -39,7 +40,7 @@ public class NotificationDispatcherServiceImpl implements NotificationDispatcher
     private final NotificationLetterBuilderFactory letterBuilderFactory;
 
     @Override
-    public void send(@NonNull BaseNotification notification) {
+    public void send(@NonNull BaseNotification<? extends NotificationData> notification) {
         NotificationSender sender = senderFactory.getSender(notification.channel());
         NotificationContentBuilder notificationContentBuilder = letterBuilderFactory
                 .getNotificationBuilder(notification.type(), notification.channel());

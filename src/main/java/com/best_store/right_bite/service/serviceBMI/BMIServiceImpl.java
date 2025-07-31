@@ -2,7 +2,7 @@ package com.best_store.right_bite.service.serviceBMI;
 
 import com.best_store.right_bite.bmiInterpreter.BmiInterpreterFactory;
 import com.best_store.right_bite.bmiInterpreter.InterpreterBMI;
-import com.best_store.right_bite.constans.BMICategory;
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;
 import com.best_store.right_bite.dto.dtoBMI.BmiResponse;

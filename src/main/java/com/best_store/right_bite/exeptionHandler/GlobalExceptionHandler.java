@@ -7,7 +7,9 @@ import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
-import com.best_store.right_bite.util.excetion.ErrorResponseBuilder;
+import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
+import com.best_store.right_bite.security.exception.TokenRevokedException;
+import com.best_store.right_bite.utils.excetion.ErrorResponseBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRoleNotFoundException(RoleNotFoundException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -54,6 +56,15 @@ public class GlobalExceptionHandler {
         return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
     }
 
+    @ExceptionHandler(TokenRevokedException.class)
+    public ResponseEntity<ErrorResponseDto> handleTokenRevokedException(TokenRevokedException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(InvalidTokenSubjectException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidTokenSubjectException(InvalidTokenSubjectException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
