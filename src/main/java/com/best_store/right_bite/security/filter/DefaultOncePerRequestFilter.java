@@ -10,6 +10,7 @@ import com.best_store.right_bite.security.exception.SecurityExceptionMessageProv
 import com.best_store.right_bite.security.exception.TokenRevokedException;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
 import com.best_store.right_bite.security.principal.JwtPrincipal;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -69,13 +70,13 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
                         ));
                     }
 
-                    Long id = claimsProvider.extractClaimFromToken(token,
-                            claims -> claims.get(
-                                    TokenClaimsConstants.USER_ID_CLAIM, Long.class));
+                    String id = claimsProvider.extractClaimFromToken(token,
+                            Claims::getSubject);
+                    log.debug("User id is {}", id);
                     String email = claimsProvider.extractClaimFromToken(token,
                             claims -> claims.get(
                                     TokenClaimsConstants.USERNAME_CLAIM, String.class));
-
+                    log.debug("Username is {}", email);
                     List<?> rawRoles = claimsProvider.extractClaimFromToken(token,
                             claims -> claims.get("roles", List.class));
 

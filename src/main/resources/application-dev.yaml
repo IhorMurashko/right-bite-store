@@ -1,4 +1,4 @@
-jwt.secret.key: f8G7YxZ2KmL9QaP5RsDcVb3WNeJh4Tu1
+jwt.secret.key: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
 spring:
   application:
     name: right-bite
@@ -7,23 +7,22 @@ spring:
       host: localhost
       port: 6379
   datasource:
-    driver-class-name: org.h2.Driver
-    username: h2
-    password: h2
-    url: jdbc:h2:mem:h2db
+    url: jdbc:postgresql://postgres:5432/rightbite
+    username: postgres
+    password: postgresql
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop #create-drop
+      ddl-auto: validate
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+    baseline-on-migrate: false
   sql:
     init:
-      mode: always
+      mode: never
   security:
     oauth2:
       client:
@@ -48,15 +47,10 @@ spring:
           auth: true
           starttls:
             enable: true
-  flyway:
-    enabled: true
-    locations:
-      - classpath:db/migration/catalog
-    baseline-on-migrate: true
 logging:
   level:
     root: INFO               # Основной уровень логирования
-    com.bestStore: DEBUG     # Включаем DEBUG для своего кода
+    com.best_store: DEBUG     # Включаем DEBUG для своего кода
     org.springframework.web: WARN
     org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)

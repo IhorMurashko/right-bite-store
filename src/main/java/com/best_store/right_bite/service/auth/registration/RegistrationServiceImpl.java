@@ -2,15 +2,17 @@ package com.best_store.right_bite.service.auth.registration;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
+import com.best_store.right_bite.constant.notification.email.EmailLetterContent;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.dto.notification.DefaultNotification;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.model.user.User;
+import com.best_store.right_bite.notification.data.SimpleTextNotification;
+import com.best_store.right_bite.notification.data.TypedNotification;
 import com.best_store.right_bite.service.notificationService.NotificationDispatcherService;
-import com.best_store.right_bite.service.user.UserCrudService;
-import com.best_store.right_bite.util.user.UserAssembler;
-import com.best_store.right_bite.util.user.UserFieldAdapter;
+import com.best_store.right_bite.service.user.crud.UserCrudService;
+import com.best_store.right_bite.utils.user.UserAssembler;
+import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.Objects;
+
 /**
  * Implementation of the {@link RegistrationService} responsible for handling user registration logic.
  *
@@ -89,12 +92,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         userCrudService.save(user);
         log.info("User {} saved successfully", email);
 
-        DefaultNotification congratulationLetter = new DefaultNotification(
-                NotificationType.REGISTRATION,
+        TypedNotification<SimpleTextNotification> congratulationLetter = new TypedNotification<>(
+                NotificationType.TEXT_NOTIFICATION,
                 NotificationChannel.EMAIL,
                 email,
-                null,
-                null
+                EmailLetterContent.GREETING_SUBJECT,
+                new SimpleTextNotification(EmailLetterContent.GREETING)
         );
 
         notificationDispatcherService.send(congratulationLetter);

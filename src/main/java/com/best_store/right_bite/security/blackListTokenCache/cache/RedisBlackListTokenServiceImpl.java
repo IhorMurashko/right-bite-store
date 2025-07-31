@@ -8,7 +8,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
-
+/**
+ * Redis-backed implementation of {@link BlackListTokenService}.
+ *
+ * <p>Stores revoked tokens in Redis with expiration matching the token's TTL.</p>
+ *
+ * <p>Uses {@link ClaimsProvider} to extract expiration date from tokens.</p>
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -16,7 +22,11 @@ public class RedisBlackListTokenServiceImpl implements BlackListTokenService {
 
     private final StringRedisTemplate redisTemplate;
     private final ClaimsProvider claimsProvider;
-
+    /**
+     * Saves revoked tokens into Redis with TTL until token expiration.
+     *
+     * @param tokens tokens to revoke
+     */
     @Override
     public void saveToken(@NonNull String... tokens) {
         for (String t : tokens) {
@@ -35,7 +45,12 @@ public class RedisBlackListTokenServiceImpl implements BlackListTokenService {
             }
         }
     }
-
+    /**
+     * Checks if a token is present (revoked) in Redis.
+     *
+     * @param token token to check
+     * @return true if token is revoked
+     */
     @Override
     public boolean isTokenPresent(@NonNull String token) {
         return redisTemplate.hasKey(token);

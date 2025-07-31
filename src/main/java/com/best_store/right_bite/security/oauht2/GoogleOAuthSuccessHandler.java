@@ -5,9 +5,9 @@ import com.best_store.right_bite.security.constant.GoogleCredentialsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.managment.TokenManager;
-import com.best_store.right_bite.service.user.UserCrudService;
-import com.best_store.right_bite.util.user.UserAssembler;
-import com.best_store.right_bite.util.user.UserFieldAdapter;
+import com.best_store.right_bite.service.user.crud.UserCrudService;
+import com.best_store.right_bite.utils.user.UserAssembler;
+import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
-
+/**
+ * Handles successful OAuth2 authentication via Google.
+ * <p>
+ * If the user already exists in the system (by email), they are loaded.
+ * Otherwise, a new user is created and saved using the received OAuth2 data.
+ * <p>
+ * After successful login, an access and refresh JWT token are generated and returned in JSON format.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +38,15 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final UserCrudService userCrudService;
     private final UserAssembler userAssembler;
     private final TokenManager tokenManager;
-
+    /**
+     * Called after successful OAuth2 authentication.
+     *
+     * @param request        the HTTP request
+     * @param response       the HTTP response (returns token JSON)
+     * @param authentication the authenticated OAuth2 user
+     * @throws IOException      if writing to response fails
+     * @throws ServletException in case of servlet errors
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,

@@ -1,7 +1,7 @@
 package com.best_store.right_bite.bmiInterpreter;
 
 
-import com.best_store.right_bite.constans.BMICategory;
+import com.best_store.right_bite.constant.bmi.BMICategory;
 
 /**
  * TeenGirlBmiInterpreterBMI is an implementation of the InterpreterBMI interface
