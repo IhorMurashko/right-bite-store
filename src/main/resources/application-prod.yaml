@@ -15,7 +15,7 @@ spring:
     show-sql: true
   flyway:
     locations: classpath:db/migration
-    enabled: false
+    enabled: true
     baseline-on-migrate: false
   security:
     oauth2:
