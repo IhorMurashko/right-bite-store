@@ -1,5 +1,8 @@
 jwt.secret.key: ${JWT_SECRET_KEY}
 spring:
+  config:
+    activate:
+      on-profile: prod
   data:
     redis:
       host: localhost
@@ -41,6 +44,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_and_stop
+      profiles:
+        active: prod
 logging:
   level:
     root: INFO               # Основной уровень логирования

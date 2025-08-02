@@ -1,7 +1,9 @@
 jwt.secret.key: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
 spring:
-  application:
-    name: right-bite
+  config:
+    activate:
+      on-profile: dev
+    import: optional:file:.env[.properties]
   data:
     redis:
       host: localhost
@@ -20,9 +22,6 @@ spring:
     locations: classpath:db/migration
     enabled: true
     baseline-on-migrate: false
-  sql:
-    init:
-      mode: never
   security:
     oauth2:
       client:
@@ -47,6 +46,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_and_stop
+      profiles:
+        active: dev
 logging:
   level:
     root: INFO               # Основной уровень логирования

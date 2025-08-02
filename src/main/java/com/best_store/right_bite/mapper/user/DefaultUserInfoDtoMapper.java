@@ -1,26 +1,28 @@
 package com.best_store.right_bite.mapper.user;
 
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
-import com.best_store.right_bite.model.role.Role;
 import com.best_store.right_bite.model.user.User;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
+/**
+ * Maps {@link User} entities to {@link DefaultUserInfoResponseDto}.
+ * <p>
+ * Used to expose user data in API responses in a consistent format.
+ *
+ * Mapping is one-way only (entity → DTO).
+ */
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DefaultUserInfoDtoMapper {
 
-
-    @Mapping(target = "roles", source = "roles", qualifiedByName = "convertUserRolesToSetString")
+    /**
+     * Converts a {@link User} entity to a {@link DefaultUserInfoResponseDto}.
+     *
+     * @param user the User entity
+     * @return mapped DefaultUserInfoResponseDto
+     */
     DefaultUserInfoResponseDto toDTO(User user);
-
-    @Named("convertUserRolesToSetString")
-    default Set<String> convertUserRolesToSetString(Set<Role> roles) {
-        return roles.stream()
-                .filter(obj -> false)
-                .map(role -> role.getName().name())
-                .collect(Collectors.toSet());
-    }
 }
+

@@ -102,7 +102,7 @@ public class AuthController {
      * @throws UserAccountIsNotAvailableException if the user account is expired, locked or disabled
      */
     @Operation(
-            summary = "google sing in",
+            summary = "email-password login",
             description = "sign in using email and password. request can't contains any jwt token.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "authentication credentials",
@@ -135,7 +135,7 @@ public class AuthController {
      * @throws IOException if redirection fails
      */
     @Operation(
-            summary = "sing in",
+            summary = "google sing in",
             description = "sign in using google. request can't contains any jwt token.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "success",
