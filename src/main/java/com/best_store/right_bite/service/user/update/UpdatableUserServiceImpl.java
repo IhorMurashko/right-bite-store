@@ -18,6 +18,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Implementation of {@link UpdatableUserService} for managing updates and retrieval
+ * of authenticated and other users.
+ * <p>
+ * Resolves user identity from JWT, applies updates via mappers,
+ * and persists changes using {@link UserCrudService}.
+ */
 @Service
 @RequiredArgsConstructor
 @Validated
@@ -28,19 +35,17 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
     private final UpdatableUserInfoMapper updatableUserInfoMapper;
     private final DefaultUserInfoDtoMapper defaultUserInfoDtoMapper;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
                                    @NonNull Authentication authentication) {
 
-        if (!(authentication.getPrincipal() instanceof JwtPrincipal principal)) {
-            log.error("Invalid principal type");
-            throw new InvalidPrincipalCastException(
-                    ExceptionMessageProvider.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);
-        }
-        String id = principal.id();
+        Long id = getUserIdFromAuthentication(authentication);
 
         try {
-            User user = userCrudService.findById(Long.parseLong(id));
+            User user = userCrudService.findById(id);
             log.debug("user with id was {} was found", id);
             updatableUserInfoMapper.updateEntityFromDto(userUpdateRequestDto, user);
             User saved = userCrudService.save(user);
@@ -55,33 +60,60 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BaseUserInfo findUserBy(@NonNull String email) {
         User user = userCrudService.findByEmail(email);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BaseUserInfo findUserBy(@NonNull Long id) {
         User user = userCrudService.findById(id);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BaseUserInfo findUserBy(@NonNull Authentication authentication) {
-        if (authentication.getPrincipal() instanceof JwtPrincipal principal) {
-            User user = userCrudService.findById(Long.parseLong(principal.id()));
-            return defaultUserInfoDtoMapper.toDTO(user);
-        } else {
-            throw new InvalidPrincipalCastException(
-                    ExceptionMessageProvider.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);
-        }
+        User user = userCrudService.findById(getUserIdFromAuthentication(authentication));
+        return defaultUserInfoDtoMapper.toDTO(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteUserBy(@NonNull Authentication authentication) {
+        userCrudService.deleteById(getUserIdFromAuthentication(authentication));
+    }
+
+    /**
+     * Extracts the authenticated user's ID from the provided authentication object.
+     * Only supports {@link JwtPrincipal}.
+     *
+     * @param authentication current security context
+     * @return user ID
+     * @throws InvalidTokenSubjectException  if ID cannot be parsed
+     * @throws InvalidPrincipalCastException if the principal is not a {@link JwtPrincipal}
+     */
+    private Long getUserIdFromAuthentication(@NonNull Authentication authentication) {
         if (authentication.getPrincipal() instanceof JwtPrincipal principal) {
-            userCrudService.deleteById(Long.parseLong(principal.id()));
+            try {
+                return Long.parseLong(principal.id());
+            } catch (NumberFormatException ex) {
+                throw new InvalidTokenSubjectException(
+                        String.format(
+                                ExceptionMessageProvider.INVALID_TOKEN_SUBJECT,
+                                ex.getClass().getSimpleName()));
+            }
         } else {
             throw new InvalidPrincipalCastException(
                     ExceptionMessageProvider.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);

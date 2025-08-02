@@ -1,15 +1,16 @@
 package com.best_store.right_bite.service.user.crud;
 
 
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import org.springframework.lang.NonNull;
 /**
  * Interface defining basic CRUD and utility operations for {@link User} entities.
  *
- * <p>Provides methods to retrieve, create, delete users and check their existence
- * by email or ID. Also allows password reset by email.</p>
+ * <p>Supports retrieval, creation, deletion of users and utility checks by email or ID.
+ * Also provides password reset functionality.</p>
  *
- * <p>All operations are email- or ID-based to ensure consistent access patterns.</p>
+ * <p>Designed for consistent and reusable user data access.</p>
  *
  * @author Ihor Murashko
  */
@@ -19,7 +20,8 @@ public interface UserCrudService {
      * Retrieves a user by email.
      *
      * @param email user's email
-     * @return the user entity
+     * @return the found {@link User}
+     * @throws UserNotFoundException if user is not found
      */
     User findByEmail(@NonNull String email);
 
@@ -27,15 +29,16 @@ public interface UserCrudService {
      * Retrieves a user by ID.
      *
      * @param id user ID
-     * @return the user entity
+     * @return the found {@link User}
+     * @throws UserNotFoundException if user is not found
      */
     User findById(@NonNull Long id);
 
     /**
-     * Saves a new or updated user.
+     * Saves or updates the given user.
      *
-     * @param user user entity to save
-     * @return saved user
+     * @param user user entity to persist
+     * @return the saved {@link User}
      */
     User save(@NonNull User user);
 
@@ -54,7 +57,7 @@ public interface UserCrudService {
     void deleteByEmail(@NonNull String email);
 
     /**
-     * Checks whether a user with given email exists.
+     * Checks if a user exists by email.
      *
      * @param email user email
      * @return true if exists, false otherwise
