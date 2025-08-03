@@ -1,8 +1,7 @@
 package com.best_store.right_bite.dto.dtoBMI;
 
-import com.best_store.right_bite.constans.BMICategory;
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
-import com.best_store.right_bite.model.catalog.Product;
 
 import java.util.List;
 

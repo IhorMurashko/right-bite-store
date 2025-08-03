@@ -1,7 +1,7 @@
 package com.best_store.right_bite.dto.dtoBMI;
 
 
-import com.best_store.right_bite.constans.Gender;
+import com.best_store.right_bite.constant.bmi.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

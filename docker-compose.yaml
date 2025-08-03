@@ -4,3 +4,14 @@ services:
     image: redis:latest
     ports:
       - '6379:6379'
+    restart: unless-stopped
+#  postgres:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_DB: rightbite
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgresql
+#    ports:
+#      - '5432:5432'
+#    tmpfs:
+#      - /var/lib/postgresql/data

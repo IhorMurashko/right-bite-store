@@ -9,6 +9,8 @@ spring:
     active: dev
   application:
     name: right-bite
+#  profiles:
+#    active: dev
   docker:
     compose:
       lifecycle-management: start_and_stop

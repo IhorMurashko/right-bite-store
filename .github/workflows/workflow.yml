@@ -23,7 +23,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build & test service
-        run: mvn clean verify -am -Pdev
+        run: mvn clean verify -am -Pprod
 
   deploy:
     name: Deploy service

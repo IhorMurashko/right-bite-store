@@ -1,6 +1,6 @@
 package com.best_store.right_bite.utils.utilsBMI;
 
-import com.best_store.right_bite.constans.BMICategory;
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import lombok.experimental.UtilityClass;
 
 /**
