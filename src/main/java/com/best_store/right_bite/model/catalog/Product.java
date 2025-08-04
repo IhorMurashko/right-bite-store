@@ -20,12 +20,18 @@ public class Product extends Base {
     String productName;
     BigDecimal price;
     String description;
-    Integer kcal;
+    Double kcal;
     Integer quantityInStock;
 
     Double rating;
     Integer ratingCount;
 
+    Double calories;
+    Double carbs;
+    Double protein;
+    Double fat;
+    Double fiber;
+    String vitamins;
 
 
     @OneToMany(mappedBy = "product")

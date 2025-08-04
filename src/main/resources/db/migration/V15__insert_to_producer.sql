@@ -1,6 +1,16 @@
-INSERT INTO producer (producer_name)
-VALUES ('Nestle'),
-       ('Mars'),
-       ('Oils'),
-       ('Test'),
-       ('BioWorld');
+INSERT INTO Producer (id, producer_name) VALUES
+    (1, 'Torres, Hernandez and Brown'),
+    (2, 'Stephens, Sims and Sanchez'),
+    (3, 'Medina Ltd'),
+    (4, 'Hanson LLC'),
+    (5, 'Coleman, Harper and Hernandez'),
+    (6, 'Hicks, Campbell and Ross'),
+    (7, 'Reyes PLC'),
+    (8, 'Ross, Lewis and Morgan'),
+    (9, 'Ferguson PLC'),
+    (10, 'Kelley, Cooper and Allen'),
+    (11, 'Ward Ltd'),
+    (12, 'Sanders-Williams'),
+    (13, 'Perez, Howard and Young'),
+    (14, 'Morris-Moore'),
+    (15, 'Evans PLC');
