@@ -15,14 +15,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Implementation of {@link UserCrudService} using JPA repository.
+ * Implementation of {@link UserCrudService} backed by {@link UserRepository}.
  *
- * <p>Provides transactional CRUD operations and utility methods on {@link User} entities.
- * Email fields are normalized to lowercase before queries.</p>
+ * <p>Handles transactional persistence operations for {@link User} entities.
+ * Normalizes email fields and ensures proper exception handling.</p>
  *
- * <p>Logging is used to trace user lifecycle events and debug existence checks.</p>
- *
- * <p>Transactional boundaries are explicitly defined for mutating operations.</p>
+ * <p>Provides audit-level logging for all critical operations.</p>
  *
  * @see UserRepository
  * @see UserFieldAdapter
@@ -35,6 +33,9 @@ public class UserCrudServiceImpl implements UserCrudService {
 
     private final UserRepository userRepository;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User findByEmail(@NonNull String email) {
         log.info("Find user by email: {}", email);
@@ -44,6 +45,9 @@ public class UserCrudServiceImpl implements UserCrudService {
                 ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User findById(@NonNull Long id) {
         log.info("Find user by id: {}", id);
@@ -53,6 +57,9 @@ public class UserCrudServiceImpl implements UserCrudService {
                 ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public User save(@NonNull User user) {
@@ -60,6 +67,9 @@ public class UserCrudServiceImpl implements UserCrudService {
         return userRepository.save(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteById(@NonNull long id) {
@@ -68,6 +78,9 @@ public class UserCrudServiceImpl implements UserCrudService {
         userRepository.delete(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteByEmail(@NonNull String email) {
@@ -76,18 +89,27 @@ public class UserCrudServiceImpl implements UserCrudService {
         userRepository.delete(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmailExist(@NonNull String email) {
         log.debug("Check if user with email: {} exists", email);
         return userRepository.existsByEmail(UserFieldAdapter.toLower(email));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isUserExistById(@NonNull long id) {
         log.debug("Check if user with id: {} exists", id);
         return userRepository.existsById(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void resetPasswordByEmail(@NonNull String email, @NonNull String newEncodedPassword) {
