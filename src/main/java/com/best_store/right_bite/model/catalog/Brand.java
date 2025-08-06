@@ -10,5 +10,5 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Brand extends Base {
-    String brandName;
+    private String brandName;
 }

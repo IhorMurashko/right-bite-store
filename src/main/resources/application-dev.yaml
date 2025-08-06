@@ -9,13 +9,13 @@ spring:
       host: localhost
       port: 6379
   datasource:
-    url: jdbc:postgresql://postgres:5432/rightbite
+    url: jdbc:postgresql://localhost:5432/rightbite
     username: postgres
     password: postgresql
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: validate #none
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
@@ -60,4 +60,5 @@ logging:
     org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)
     org.flywaydb.core: DEBUG
-
+    org.springframework.boot.autoconfigure.flyway: DEBUG
+    org.springframework.boot.autoconfigure.jdbc: DEBUG

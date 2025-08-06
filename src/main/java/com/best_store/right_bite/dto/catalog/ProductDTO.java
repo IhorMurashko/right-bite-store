@@ -23,6 +23,12 @@ public class ProductDTO {
     Double rating;
     Integer ratingCount;
 
+    Double calories;
+    Double carbs;
+    Double protein;
+    Double fat;
+    Double fiber;
+    String vitamins;
 
     List<ProductSalesDTO> productSales;
     BrandDTO brand;

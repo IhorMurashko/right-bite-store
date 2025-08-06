@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 
 /**
  * Utility class providing regular expression patterns and associated error messages
- * for validating user input fields related to the {@code User} entity and related data.
+ * for validating user input fields related to the {@code User} entity and related data.sql.
  *
  * <p>This class is designed to be used both for manual validation logic and as pattern
  * definitions inside validation annotations such as {@code @Pattern}.</p>

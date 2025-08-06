@@ -15,11 +15,11 @@ import lombok.*;
 @Builder
 public class Image extends Base {
 
-    String url;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     @JsonBackReference
-    Product product;
+    private Product product;
 
 }

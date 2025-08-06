@@ -6,7 +6,7 @@ import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;
 import com.best_store.right_bite.dto.dtoBMI.BmiResponse;
-import com.best_store.right_bite.service.catalog.CatalogService;
+import com.best_store.right_bite.service.catalog.ProductService;
 import com.best_store.right_bite.utils.utilsBMI.BmiCalculator;
 import com.best_store.right_bite.utils.utilsBMI.CaloriesByType;
 import com.best_store.right_bite.utils.utilsBMI.HealthRiskEstim;
@@ -32,7 +32,7 @@ import java.util.List;
 public class BMIServiceImpl implements BMIService {
 
     @Autowired
-    private CatalogService catalogService;
+    private ProductService catalogService;
 
     /**
      * The Groq is used to get recommendations based on the BMI category.

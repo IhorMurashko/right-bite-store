@@ -11,5 +11,5 @@ import lombok.*;
 @Builder
 public class Producer extends Base {
 
-    String producerName;
+    private String producerName;
 }

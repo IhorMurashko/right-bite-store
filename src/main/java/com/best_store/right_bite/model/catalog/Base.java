@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public abstract class Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
 
 }

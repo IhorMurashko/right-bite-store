@@ -16,6 +16,12 @@
     <name>right-bite</name>
     <description>right-bite backend</description>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
 
     <developers>
         <developer>
@@ -109,8 +115,9 @@
         <spring-ai-starter-model-openai.version>1.0.0</spring-ai-starter-model-openai.version>
     </properties>
 
-
     <dependencies>
+
+
 
         <!--    WEB   -->
         <dependency>
@@ -137,6 +144,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 
         <!--    MAIL   -->
         <dependency>
