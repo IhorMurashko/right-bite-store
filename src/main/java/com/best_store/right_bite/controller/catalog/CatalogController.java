@@ -1,7 +1,6 @@
 package com.best_store.right_bite.controller.catalog;
 
 
-import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
 import com.best_store.right_bite.dto.catalog.BrandDTO;
 import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequestMapping("/api/v1/catalog")
 public class CatalogController {
 
-    private final CatalogService catalogService;
+    private final ProductService catalogService;
     private final CategoryService categoryService;
     private final BrandService brandService;
 
@@ -40,6 +39,20 @@ public class CatalogController {
     public List<ProductDTO> getAllProduct()
     {
         return catalogService.getAllProduct();
+    }
+
+
+    @Operation(
+            summary = "Get product by ID",
+            description = "Returns a product by its unique identifier.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Product successfully returned"),
+                    @ApiResponse(responseCode = "404", description = "Product not found")
+            }
+    )
+    @GetMapping("/{id}")
+    public ProductDTO getProductById(@PathVariable Long id) {
+        return catalogService.getProductDTOById(id);
     }
 
 
@@ -83,5 +96,7 @@ public class CatalogController {
     public List<BrandDTO> getAllBrand() {
         return brandService.getAllBrands();
     }
+
+
 
 }

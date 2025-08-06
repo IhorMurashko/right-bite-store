@@ -17,33 +17,33 @@ import java.util.Set;
 public class Product extends Base {
 
 
-    String productName;
-    BigDecimal price;
-    String description;
-    Double kcal;
-    Integer quantityInStock;
+    private String productName;
+    private BigDecimal price;
+    private String description;
+    private Double kcal;
+    private Integer quantityInStock;
 
-    Double rating;
-    Integer ratingCount;
+    private Double rating;
+    private Integer ratingCount;
 
-    Double calories;
-    Double carbs;
-    Double protein;
-    Double fat;
-    Double fiber;
-    String vitamins;
+    private Double calories;
+    private Double carbs;
+    private Double protein;
+    private Double fat;
+    private Double fiber;
+    private String vitamins;
 
 
     @OneToMany(mappedBy = "product")
-    List<ProductSales> productSales;
+    private List<ProductSales> productSales;
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
-    Brand brand;
+    private Brand brand;
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
-    List<Image> images;
+    private List<Image> images;
 
     @ManyToMany()
     @JoinTable(
@@ -51,11 +51,11 @@ public class Product extends Base {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    Set<Category> categories;
+    private Set<Category> categories;
 
     @ManyToOne
     @JoinColumn(name = "producer_id")
-    Producer producer;
+    private Producer producer;
 
 
 }

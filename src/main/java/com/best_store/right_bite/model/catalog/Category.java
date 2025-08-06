@@ -18,10 +18,10 @@ import java.util.List;
 public class Category extends Base {
 
     @Column(name = "category_name")
-    String categoryName;
+    private String categoryName;
 
     @ManyToMany(mappedBy = "categories")
-    List<Product> product;
+    private List<Product> product;
 
-    String image;
+    private String image;
 }

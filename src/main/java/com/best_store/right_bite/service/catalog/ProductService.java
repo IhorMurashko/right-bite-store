@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface CatalogService {
+public interface ProductService {
     List<ProductDTO> getAllProduct();
     Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest);
+    ProductDTO getProductDTOById(Long id);
 }

@@ -20,8 +20,8 @@ public class ProductSales extends Base{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    Product product;
+    private Product product;
 
-    Integer quantity;
-    LocalDateTime saleDate;
+    private Integer quantity;
+    private LocalDateTime saleDate;
 }

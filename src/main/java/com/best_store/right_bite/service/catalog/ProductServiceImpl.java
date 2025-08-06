@@ -6,10 +6,8 @@ import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
 import com.best_store.right_bite.mapper.catalog.ProductMapper;
-import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CatalogServiceImpl implements CatalogService {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository catalogRepository;
 
@@ -32,6 +30,10 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogRepository.findAll().stream().map(productEntityToDTOMapper::toDTO).toList();
     }
 
+    @Override
+    public ProductDTO getProductDTOById(Long id) {
+        return productEntityToDTOMapper.toDTO(catalogRepository.findById(id).orElse(null));
+    }
 
     public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest)
     {
@@ -77,6 +79,7 @@ public class CatalogServiceImpl implements CatalogService {
             products.sort(comparator);
         }
     }
+
 
     private Page<ProductDTO> paginate(List<ProductDTO> products, int page, int size) {
         int fromIndex = page * size;
