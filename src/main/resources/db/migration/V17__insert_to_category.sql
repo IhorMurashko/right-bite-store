@@ -7,23 +7,3 @@ INSERT INTO Category (id, category_name, image) VALUES
 (6, 'Bakery and Bread', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsCLgtsQdIEOJeavoeJBkp3AcGoyMDSdxy0A&s'),
 (7, 'Beverages', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGtkoq9V7ETfgOoA7ocitS9apGg1a0ukHlSg&s'),
 (8, 'Snacks and Sweets', 'https://www.foodanddrinktechnology.com/wp-content/uploads/sweets_snacks.jpg');
-
-
-
--- vegetables;
---
--- fruits;
---
--- drinks;
---
--- snacks;
---
--- desserts;
---
--- pre-cooked meals;
---
--- diets;
---
--- groceries;
---
--- accessories
