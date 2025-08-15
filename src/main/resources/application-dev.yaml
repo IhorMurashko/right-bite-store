@@ -22,10 +22,6 @@ spring:
     locations: classpath:db/migration
     enabled: true
     baseline-on-migrate: false
-    url: jdbc:postgresql://localhost:5432/rightbite
-    user: postgres
-    password: postgresql
-    driver-class-name: org.postgresql.Driver
   security:
     oauth2:
       client:
