@@ -1,7 +1,6 @@
 package com.best_store.right_bite.service.catalog;
 
 
-
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
@@ -26,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productEntityToDTOMapper;
 
+    @Override
     public List<ProductDTO> getAllProduct() {
         return catalogRepository.findAll().stream().map(productEntityToDTOMapper::toDTO).toList();
     }
@@ -35,8 +35,8 @@ public class ProductServiceImpl implements ProductService {
         return productEntityToDTOMapper.toDTO(catalogRepository.findById(id).orElse(null));
     }
 
-    public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest)
-    {
+    @Override
+    public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest) {
         List<ProductDTO> allProduct = getAllProduct();
 
         List<ProductDTO> filtered = applyFilters(allProduct, productFilterRequest);
