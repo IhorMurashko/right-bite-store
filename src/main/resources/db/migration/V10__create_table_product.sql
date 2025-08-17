@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Product
     protein           DOUBLE PRECISION NOT NULL,
     fat               DOUBLE PRECISION NOT NULL,
     fiber             DOUBLE PRECISION NOT NULL,
-    vitamins          INTEGER NOT NULL,
+    vitamins          VARCHAR(40) NOT NULL,
     quantity_in_stock INTEGER          DEFAULT 0,
     rating            DOUBLE PRECISION DEFAULT 0,
     rating_count      INTEGER          DEFAULT 0,
