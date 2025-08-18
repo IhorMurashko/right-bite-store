@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS billing_info
 (
-    id           BIGSERIAL PRIMARY KEY,
+    id           BIGSERIAL PRIMARY KEY DEFAULT nextval('billing_seq'),
     name_on_card VARCHAR(255),
     card_number  TEXT,
     expire_date  VARCHAR(10),
