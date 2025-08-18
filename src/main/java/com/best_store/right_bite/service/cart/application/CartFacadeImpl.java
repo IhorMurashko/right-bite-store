@@ -63,8 +63,9 @@ public class CartFacadeImpl implements CartFacade {
         Optional<Cart> optionalCart = cartService.getCartByUserId(userId);
         if (optionalCart.isEmpty()) {
             log.debug("user cart is not present");
-            optionalCart = Optional.of(new Cart(user));
-            cartService.save(optionalCart.get());
+            Cart created = new Cart(user);
+            Cart persistedCart = cartService.save(created);
+            optionalCart = Optional.of(persistedCart);
             log.info("new user cart was created");
         }
         return optionalCart.get();
