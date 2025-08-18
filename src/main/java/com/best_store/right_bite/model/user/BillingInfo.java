@@ -13,7 +13,8 @@ import lombok.*;
 @AllArgsConstructor
 public class BillingInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "billing_seq")
+    @SequenceGenerator(name = "billing_seq", sequenceName = "billing_seq", allocationSize = 1)
     private Long id;
     private String nameOnCard;
     @Convert(converter = CardNumberEncryptor.class)
