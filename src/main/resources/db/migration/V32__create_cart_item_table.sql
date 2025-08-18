@@ -1,6 +1,6 @@
 CREATE TABLE cart_items
 (
-    id                  BIGINT PRIMARY KEY DEFAULT nextval('item_seq'),
+    id                  BIGINT PRIMARY KEY,
     product_id          BIGINT         NOT NULL,
     product_name        VARCHAR(100)   NOT NULL,
     quantity            INTEGER        NOT NULL,

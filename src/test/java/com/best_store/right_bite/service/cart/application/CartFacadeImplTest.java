@@ -84,29 +84,6 @@ class CartFacadeImplTest {
     class FindCartByAuthUser {
 
         @Test
-        @DisplayName("get existing user cart")
-        void shouldReturnExistingUserCart_when_userWasFound() {
-            doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
-            doReturn(user).when(userCrudService).findById(userId);
-            doReturn(existingUserCart).when(cartService).getCartByUserId(userId);
-
-            Cart cart = cartFacade.findCartByAuthUser(authentication);
-            verify(cartService).getCartByUserId(longArgumentCaptor.capture());
-
-            assertNotNull(cart);
-            assertTrue(existingUserCart.isPresent());
-            assertSame(existingUserCart.get(), cart);
-            assertEquals(user, cart.getUser());
-            assertEquals(userId, longArgumentCaptor.getValue());
-
-            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
-            verify(userCrudService, times(1)).findById(userId);
-            verify(cartService, times(1)).getCartByUserId(userId);
-            verifyNoMoreInteractions(authenticationParserUtil, userCrudService, cartService);
-
-        }
-
-        @Test
         @DisplayName("create new user cart")
         void shouldReturnNewUserCart_when_userWasNotFound() {
             doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
@@ -167,6 +144,29 @@ class CartFacadeImplTest {
             verify(userCrudService, times(1)).findById(userId);
             verifyNoMoreInteractions(userCrudService, authenticationParserUtil);
             verifyNoInteractions(cartService);
+        }
+
+        @Test
+        @DisplayName("get existing user cart")
+        void shouldReturnExistingUserCart_when_userWasFound() {
+            doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
+            doReturn(user).when(userCrudService).findById(userId);
+            doReturn(existingUserCart).when(cartService).getCartByUserId(userId);
+
+            Cart cart = cartFacade.findCartByAuthUser(authentication);
+            verify(cartService).getCartByUserId(longArgumentCaptor.capture());
+
+            assertNotNull(cart);
+            assertTrue(existingUserCart.isPresent());
+            assertSame(existingUserCart.get(), cart);
+            assertEquals(user, cart.getUser());
+            assertEquals(userId, longArgumentCaptor.getValue());
+
+            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
+            verify(userCrudService, times(1)).findById(userId);
+            verify(cartService, times(1)).getCartByUserId(userId);
+            verifyNoMoreInteractions(authenticationParserUtil, userCrudService, cartService);
+
         }
     }
 

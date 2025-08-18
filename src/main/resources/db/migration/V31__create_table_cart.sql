@@ -1,6 +1,6 @@
 CREATE TABLE carts
 (
-    id          BIGINT PRIMARY KEY DEFAULT nextval('cart_seq'),
+    id          BIGINT PRIMARY KEY,
     user_id     BIGINT    NOT NULL UNIQUE,
     created_at  TIMESTAMP NOT NULL,
     updated_at  TIMESTAMP,
