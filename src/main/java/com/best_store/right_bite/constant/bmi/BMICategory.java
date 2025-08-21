@@ -1,7 +1,5 @@
 package com.best_store.right_bite.constant.bmi;
 
-
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
