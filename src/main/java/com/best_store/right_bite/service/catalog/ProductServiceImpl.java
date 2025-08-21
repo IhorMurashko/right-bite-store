@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductDTOById(Long id) {
         return productEntityToDTOMapper.toDTO(catalogRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ExceptionMessageProvider.ID_PRODUCT_NOT_FOUND)));
+                .orElseThrow(() -> new ProductNotFoundException(ExceptionMessageProvider.ID_PRODUCT_NOT_FOUND.formatted(id))));
     }
 
     public Page<ProductDTO> getAllProductPageable(ProductFilterRequest productFilterRequest)
