@@ -16,6 +16,7 @@ public class ExceptionMessageProvider {
     public final String INVALID_TOKEN = "Invalid token.";
     public final String AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION= "Authentication principal is not instance of JwtPrincipal.";
     public final String INVALID_TOKEN_SUBJECT= "Invalid token subject. Subject couldn't be %s type.";
+    public final String ID_PRODUCT_NOT_FOUND= "Product with id %s not found";
 
 
 }
