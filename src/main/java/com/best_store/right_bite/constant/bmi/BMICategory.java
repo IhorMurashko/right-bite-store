@@ -1,6 +1,5 @@
 package com.best_store.right_bite.constant.bmi;
 
-
 import lombok.Getter;
 
 /**

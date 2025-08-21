@@ -5,6 +5,7 @@ import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
@@ -19,12 +20,18 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleProductNotFound(ProductNotFoundException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRoleNotFoundException(RoleNotFoundException ex, HttpServletRequest request) {

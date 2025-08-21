@@ -4,6 +4,8 @@ package com.best_store.right_bite.service.catalog;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
 import com.best_store.right_bite.mapper.catalog.ProductMapper;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductDTOById(Long id) {
-        return productEntityToDTOMapper.toDTO(catalogRepository.findById(id).orElse(null));
+        return productEntityToDTOMapper.toDTO(catalogRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(ExceptionMessageProvider.ID_PRODUCT_NOT_FOUND.formatted(id))));
     }
 
     @Override

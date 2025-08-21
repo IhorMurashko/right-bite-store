@@ -1,5 +1,6 @@
 package com.best_store.right_bite.model.catalog;
 
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
