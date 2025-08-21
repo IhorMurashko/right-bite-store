@@ -10,6 +10,7 @@ import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
 import com.best_store.right_bite.security.principal.JwtPrincipal;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
+import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
     private final UserCrudService userCrudService;
     private final UpdatableUserInfoMapper updatableUserInfoMapper;
     private final DefaultUserInfoDtoMapper defaultUserInfoDtoMapper;
+    private final AuthenticationParserUtil authenticationParserUtil;
 
     /**
      * {@inheritDoc}
@@ -42,7 +44,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
     public BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
                                    @NonNull Authentication authentication) {
 
-        Long id = getUserIdFromAuthentication(authentication);
+        Long id = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
 
         try {
             User user = userCrudService.findById(id);
@@ -83,7 +85,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public BaseUserInfo findUserBy(@NonNull Authentication authentication) {
-        User user = userCrudService.findById(getUserIdFromAuthentication(authentication));
+        User user = userCrudService.findById(authenticationParserUtil.getUserLongIdFromAuthentication(authentication));
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
@@ -92,31 +94,6 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public void deleteUserBy(@NonNull Authentication authentication) {
-        userCrudService.deleteById(getUserIdFromAuthentication(authentication));
-    }
-
-    /**
-     * Extracts the authenticated user's ID from the provided authentication object.
-     * Only supports {@link JwtPrincipal}.
-     *
-     * @param authentication current security context
-     * @return user ID
-     * @throws InvalidTokenSubjectException  if ID cannot be parsed
-     * @throws InvalidPrincipalCastException if the principal is not a {@link JwtPrincipal}
-     */
-    private Long getUserIdFromAuthentication(@NonNull Authentication authentication) {
-        if (authentication.getPrincipal() instanceof JwtPrincipal principal) {
-            try {
-                return Long.parseLong(principal.id());
-            } catch (NumberFormatException ex) {
-                throw new InvalidTokenSubjectException(
-                        String.format(
-                                ExceptionMessageProvider.INVALID_TOKEN_SUBJECT,
-                                ex.getClass().getSimpleName()));
-            }
-        } else {
-            throw new InvalidPrincipalCastException(
-                    ExceptionMessageProvider.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);
-        }
+        userCrudService.deleteById(authenticationParserUtil.getUserLongIdFromAuthentication(authentication));
     }
 }
