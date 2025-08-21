@@ -11,13 +11,9 @@ public enum BMICategory {
     UNDERWEIGHT("Underweight"),
     NORMAL_WEIGHT("Normal"),
     OVERWEIGHT("Overweight");
-
-
     private final String category;
 
     BMICategory(String category) {
         this.category = category;
     }
-
-
 }

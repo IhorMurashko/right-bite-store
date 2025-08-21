@@ -6,7 +6,9 @@ import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 
-import com.best_store.right_bite.service.catalog.*;
+import com.best_store.right_bite.service.catalog.brandDomain.BrandService;
+import com.best_store.right_bite.service.catalog.categoryDomain.CategoryService;
+import com.best_store.right_bite.service.catalog.productDomain.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

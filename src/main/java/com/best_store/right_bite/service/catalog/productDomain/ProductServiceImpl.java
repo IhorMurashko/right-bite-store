@@ -1,13 +1,16 @@
-package com.best_store.right_bite.service.catalog;
+package com.best_store.right_bite.service.catalog.productDomain;
 
 
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
 import com.best_store.right_bite.mapper.catalog.ProductMapper;
+import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,7 +27,6 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository catalogRepository;
-
     private final ProductMapper productEntityToDTOMapper;
 
     @Override
@@ -36,6 +38,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO getProductDTOById(Long id) {
         return productEntityToDTOMapper.toDTO(catalogRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(ExceptionMessageProvider.ID_PRODUCT_NOT_FOUND.formatted(id))));
+    }
+
+    /**
+     * Service implementation for managing products.
+     * Provides methods to retrieve, filter, categorize, and manipulate product data.
+     * This includes operations to support business logic related to products.
+     */
+    @Override
+    public List<ProductDTO> getProductsByBMICategory(@NotNull BMICategory bmiCategory) {
+        List<Product> productsByBmiCategory = catalogRepository.getProductByBMICategory(bmiCategory);
+        return productEntityToDTOMapper.toDTOList(productsByBmiCategory);
     }
 
     @Override

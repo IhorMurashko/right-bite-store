@@ -1,6 +1,7 @@
 package com.best_store.right_bite.exeptionHandler;
 
 import com.best_store.right_bite.dto.exception.ErrorResponseDto;
+import com.best_store.right_bite.exception.ai.OpenAiCallerException;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
@@ -27,6 +28,11 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(OpenAiCallerException.class)
+    public ResponseEntity<ErrorResponseDto> handleOpenAiCallerException(OpenAiCallerException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleProductNotFound(ProductNotFoundException ex, HttpServletRequest request) {

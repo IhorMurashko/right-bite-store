@@ -1,12 +1,10 @@
-package com.best_store.right_bite.service.catalog;
+package com.best_store.right_bite.service.catalog.categoryDomain;
 
 
 import com.best_store.right_bite.dto.catalog.CategoryDTO;
 import com.best_store.right_bite.mapper.catalog.CategoryMapper;
-import com.best_store.right_bite.model.catalog.Category;
 import com.best_store.right_bite.repository.catalog.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

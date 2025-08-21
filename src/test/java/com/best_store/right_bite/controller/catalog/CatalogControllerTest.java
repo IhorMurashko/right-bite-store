@@ -1,9 +1,9 @@
 //package com.best_store.right_bite.controller.catalog;
 //
 //import com.best_store.right_bite.dto.catalog.ProductDTO;
-//import com.best_store.right_bite.service.catalog.BrandService;
+//import com.best_store.right_bite.service.catalog.brandDomain.BrandService;
 //import com.best_store.right_bite.service.catalog.CatalogService;
-//import com.best_store.right_bite.service.catalog.CategoryService;
+//import com.best_store.right_bite.service.catalog.catalog.CategoryService;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.Mockito;
 //import org.springframework.beans.factory.annotation.Autowired;

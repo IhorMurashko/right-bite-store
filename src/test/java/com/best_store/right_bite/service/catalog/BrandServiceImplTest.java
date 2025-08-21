@@ -4,6 +4,7 @@ import com.best_store.right_bite.dto.catalog.BrandDTO;
 import com.best_store.right_bite.mapper.catalog.BrandMapper;
 import com.best_store.right_bite.model.catalog.Brand;
 import com.best_store.right_bite.repository.catalog.BrandRepository;
+import com.best_store.right_bite.service.catalog.brandDomain.BrandServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 

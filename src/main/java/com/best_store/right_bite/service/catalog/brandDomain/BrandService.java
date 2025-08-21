@@ -1,4 +1,4 @@
-package com.best_store.right_bite.service.catalog;
+package com.best_store.right_bite.service.catalog.brandDomain;
 
 import com.best_store.right_bite.dto.catalog.BrandDTO;
 
