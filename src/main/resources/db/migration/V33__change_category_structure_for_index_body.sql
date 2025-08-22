@@ -1,0 +1,1 @@
+ALTER TABLE Category ADD COLUMN index_body VARCHAR(25);

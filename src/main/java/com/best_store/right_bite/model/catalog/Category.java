@@ -1,7 +1,6 @@
 package com.best_store.right_bite.model.catalog;
 
 import com.best_store.right_bite.constant.bmi.BMICategory;
-import com.best_store.right_bite.utils.utilsBMI.BMICategoryPostgresConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +21,7 @@ public class Category extends Base {
     @ManyToMany(mappedBy = "categories")
     private List<Product> product;
 
-    @Convert(converter = BMICategoryPostgresConverter.class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "index_body")
     private BMICategory indexBody;
 

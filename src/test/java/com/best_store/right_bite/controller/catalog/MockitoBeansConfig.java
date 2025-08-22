@@ -2,9 +2,9 @@ package com.best_store.right_bite.controller.catalog;
 
 
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
-import com.best_store.right_bite.service.catalog.BrandService;
-import com.best_store.right_bite.service.catalog.ProductService;
-import com.best_store.right_bite.service.catalog.CategoryService;
+import com.best_store.right_bite.service.catalog.brandDomain.BrandService;
+import com.best_store.right_bite.service.catalog.productDomain.ProductService;
+import com.best_store.right_bite.service.catalog.categoryDomain.CategoryService;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

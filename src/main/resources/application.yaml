@@ -3,7 +3,6 @@ tokens:
   accessTokenAvailableValidityPeriodInSec: 1800
   #30 days
   refreshTokenAvailableValidityPeriodInSec: 2592000
-
 spring:
   application:
     name: right-bite
