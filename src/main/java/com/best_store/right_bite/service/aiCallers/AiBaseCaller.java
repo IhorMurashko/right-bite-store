@@ -1,4 +1,4 @@
-package com.best_store.right_bite.service.aicallers;
+package com.best_store.right_bite.service.aiCallers;
 
 
 import jakarta.validation.constraints.NotNull;

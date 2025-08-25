@@ -2,9 +2,8 @@ package com.best_store.right_bite.utils.notification.contentBuilder.textMessage;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
-import com.best_store.right_bite.notification.mapper.NotificationTemplateMapper;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,19 +64,21 @@ public class EmailNotificationContentBuilder implements NotificationContentBuild
     private final NotificationType notificationType;
     private final NotificationChannel notificationChannel;
     private final SpringTemplateEngine templateEngine;
-    private final NotificationTemplateMapper<? extends NotificationData> notificationTemplateMapper;
+//    private final NotificationTemplateMapper<? extends NotificationPayload> notificationTemplateMapper;
 
 
     @Autowired
-    public EmailNotificationContentBuilder(SpringTemplateEngine templateEngine, NotificationTemplateMapper<? extends NotificationData> notificationTemplateMapper) {
-        this.notificationTemplateMapper = notificationTemplateMapper;
+    public EmailNotificationContentBuilder(SpringTemplateEngine templateEngine
+//            ,NotificationTemplateMapper<? extends NotificationPayload> notificationTemplateMapper
+    ) {
+//        this.notificationTemplateMapper = notificationTemplateMapper;
         this.notificationType = NotificationType.TEXT_NOTIFICATION;
         this.notificationChannel = NotificationChannel.EMAIL;
         this.templateEngine = templateEngine;
     }
 
     @Override
-    public String build(@NonNull BaseNotification<? extends NotificationData> notification) {
+    public String build(@NonNull BaseNotification<? extends NotificationPayload> notification) {
         Context context = new Context();
         context.setVariable("content", notification.data());
         return templateEngine.process("notification/email/textNotification", context);

@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.notificationService;
 
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import org.springframework.lang.NonNull;
 
 /**
@@ -14,5 +14,5 @@ import org.springframework.lang.NonNull;
  */
 @FunctionalInterface
 public interface NotificationDispatcherService {
-    void send(@NonNull BaseNotification<? extends NotificationData> notification);
+    void send(@NonNull BaseNotification<? extends NotificationPayload> notification);
 }
