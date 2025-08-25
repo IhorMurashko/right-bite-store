@@ -7,8 +7,6 @@ import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDt
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.model.user.User;
-import com.best_store.right_bite.notification.data.SimpleTextNotification;
-import com.best_store.right_bite.notification.data.TypedNotification;
 import com.best_store.right_bite.service.notificationService.NotificationDispatcherService;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.user.UserAssembler;
@@ -92,14 +90,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         userCrudService.save(user);
         log.info("User {} saved successfully", email);
 
-        TypedNotification<SimpleTextNotification> congratulationLetter = new TypedNotification<>(
-                NotificationType.TEXT_NOTIFICATION,
-                NotificationChannel.EMAIL,
-                email,
-                EmailLetterContent.GREETING_SUBJECT,
-                new SimpleTextNotification(EmailLetterContent.GREETING)
-        );
-
-        notificationDispatcherService.send(congratulationLetter);
+//        TypedNotification<SimpleTextNotification> congratulationLetter = new TypedNotification<>(
+//                NotificationType.TEXT_NOTIFICATION,
+//                NotificationChannel.EMAIL,
+//                email,
+//                EmailLetterContent.GREETING_SUBJECT,
+//                new SimpleTextNotification(EmailLetterContent.GREETING)
+//        );
+//
+//        notificationDispatcherService.send(congratulationLetter);
     }
 }

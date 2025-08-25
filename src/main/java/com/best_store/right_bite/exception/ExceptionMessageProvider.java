@@ -19,4 +19,6 @@ public class ExceptionMessageProvider {
     public final String ID_PRODUCT_NOT_FOUND = "Product with id %s not found";
     public final String USER_CART_WAS_NOT_FOUND = "User cart with user id: %d not found";
     public final String INTERNAL_AI_CALL_ERROR = "Internal AI call error: %s";
+    public final String NEWSLETTER_ID_WAS_NOT_FOUND = "Newsletter subscription with id %d not found";
+    public final String NEWSLETTER_EMAIL_WAS_NOT_FOUND = "Newsletter subscription with email %s not found";
 }

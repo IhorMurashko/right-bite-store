@@ -47,7 +47,7 @@ public interface UserCrudService {
      *
      * @param id user ID
      */
-    void deleteById(@NonNull long id);
+    void deleteById(@NonNull Long id);
 
     /**
      * Deletes a user by email.
@@ -70,7 +70,7 @@ public interface UserCrudService {
      * @param id user ID
      * @return true if exists, false otherwise
      */
-    boolean isUserExistById(@NonNull long id);
+    boolean isUserExistById(@NonNull Long id);
 
     /**
      * Resets the password for a user with given email.

@@ -2,8 +2,8 @@ package com.best_store.right_bite.utils.notification.contentBuilder;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import org.springframework.lang.NonNull;
 
 /**
@@ -34,7 +34,7 @@ import org.springframework.lang.NonNull;
  */
 public interface NotificationContentBuilder {
 
-    String build(@NonNull BaseNotification<? extends NotificationData> notification);
+    String build(@NonNull BaseNotification<? extends NotificationPayload> notification);
 
     NotificationType getNotificationType();
 

@@ -2,7 +2,7 @@ package com.best_store.right_bite.service.serviceBMI.bmiAiCallers;
 
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.ai.OpenAiCallerException;
-import com.best_store.right_bite.service.aicallers.AiBaseCaller;
+import com.best_store.right_bite.service.aiCallers.AiBaseCaller;
 import com.best_store.right_bite.service.serviceBMI.BMIServiceImpl;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

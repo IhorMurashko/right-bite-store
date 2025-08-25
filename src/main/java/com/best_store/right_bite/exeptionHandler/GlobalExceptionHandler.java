@@ -7,6 +7,7 @@ import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
 import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
+import com.best_store.right_bite.exception.notificationSubscription.NewsletterSubscriptionsWasNotFound;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
@@ -21,13 +22,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NewsletterSubscriptionsWasNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleNewsletterSubscriptionsWasNotFound(NewsletterSubscriptionsWasNotFound ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
 
     @ExceptionHandler(OpenAiCallerException.class)
     public ResponseEntity<ErrorResponseDto> handleOpenAiCallerException(OpenAiCallerException ex, HttpServletRequest request) {
