@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -66,9 +67,8 @@ public class BmiController {
     )
     @PostMapping("/calculate")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<BmiResponse> calculate(@RequestBody @Valid BmiRequest bmiRequest) {
+    public ResponseEntity<BmiResponse> calculate(@RequestBody @Valid @NotNull BmiRequest bmiRequest) {
         BmiResponse bmiResponse = bmiService.calculateBmi(bmiRequest);
         return new ResponseEntity<>(bmiResponse, HttpStatus.OK);
     }
-
 }

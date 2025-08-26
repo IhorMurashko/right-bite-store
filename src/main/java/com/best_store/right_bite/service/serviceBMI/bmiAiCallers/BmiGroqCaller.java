@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * BmiGroqCaller is a service class responsible for interacting with the OpenAI Groq chat model.
@@ -31,12 +31,12 @@ import org.springframework.stereotype.Service;
  * This class depends on {@link OpenAiChatModel} for calling the AI services.
  * </p>
  *
+ * @author Ihor Murashko
  * @see OpenAiChatModel
  * @see AiBaseCaller
  * @see ExceptionMessageProvider
- * @author Ihor Murashko
  */
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class BmiGroqCaller implements AiBaseCaller<String> {
