@@ -33,9 +33,6 @@ import java.util.Set;
         name = "order_with_delivery_details",
         attributeNodes = @NamedAttributeNode("orderDeliveryDetails")
 )
-@NamedEntityGraph(
-        includeAllAttributes = true
-)
 public class Order {
 
     /**
@@ -45,7 +42,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_seq_generator")
     @SequenceGenerator(name = "orders_seq_generator", sequenceName = "orders_seq", allocationSize = 1)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
     @Enumerated(EnumType.STRING)
@@ -68,6 +65,7 @@ public class Order {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
+        if (id == null || order.id == null) return false;
         return Objects.equals(id, order.id);
     }
 

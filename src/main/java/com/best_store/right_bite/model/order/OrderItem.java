@@ -1,6 +1,5 @@
 package com.best_store.right_bite.model.order;
 
-import com.best_store.right_bite.model.cart.CartItem;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,7 @@ public class OrderItem {
     private Long productId;
     @Column(nullable = false)
     private int quantity;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String productName;
     @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal priceSnapshot;
