@@ -25,15 +25,15 @@ public class OrderDeliveryDetails {
     private String lastname;
     @Column(nullable = false, length = 15)
     private String phoneNumber;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 10)
     private String houseNumber;
-    @Column(nullable = false, length = 100)
+    @Column(nullable = true, length = 100)
     private String streetName;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String city;
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String country;
-    @Column(nullable = false, length = 15)
+    @Column(nullable = true, length = 15)
     private String zipCode;
     @Column(nullable = true, length = 150)
     private String comment;

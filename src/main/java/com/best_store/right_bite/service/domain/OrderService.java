@@ -1,4 +1,4 @@
-package com.best_store.right_bite.service.domaine;
+package com.best_store.right_bite.service.domain;
 
 import com.best_store.right_bite.constant.order.OrderStatus;
 import com.best_store.right_bite.model.order.Order;

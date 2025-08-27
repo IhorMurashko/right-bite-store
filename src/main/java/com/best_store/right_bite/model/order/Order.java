@@ -22,6 +22,20 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@NamedEntityGraph(
+        name = "order_with_items",
+        attributeNodes = @NamedAttributeNode("items"))
+@NamedEntityGraph(
+        name = "order_with_user",
+        attributeNodes = @NamedAttributeNode("user")
+)
+@NamedEntityGraph(
+        name = "order_with_delivery_details",
+        attributeNodes = @NamedAttributeNode("orderDeliveryDetails")
+)
+@NamedEntityGraph(
+        includeAllAttributes = true
+)
 public class Order {
 
     /**
@@ -31,15 +45,12 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "orders_seq_generator")
     @SequenceGenerator(name = "orders_seq_generator", sequenceName = "orders_seq", allocationSize = 1)
     private Long id;
-    //todo: anonymous?
-    //todo: N+1 problem (EntityGraph)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false, length = 20)
     private OrderStatus orderStatus;
-    //todo: N+1 problem (EntityGraph)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> items = new LinkedHashSet<>();
     @Column(nullable = false, precision = 19, scale = 2)
@@ -50,7 +61,6 @@ public class Order {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-    //todo: N+1 problem (EntityGraph)
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private OrderDeliveryDetails orderDeliveryDetails;
 
