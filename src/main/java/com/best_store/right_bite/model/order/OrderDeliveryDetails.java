@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "order_delivery_details")
 @Getter
@@ -41,4 +43,16 @@ public class OrderDeliveryDetails {
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderDeliveryDetails other)) return false;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
