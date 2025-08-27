@@ -1,0 +1,31 @@
+package com.best_store.right_bite.model.order;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "order_items")
+@Getter
+@Setter
+@NoArgsConstructor
+public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_items_seq_generator")
+    @SequenceGenerator(name = "order_items_seq_generator", sequenceName = "order_item_seq", allocationSize = 1)
+    private Long id;
+    @Column(nullable = false)
+    private Long productId;
+    @Column(nullable = false)
+    private int quantity;
+    @Column(nullable = false)
+    private String productName;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal priceSnapshot;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+}
