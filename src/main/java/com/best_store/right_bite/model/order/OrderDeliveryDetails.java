@@ -41,7 +41,7 @@ public class OrderDeliveryDetails {
     @Column(nullable = false, length = 20)
     private DeliveryMethod deliveryMethod;
     @OneToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
     private Order order;
 
     @Override
