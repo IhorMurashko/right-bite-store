@@ -1,5 +1,6 @@
 package com.best_store.right_bite.dto.catalog;
 
+import com.best_store.right_bite.constant.bmi.BMICategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class ProductDTO {
     Double fat;
     Double fiber;
     String vitamins;
+    String indexBody;
 
     List<ProductSalesDTO> productSales;
     BrandDTO brand;

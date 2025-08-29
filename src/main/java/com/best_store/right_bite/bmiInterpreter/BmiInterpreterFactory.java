@@ -16,7 +16,7 @@ public class BmiInterpreterFactory {
      * Chooses appropriate class to analyze BMI.
      * @param gender - gender of person who is calculating BMI
      * @param age - age of person who is calculating BMI
-     * @return
+     * @return InterpreterBMI object that is used to analyze BMI.
      */
     public InterpreterBMI getInterpreter(Gender gender, int age) {
         if (age < 20) {

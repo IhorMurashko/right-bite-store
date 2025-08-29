@@ -1,8 +1,8 @@
 package com.best_store.right_bite.notification;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import org.springframework.lang.NonNull;
 
 /**
@@ -18,5 +18,5 @@ import org.springframework.lang.NonNull;
 public interface NotificationSender {
 
     NotificationChannel getNotificationChannel();
-    void send(@NonNull BaseNotification <? extends NotificationData> notification, @NonNull String content);
+    void send(@NonNull BaseNotification <? extends NotificationPayload> notification, @NonNull String content);
 }

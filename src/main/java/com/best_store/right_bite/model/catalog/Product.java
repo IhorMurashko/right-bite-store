@@ -56,6 +56,4 @@ public class Product extends Base {
     @ManyToOne
     @JoinColumn(name = "producer_id")
     private Producer producer;
-
-
 }

@@ -1,9 +1,7 @@
 package com.best_store.right_bite.model.catalog;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.best_store.right_bite.constant.bmi.BMICategory;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -22,6 +20,10 @@ public class Category extends Base {
 
     @ManyToMany(mappedBy = "categories")
     private List<Product> product;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "index_body")
+    private BMICategory indexBody;
 
     private String image;
 }

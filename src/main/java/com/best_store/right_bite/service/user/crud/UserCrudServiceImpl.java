@@ -72,7 +72,7 @@ public class UserCrudServiceImpl implements UserCrudService {
      */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
-    public void deleteById(@NonNull long id) {
+    public void deleteById(@NonNull Long id) {
         User user = findById(id);
         log.warn("Delete user by id: {}", id);
         userRepository.delete(user);
@@ -102,7 +102,7 @@ public class UserCrudServiceImpl implements UserCrudService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isUserExistById(@NonNull long id) {
+    public boolean isUserExistById(@NonNull Long id) {
         log.debug("Check if user with id: {} exists", id);
         return userRepository.existsById(id);
     }

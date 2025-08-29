@@ -1,0 +1,15 @@
+UPDATE Category SET index_body = 'UNDERWEIGHT' WHERE id = 1;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 2;
+UPDATE Category SET index_body = 'OVERWEIGHT' WHERE id = 3;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 4;
+UPDATE Category SET index_body = 'OVERWEIGHT' WHERE id = 5;
+UPDATE Category SET index_body = 'OVERWEIGHT' WHERE id = 6;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 7;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 8;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 9;
+UPDATE Category SET index_body = 'OVERWEIGHT' WHERE id = 10;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 11;
+UPDATE Category SET index_body = 'OVERWEIGHT' WHERE id = 12;
+UPDATE Category SET index_body = 'UNDERWEIGHT' WHERE id = 13;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 14;
+UPDATE Category SET index_body = 'NORMAL_WEIGHT' WHERE id = 15;

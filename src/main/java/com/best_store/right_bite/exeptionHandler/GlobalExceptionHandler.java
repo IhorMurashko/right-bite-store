@@ -1,10 +1,13 @@
 package com.best_store.right_bite.exeptionHandler;
 
 import com.best_store.right_bite.dto.exception.ErrorResponseDto;
+import com.best_store.right_bite.exception.ai.OpenAiCallerException;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
+import com.best_store.right_bite.exception.notificationSubscription.NewsletterSubscriptionsWasNotFound;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
@@ -25,6 +28,21 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NewsletterSubscriptionsWasNotFound.class)
+    public ResponseEntity<ErrorResponseDto> handleNewsletterSubscriptionsWasNotFound(NewsletterSubscriptionsWasNotFound ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(OpenAiCallerException.class)
+    public ResponseEntity<ErrorResponseDto> handleOpenAiCallerException(OpenAiCallerException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleProductNotFound(ProductNotFoundException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.NOT_FOUND, request);
+    }
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleRoleNotFoundException(RoleNotFoundException ex, HttpServletRequest request) {

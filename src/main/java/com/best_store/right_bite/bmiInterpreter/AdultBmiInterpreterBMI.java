@@ -10,7 +10,6 @@ import com.best_store.right_bite.constant.bmi.BMICategory;
  */
 public class AdultBmiInterpreterBMI implements InterpreterBMI {
 
-
     @Override
     public BMICategory interpret(double bmi) {
         if (bmi < 18.5) return BMICategory.UNDERWEIGHT;

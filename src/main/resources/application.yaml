@@ -3,16 +3,12 @@ tokens:
   accessTokenAvailableValidityPeriodInSec: 1800
   #30 days
   refreshTokenAvailableValidityPeriodInSec: 2592000
-
 spring:
   application:
     name: right-bite
-#  profiles:
-#    active: dev
-  docker:
-    compose:
-      lifecycle-management: start_and_stop
-      enabled: true
+  cache:
+    type: caffeine
+
   ai:
     openai:
       api-key: ${API_KEY}
@@ -20,5 +16,14 @@ spring:
       chat:
         options:
           model: ${API_MODEL}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
 server:
   port: 8080

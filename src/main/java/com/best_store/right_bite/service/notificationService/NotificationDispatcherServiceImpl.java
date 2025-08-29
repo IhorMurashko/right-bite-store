@@ -1,8 +1,8 @@
 package com.best_store.right_bite.service.notificationService;
 
 import com.best_store.right_bite.notification.NotificationSender;
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import com.best_store.right_bite.notification.sender.factory.SenderFactory;
 import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
 import com.best_store.right_bite.utils.notification.factory.NotificationLetterBuilderFactory;
@@ -40,7 +40,7 @@ public class NotificationDispatcherServiceImpl implements NotificationDispatcher
     private final NotificationLetterBuilderFactory letterBuilderFactory;
 
     @Override
-    public void send(@NonNull BaseNotification<? extends NotificationData> notification) {
+    public void send(@NonNull BaseNotification<? extends NotificationPayload> notification) {
         NotificationSender sender = senderFactory.getSender(notification.channel());
         NotificationContentBuilder notificationContentBuilder = letterBuilderFactory
                 .getNotificationBuilder(notification.type(), notification.channel());

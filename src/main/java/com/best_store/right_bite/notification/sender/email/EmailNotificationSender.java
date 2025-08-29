@@ -3,8 +3,8 @@ package com.best_store.right_bite.notification.sender.email;
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.email.EmailLetterContent;
 import com.best_store.right_bite.notification.NotificationSender;
-import com.best_store.right_bite.notification.data.BaseNotification;
-import com.best_store.right_bite.notification.data.NotificationData;
+import com.best_store.right_bite.notification.data.core.BaseNotification;
+import com.best_store.right_bite.notification.data.payload.NotificationPayload;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Getter;
@@ -60,12 +60,12 @@ public class EmailNotificationSender implements NotificationSender {
 
     @Async
     @Override
-    public void send(@NonNull BaseNotification<? extends NotificationData> notification, @NonNull String content) {
+    public void send(@NonNull BaseNotification<? extends NotificationPayload> notification, @NonNull String content) {
 
         MimeMessage message = sender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setTo(notification.to());
+//            helper.setTo(notification.to());
 
             if (notification.subject() != null) {
                 helper.setSubject(Objects.requireNonNull(notification.subject()));
