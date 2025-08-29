@@ -5,12 +5,14 @@ tokens:
   refreshTokenAvailableValidityPeriodInSec: 2592000
 
 spring:
-  profiles:
-    active: dev
   application:
     name: right-bite
 #  profiles:
 #    active: dev
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+      enabled: true
   ai:
     openai:
       api-key: ${API_KEY}
@@ -18,6 +20,5 @@ spring:
       chat:
         options:
           model: ${API_MODEL}
-
 server:
   port: 8080
