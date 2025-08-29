@@ -1,4 +1,6 @@
-jwt.secret.key: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
+jwt:
+  secret:
+    key: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
 spring:
   config:
     activate:
