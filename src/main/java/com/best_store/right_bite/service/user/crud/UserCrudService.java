@@ -4,6 +4,9 @@ package com.best_store.right_bite.service.user.crud;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import org.springframework.lang.NonNull;
+
+import java.util.Optional;
+
 /**
  * Interface defining basic CRUD and utility operations for {@link User} entities.
  *
@@ -23,7 +26,7 @@ public interface UserCrudService {
      * @return the found {@link User}
      * @throws UserNotFoundException if user is not found
      */
-    User findByEmail(@NonNull String email);
+   Optional <User> findByEmail(@NonNull String email);
 
     /**
      * Retrieves a user by ID.
@@ -32,7 +35,7 @@ public interface UserCrudService {
      * @return the found {@link User}
      * @throws UserNotFoundException if user is not found
      */
-    User findById(@NonNull Long id);
+    Optional <User> findById(@NonNull Long id);
 
     /**
      * Saves or updates the given user.

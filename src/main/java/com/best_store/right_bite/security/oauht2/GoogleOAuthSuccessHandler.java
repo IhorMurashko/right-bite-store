@@ -1,5 +1,7 @@
 package com.best_store.right_bite.security.oauht2;
 
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.constant.GoogleCredentialsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
+
 /**
  * Handles successful OAuth2 authentication via Google.
  * <p>
@@ -38,6 +41,7 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final UserCrudService userCrudService;
     private final UserAssembler userAssembler;
     private final TokenManager tokenManager;
+
     /**
      * Called after successful OAuth2 authentication.
      *
@@ -62,7 +66,10 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         User user;
         if (userCrudService.isEmailExist(email)) {
-            user = userCrudService.findByEmail(email);
+            user = userCrudService.findByEmail(email)
+                    .orElseThrow(() -> new UserNotFoundException(
+                            String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
+                    ));
             log.debug("user has been found");
         } else {
             log.debug("user wasn't found");
