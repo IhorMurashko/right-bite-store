@@ -4,6 +4,7 @@ import com.best_store.right_bite.dto.auth.login.AuthRequest;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.managment.TokenManager;
@@ -42,7 +43,10 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
      */
     @Override
     public TokenDto authenticate(@NonNull @Valid AuthRequest authRequest) {
-        User user = userCrudService.findByEmail(authRequest.email());
+        User user = userCrudService.findByEmail(authRequest.email())
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, authRequest.email())
+                ));
         if (!passwordEncoder.matches(authRequest.password(), user.getPassword())) {
             throw new CredentialsException(ExceptionMessageProvider
                     .PASSWORDS_DONT_MATCH);

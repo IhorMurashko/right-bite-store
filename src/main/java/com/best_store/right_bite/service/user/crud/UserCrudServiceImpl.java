@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * Implementation of {@link UserCrudService} backed by {@link UserRepository}.
  *
@@ -37,24 +39,18 @@ public class UserCrudServiceImpl implements UserCrudService {
      * {@inheritDoc}
      */
     @Override
-    public User findByEmail(@NonNull String email) {
+    public Optional<User> findByEmail(@NonNull String email) {
         log.info("Find user by email: {}", email);
-        return userRepository.findByEmail(UserFieldAdapter.toLower(email))
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
-                ));
+        return userRepository.findByEmail(UserFieldAdapter.toLower(email));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User findById(@NonNull Long id) {
+    public Optional<User> findById(@NonNull Long id) {
         log.info("Find user by id: {}", id);
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
-                ));
+        return userRepository.findById(id);
     }
 
     /**
@@ -73,7 +69,11 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteById(@NonNull Long id) {
-        User user = findById(id);
+        User user = findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
+                ));
+
         log.warn("Delete user by id: {}", id);
         userRepository.delete(user);
     }
@@ -84,7 +84,10 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteByEmail(@NonNull String email) {
-        User user = findByEmail(email);
+        User user = findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
+                ));
         log.warn("Delete user by email: {}", email);
         userRepository.delete(user);
     }

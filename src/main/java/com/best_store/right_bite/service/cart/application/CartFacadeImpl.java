@@ -4,6 +4,8 @@ import com.best_store.right_bite.dto.cart.request.AddCartItemRequestDto;
 import com.best_store.right_bite.dto.cart.request.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.remove.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
@@ -58,7 +60,10 @@ public class CartFacadeImpl implements CartFacade {
     @Override
     public Cart findCartByAuthUser(@NonNull Authentication authentication) {
         Long userId = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
-        User user = userCrudService.findById(userId);
+        User user = userCrudService.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)
+                ));
         log.debug("user with id: {} was found", userId);
         Optional<Cart> optionalCart = cartService.getCartByUserId(userId);
         if (optionalCart.isEmpty()) {

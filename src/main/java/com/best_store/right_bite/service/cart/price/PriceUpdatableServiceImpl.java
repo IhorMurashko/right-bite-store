@@ -1,6 +1,6 @@
 package com.best_store.right_bite.service.cart.price;
 
-import com.best_store.right_bite.constant.constraint.ProductConstraints;
+import com.best_store.right_bite.constant.constraint.products.ProductConstraints;
 import com.best_store.right_bite.dto.catalog.product.ProductPriceDto;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
