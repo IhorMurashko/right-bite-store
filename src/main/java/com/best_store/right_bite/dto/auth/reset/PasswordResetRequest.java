@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import org.springframework.lang.NonNull;
 
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.EMAIL_MESSAGE;
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.EMAIL_PATTERN;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_MESSAGE;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_PATTERN;
 
 @Schema(description = "reset password object")
 public record PasswordResetRequest(

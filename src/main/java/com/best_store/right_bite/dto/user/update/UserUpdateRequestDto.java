@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import org.springframework.lang.Nullable;
 
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.*;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.*;
 
 /**
  * Request DTO for partial user profile updates.

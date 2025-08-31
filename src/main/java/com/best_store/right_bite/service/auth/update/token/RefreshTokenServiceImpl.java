@@ -3,6 +3,7 @@ package com.best_store.right_bite.service.auth.update.token;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.claims.ClaimsProvider;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
@@ -68,8 +69,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             String userId = claims.getSubject();
             log.debug("refresh token user id: {}", userId);
 
-            User user = userCrudService.findById(Long.valueOf(userId));
-            log.info("user with id {} was found", userId);
+            Long id = Long.parseLong(userId);
+            User user = userCrudService.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException(
+                            String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
+                    ));
+            log.info("user with id {} was found", id);
 
 
             Date refreshTokenExpiration = claims.getExpiration();

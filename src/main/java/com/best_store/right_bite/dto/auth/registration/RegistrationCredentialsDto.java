@@ -7,7 +7,7 @@ import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.*;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.*;
 /**
  * DTO representing user credentials for registration via email and password.
  *
