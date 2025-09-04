@@ -43,10 +43,7 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
      */
     @Override
     public TokenDto authenticate(@NonNull @Valid AuthRequest authRequest) {
-        User user = userCrudService.findByEmail(authRequest.email())
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, authRequest.email())
-                ));
+        User user = userCrudService.findByEmail(authRequest.email());
         if (!passwordEncoder.matches(authRequest.password(), user.getPassword())) {
             throw new CredentialsException(ExceptionMessageProvider
                     .PASSWORDS_DONT_MATCH);

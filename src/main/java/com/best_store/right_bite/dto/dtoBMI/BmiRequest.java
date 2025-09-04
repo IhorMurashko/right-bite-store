@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import static com.best_store.right_bite.constant.constraint.BmiConstraints.*;
+import static com.best_store.right_bite.constant.constraint.bmi.BmiConstraints.*;
 
 /**
  * BmiRequest is a data.sql transfer object that represents the request for calculating BMI.

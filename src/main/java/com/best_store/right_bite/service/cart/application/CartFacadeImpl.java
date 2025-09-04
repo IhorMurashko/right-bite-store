@@ -1,8 +1,8 @@
 package com.best_store.right_bite.service.cart.application;
 
-import com.best_store.right_bite.dto.cart.request.AddCartItemRequestDto;
-import com.best_store.right_bite.dto.cart.request.AddCartRequestDto;
-import com.best_store.right_bite.dto.cart.request.remove.RemoveItemsRequestDto;
+import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDto;
+import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
+import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
@@ -59,11 +59,8 @@ public class CartFacadeImpl implements CartFacade {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public Cart findCartByAuthUser(@NonNull Authentication authentication) {
-        Long userId = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
-        User user = userCrudService.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)
-                ));
+        Long userId = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
+        User user = userCrudService.findById(userId);
         log.debug("user with id: {} was found", userId);
         Optional<Cart> optionalCart = cartService.getCartByUserId(userId);
         if (optionalCart.isEmpty()) {
@@ -79,7 +76,7 @@ public class CartFacadeImpl implements CartFacade {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "cart", key = "@authenticationParserUtil.getUserLongIdFromAuthentication(#authentication)")
+    @Cacheable(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public CartResponseDto getUserCart(@NonNull Authentication authentication) {
@@ -99,7 +96,7 @@ public class CartFacadeImpl implements CartFacade {
     /**
      * {@inheritDoc}
      */
-    @CachePut(value = "cart", key = "@authenticationParserUtil.getUserLongIdFromAuthentication(#authentication)")
+    @CachePut(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Authentication authentication) {
@@ -142,7 +139,7 @@ public class CartFacadeImpl implements CartFacade {
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = "cart", key = "@authenticationParserUtil.getUserLongIdFromAuthentication(#authentication)")
+    @CacheEvict(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Authentication authentication) {
@@ -163,7 +160,7 @@ public class CartFacadeImpl implements CartFacade {
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = "cart", key = "@authenticationParserUtil.getUserLongIdFromAuthentication(#authentication)")
+    @CacheEvict(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public void clear(@NonNull Authentication authentication) {
