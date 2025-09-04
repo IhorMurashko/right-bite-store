@@ -1,4 +1,4 @@
-package com.best_store.right_bite.dto.cart.request.remove;
+package com.best_store.right_bite.dto.cart.request.removeFromCart;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
