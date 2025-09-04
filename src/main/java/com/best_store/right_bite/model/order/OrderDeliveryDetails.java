@@ -2,17 +2,17 @@ package com.best_store.right_bite.model.order;
 
 import com.best_store.right_bite.constant.order.DeliveryMethod;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "order_delivery_details")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder(access = AccessLevel.PUBLIC)
 public class OrderDeliveryDetails {
 
     @Id
@@ -43,6 +43,14 @@ public class OrderDeliveryDetails {
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false, unique = true)
     private Order order;
+
+    void setOrder(@NotNull Order order) {
+        this.order = order;
+    }
+
+    void setDeliveryMethod(@NotNull DeliveryMethod deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
 
     @Override
     public boolean equals(Object o) {
