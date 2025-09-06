@@ -54,6 +54,13 @@ spring:
       lifecycle-management: start_and_stop
       profiles:
         active: prod
+  ai:
+    openai:
+      api-key: ${API_KEY}
+      base-url: ${BASE_URL}
+      chat:
+        options:
+          model: ${API_MODEL}
 logging:
   level:
     root: INFO               # Основной уровень логирования
