@@ -1,9 +1,8 @@
 package com.best_store.right_bite.controller.adminPanel;
 
 
-import com.best_store.right_bite.dto.adminPanel.AdminInfoDTO;
 import com.best_store.right_bite.dto.adminPanel.order.OrderDTO;
-import com.best_store.right_bite.security.principal.JwtPrincipal;
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.service.adminPanel.dashboard.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class AdminController {
 
     @PreAuthorize("hasRole(T(com.best_store.right_bite.model.role.RoleName).ROLE_ADMIN.name())")
     @GetMapping("/admin-info")
-    public ResponseEntity<AdminInfoDTO> getAdminInfo(Authentication authentication) {
+    public ResponseEntity<DefaultUserInfoResponseDto> getAdminInfo(Authentication authentication) {
         return ResponseEntity.ok(dashboardService.getAdminInfo(authentication));
     }
 
