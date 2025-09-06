@@ -20,6 +20,9 @@ spring:
       ddl-auto: validate
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      highlight_sql: true
+      use_sql_comments: true
   flyway:
     locations: classpath:db/migration
     enabled: true
@@ -57,7 +60,7 @@ spring:
 logging:
   level:
     root: INFO               # Основной уровень логирования
-    com.best_store.*: DEBUG     # Включаем DEBUG для своего кода
+    com.best_store: DEBUG
     org.springframework.web: WARN
     org.hibernate.SQL: DEBUG        # SQL запросы (если нужно)
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # Значения параметров (если нужно)

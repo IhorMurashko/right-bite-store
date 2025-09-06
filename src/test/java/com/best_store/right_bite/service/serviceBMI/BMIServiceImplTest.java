@@ -2,7 +2,7 @@ package com.best_store.right_bite.service.serviceBMI;
 
 import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.constant.bmi.Gender;
-import com.best_store.right_bite.constant.constraint.BmiConstraints;
+import com.best_store.right_bite.constant.constraint.bmi.BmiConstraints;
 import com.best_store.right_bite.constant.healthRiskEsteem.HealthRiskEsteemRecommendations;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.dtoBMI.BmiRequest;

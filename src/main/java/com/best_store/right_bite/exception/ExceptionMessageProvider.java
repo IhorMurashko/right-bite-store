@@ -8,7 +8,6 @@ public class ExceptionMessageProvider {
     public final String USER_ID_NOT_FOUND = "User with ID: %d not found";
     public final String PASSWORDS_DONT_MATCH = "Passwords don't match";
     public final String EMAIL_ALREADY_EXIST = "Email: %s already exist";
-    public final String INVALID_CREDENTIALS = "Invalid email or password.";
     public final String USER_ACCOUNT_IS_EXPIRED = "User account is expired.";
     public final String NOTIFICATION_CHANNEL_WAS_NOT_FOUND = "Notification type %s was not found";
     public final String NOTIFICATION_BUILDER_WAS_NOT_FOUND = "Notification builder with type: %s and channel: %s was not found.";
@@ -21,4 +20,8 @@ public class ExceptionMessageProvider {
     public final String INTERNAL_AI_CALL_ERROR = "Internal AI call error: %s";
     public final String NEWSLETTER_ID_WAS_NOT_FOUND = "Newsletter subscription with id %d not found";
     public final String NEWSLETTER_EMAIL_WAS_NOT_FOUND = "Newsletter subscription with email %s not found";
+    public final String NOT_ENOUGH_QUANTITY_IN_STOCK = "Product with id: %d has not enough quantity in stock";
+    public final String ORDER_ID_NOT_FOUND = "Order with ID: %d not found";
+    public final String EMPTY_USER_CART = "Cannot create order from empty cart";
+    public final String ORDER_ACCESS_DENIED = "Access denied to order: %d";
 }

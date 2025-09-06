@@ -3,7 +3,6 @@ package com.best_store.right_bite.service.user.update;
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.mapper.user.UpdatableUserInfoMapper;
 import com.best_store.right_bite.model.user.User;
@@ -43,13 +42,10 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
     public BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
                                    @NonNull Authentication authentication) {
 
-        Long id = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
+        Long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
 
         try {
-            User user = userCrudService.findById(id)
-                    .orElseThrow(() -> new UserNotFoundException(
-                            String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
-                    ));
+            User user = userCrudService.findById(id);
             log.debug("user with id was {} was found", id);
             updatableUserInfoMapper.updateEntityFromDto(userUpdateRequestDto, user);
             User saved = userCrudService.save(user);
@@ -69,10 +65,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public BaseUserInfo findUserBy(@NonNull String email) {
-        User user = userCrudService.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
-                ));
+        User user = userCrudService.findByEmail(email);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
@@ -81,10 +74,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public BaseUserInfo findUserBy(@NonNull Long id) {
-        User user = userCrudService.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
-                ));
+        User user = userCrudService.findById(id);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
@@ -93,11 +83,8 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public BaseUserInfo findUserBy(@NonNull Authentication authentication) {
-        long id = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
-        User user = userCrudService.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
-                ));
+        long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
+        User user = userCrudService.findById(id);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
@@ -106,6 +93,6 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public void deleteUserBy(@NonNull Authentication authentication) {
-        userCrudService.deleteById(authenticationParserUtil.getUserLongIdFromAuthentication(authentication));
+        userCrudService.deleteById(authenticationParserUtil.extractUserLongIdFromAuthentication(authentication));
     }
 }

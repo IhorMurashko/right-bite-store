@@ -32,7 +32,7 @@ public class AuthenticationParserUtil {
      * @throws InvalidTokenSubjectException  if ID cannot be parsed
      * @throws InvalidPrincipalCastException if the principal is not a {@link JwtPrincipal}
      */
-    public Long getUserLongIdFromAuthentication(@NonNull Authentication authentication) {
+    public Long extractUserLongIdFromAuthentication(@NonNull Authentication authentication) {
         if (authentication.getPrincipal() instanceof JwtPrincipal principal) {
             try {
                 return Long.parseLong(principal.id());

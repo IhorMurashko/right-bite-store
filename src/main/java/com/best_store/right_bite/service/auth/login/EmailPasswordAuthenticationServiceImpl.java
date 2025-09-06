@@ -1,10 +1,9 @@
 package com.best_store.right_bite.service.auth.login;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
-import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.managment.TokenManager;
@@ -16,6 +15,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+
 /**
  * Email/password-based implementation of the {@link AuthenticationService}.
  * <p>
@@ -38,15 +38,12 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
      *
      * @param authRequest the authentication request
      * @return a signed JWT token with default claims
-     * @throws CredentialsException if the password is invalid
+     * @throws CredentialsException               if the password is invalid
      * @throws UserAccountIsNotAvailableException if the user's account is expired, locked, or disabled
      */
     @Override
     public TokenDto authenticate(@NonNull @Valid AuthRequest authRequest) {
-        User user = userCrudService.findByEmail(authRequest.email())
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, authRequest.email())
-                ));
+        User user = userCrudService.findByEmail(authRequest.email());
         if (!passwordEncoder.matches(authRequest.password(), user.getPassword())) {
             throw new CredentialsException(ExceptionMessageProvider
                     .PASSWORDS_DONT_MATCH);

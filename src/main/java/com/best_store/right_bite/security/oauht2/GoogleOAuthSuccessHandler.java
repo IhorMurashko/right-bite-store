@@ -1,7 +1,5 @@
 package com.best_store.right_bite.security.oauht2;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.constant.GoogleCredentialsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
@@ -11,7 +9,6 @@ import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.user.UserAssembler;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,14 +44,13 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
      *
      * @param request        the HTTP request
      * @param response       the HTTP response (returns token JSON)
-     * @param authentication the authenticated OAuth2 user
-     * @throws IOException      if writing to response fails
-     * @throws ServletException in case of servlet errors
+     * @param authentication an authenticated OAuth2 user
+     * @throws IOException if writing to response fails
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.debug("user has been logged in");
@@ -66,10 +62,7 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         User user;
         if (userCrudService.isEmailExist(email)) {
-            user = userCrudService.findByEmail(email)
-                    .orElseThrow(() -> new UserNotFoundException(
-                            String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
-                    ));
+            user = userCrudService.findByEmail(email);
             log.debug("user has been found");
         } else {
             log.debug("user wasn't found");
