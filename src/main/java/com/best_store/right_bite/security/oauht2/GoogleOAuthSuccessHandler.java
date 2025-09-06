@@ -66,10 +66,7 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         User user;
         if (userCrudService.isEmailExist(email)) {
-            user = userCrudService.findByEmail(email)
-                    .orElseThrow(() -> new UserNotFoundException(
-                            String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
-                    ));
+            user = userCrudService.findByEmail(email);
             log.debug("user has been found");
         } else {
             log.debug("user wasn't found");

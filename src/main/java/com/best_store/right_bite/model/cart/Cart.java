@@ -124,6 +124,7 @@ public class Cart {
      */
     public void clear() {
         this.cartItems.clear();
+        this.totalPrice = BigDecimal.ZERO;
     }
 
     /**

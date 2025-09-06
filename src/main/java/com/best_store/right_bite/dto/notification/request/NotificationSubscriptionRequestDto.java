@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Pattern;
 
 import java.io.Serializable;
 
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.EMAIL_MESSAGE;
-import static com.best_store.right_bite.constant.constraint.UserFieldsConstraint.EMAIL_PATTERN;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_MESSAGE;
+import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_PATTERN;
 
 public record NotificationSubscriptionRequestDto(
         @NotNull

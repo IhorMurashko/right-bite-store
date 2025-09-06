@@ -1,9 +1,8 @@
 package com.best_store.right_bite.model.order;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -11,8 +10,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "order_items")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@Builder
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_items_seq_generator")
@@ -29,6 +29,14 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    public BigDecimal getTotalPrice() {
+        return priceSnapshot.multiply(BigDecimal.valueOf(quantity));
+    }
+
+   public void setOrder(@NotNull Order order) {
+        this.order = order;
+    }
 
     @Override
     public boolean equals(Object o) {
