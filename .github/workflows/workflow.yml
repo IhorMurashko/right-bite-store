@@ -1,35 +1,56 @@
-#name: CI/CD — service deploy
-#
-#on:
-#  push:
-#    branches: [ main ]
-#  pull_request:
-#    branches: [ main ]
-#
-#jobs:
-#  build:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: '17'
-#          distribution: 'corretto'
-#
-#      - name: Build & test service
-#        run: mvn clean verify -am -Pprod
-#
-#  deploy:
-#    name: Deploy service
-#    needs: build
-#    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Trigger Render deploy for service
-#        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+name: CI/CD — service deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Run test with test profile
+        run: mvn clean test -P test -Dspring.profiles.active=test
+
+      - name: Build application
+        run : mvn package -DskipTests
+
+  deploy:
+    name: Deploy to Render
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deployment
+        run: |
+          echo "Triggering deployment to Render..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}" \
+            -H "Content-Type: application/json" \
+            -d '{"clear_cache": false}'
+          echo "Deployment triggered successfully!"
+
+      - name: Wait for deployment (optional)
+        run: |
+          echo "Deployment initiated. Check Render dashboard for status."
+          echo "Application will be available shortly at your Render URL"
