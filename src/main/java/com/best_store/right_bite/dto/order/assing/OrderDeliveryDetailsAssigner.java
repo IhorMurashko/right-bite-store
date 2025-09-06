@@ -1,8 +1,6 @@
 package com.best_store.right_bite.dto.order.assing;
 
 import com.best_store.right_bite.constant.order.DeliveryMethod;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public interface OrderDeliveryDetailsAssigner {
 

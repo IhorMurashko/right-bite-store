@@ -4,8 +4,6 @@ import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDt
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;

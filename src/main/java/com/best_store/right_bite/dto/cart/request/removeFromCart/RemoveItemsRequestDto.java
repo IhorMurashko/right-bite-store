@@ -6,9 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Set;
-@Schema(name = "")
+
+@Schema(name = "remove item")
 public record RemoveItemsRequestDto(
-        @Schema(description = "ids of products for removing from the cart.", nullable = false)
+        @Schema(description = "ids of products for removing from the cart.")
         @NotNull
         @NotEmpty
         Set<@NotNull Long> idsToRemove

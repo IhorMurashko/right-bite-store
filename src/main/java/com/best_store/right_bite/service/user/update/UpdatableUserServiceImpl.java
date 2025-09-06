@@ -3,7 +3,6 @@ package com.best_store.right_bite.service.user.update;
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.mapper.user.UpdatableUserInfoMapper;
 import com.best_store.right_bite.model.user.User;
