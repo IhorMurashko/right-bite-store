@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.search;
 
 import com.best_store.right_bite.dto.search.SrchRequest;
-import com.best_store.right_bite.service.catalog.ProductServiceImpl;
+import com.best_store.right_bite.service.catalog.productDomain.ProductServiceImpl;
 import com.best_store.right_bite.service.search.luceneIndexer.Indexer;
 import com.best_store.right_bite.service.search.luceneIndexer.Run;
 import lombok.RequiredArgsConstructor;
