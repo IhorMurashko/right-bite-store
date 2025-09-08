@@ -3,6 +3,7 @@ spring:
   config:
     activate:
       on-profile: prod
+    import: optional:file:.env[.properties]
   data:
     redis:
       host: localhost
@@ -16,6 +17,9 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+    properties:
+      highlight_sql: true
+      use_sql_comments: true
   flyway:
     locations: classpath:db/migration
     enabled: true
@@ -50,6 +54,13 @@ spring:
       lifecycle-management: start_and_stop
       profiles:
         active: prod
+  ai:
+    openai:
+      api-key: ${API_KEY}
+      base-url: ${BASE_URL}
+      chat:
+        options:
+          model: ${API_MODEL}
 logging:
   level:
     root: INFO               # Основной уровень логирования

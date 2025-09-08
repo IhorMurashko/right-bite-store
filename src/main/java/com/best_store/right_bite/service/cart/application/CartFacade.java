@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.cart.application;
 
-import com.best_store.right_bite.dto.cart.request.AddCartRequestDto;
-import com.best_store.right_bite.dto.cart.request.remove.RemoveItemsRequestDto;
+import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
+import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
 import com.best_store.right_bite.model.cart.Cart;
 import jakarta.validation.Valid;

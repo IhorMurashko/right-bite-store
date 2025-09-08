@@ -68,8 +68,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             String userId = claims.getSubject();
             log.debug("refresh token user id: {}", userId);
 
-            User user = userCrudService.findById(Long.valueOf(userId));
-            log.info("user with id {} was found", userId);
+            Long id = Long.parseLong(userId);
+            User user = userCrudService.findById(id);
+            log.info("user with id {} was found", id);
 
 
             Date refreshTokenExpiration = claims.getExpiration();

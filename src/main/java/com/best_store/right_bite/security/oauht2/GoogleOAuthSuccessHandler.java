@@ -9,7 +9,6 @@ import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.user.UserAssembler;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
+
 /**
  * Handles successful OAuth2 authentication via Google.
  * <p>
@@ -38,19 +38,19 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private final UserCrudService userCrudService;
     private final UserAssembler userAssembler;
     private final TokenManager tokenManager;
+
     /**
      * Called after successful OAuth2 authentication.
      *
      * @param request        the HTTP request
      * @param response       the HTTP response (returns token JSON)
-     * @param authentication the authenticated OAuth2 user
-     * @throws IOException      if writing to response fails
-     * @throws ServletException in case of servlet errors
+     * @param authentication an authenticated OAuth2 user
+     * @throws IOException if writing to response fails
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         log.debug("user has been logged in");

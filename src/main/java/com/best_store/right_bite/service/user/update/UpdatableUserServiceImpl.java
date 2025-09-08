@@ -3,12 +3,10 @@ package com.best_store.right_bite.service.user.update;
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.role.InvalidPrincipalCastException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.mapper.user.UpdatableUserInfoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
-import com.best_store.right_bite.security.principal.JwtPrincipal;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
@@ -44,7 +42,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
     public BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
                                    @NonNull Authentication authentication) {
 
-        Long id = authenticationParserUtil.getUserLongIdFromAuthentication(authentication);
+        Long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
 
         try {
             User user = userCrudService.findById(id);
@@ -85,7 +83,8 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public BaseUserInfo findUserBy(@NonNull Authentication authentication) {
-        User user = userCrudService.findById(authenticationParserUtil.getUserLongIdFromAuthentication(authentication));
+        long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
+        User user = userCrudService.findById(id);
         return defaultUserInfoDtoMapper.toDTO(user);
     }
 
@@ -94,6 +93,6 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
      */
     @Override
     public void deleteUserBy(@NonNull Authentication authentication) {
-        userCrudService.deleteById(authenticationParserUtil.getUserLongIdFromAuthentication(authentication));
+        userCrudService.deleteById(authenticationParserUtil.extractUserLongIdFromAuthentication(authentication));
     }
 }

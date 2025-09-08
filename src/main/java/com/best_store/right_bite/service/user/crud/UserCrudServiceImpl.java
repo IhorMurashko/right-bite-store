@@ -39,10 +39,9 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Override
     public User findByEmail(@NonNull String email) {
         log.info("Find user by email: {}", email);
-        return userRepository.findByEmail(UserFieldAdapter.toLower(email))
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
-                ));
+        return userRepository.findByEmail(UserFieldAdapter.toLower(email)).orElseThrow(() -> new UserNotFoundException(
+                String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
+        ));
     }
 
     /**
@@ -53,8 +52,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         log.info("Find user by id: {}", id);
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)
-                ));
+                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)));
     }
 
     /**
@@ -74,6 +72,7 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Override
     public void deleteById(@NonNull Long id) {
         User user = findById(id);
+
         log.warn("Delete user by id: {}", id);
         userRepository.delete(user);
     }

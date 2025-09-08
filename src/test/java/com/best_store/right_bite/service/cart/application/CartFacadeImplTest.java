@@ -86,7 +86,7 @@ class CartFacadeImplTest {
         @Test
         @DisplayName("create new user cart")
         void shouldReturnNewUserCart_when_userWasNotFound() {
-            doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
+            doReturn(userId).when(authenticationParserUtil).extractUserLongIdFromAuthentication(authentication);
             doReturn(user).when(userCrudService).findById(userId);
             doReturn(Optional.empty()).when(cartService).getCartByUserId(userId);
             doReturn(newUserCart).when(cartService).save(any(Cart.class));
@@ -100,7 +100,7 @@ class CartFacadeImplTest {
             assertEquals(newUserCart.getId(), cart.getId());
             assertEquals(userId, longArgumentCaptor.getValue());
 
-            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
+            verify(authenticationParserUtil, times(1)).extractUserLongIdFromAuthentication(authentication);
             verify(userCrudService, times(1)).findById(userId);
             verify(cartService, times(1)).getCartByUserId(userId);
             verify(cartService, times(1)).save(any(Cart.class));
@@ -114,7 +114,7 @@ class CartFacadeImplTest {
             doThrow(new InvalidTokenSubjectException(
                     ExceptionMessageProvider.INVALID_TOKEN_SUBJECT
             )).when(authenticationParserUtil)
-                    .getUserLongIdFromAuthentication(authentication);
+                    .extractUserLongIdFromAuthentication(authentication);
 
             InvalidTokenSubjectException exception = assertThrows(InvalidTokenSubjectException.class,
                     () -> cartFacade.findCartByAuthUser(authentication));
@@ -122,7 +122,7 @@ class CartFacadeImplTest {
             assertNotNull(exception);
             assertEquals(ExceptionMessageProvider.INVALID_TOKEN_SUBJECT, exception.getMessage());
 
-            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
+            verify(authenticationParserUtil, times(1)).extractUserLongIdFromAuthentication(authentication);
             verifyNoMoreInteractions(authenticationParserUtil);
             verifyNoInteractions(userCrudService, cartService);
         }
@@ -130,7 +130,7 @@ class CartFacadeImplTest {
         @Test
         @DisplayName("throw exception when user was not found")
         void shouldThrowUserNotFoundException_when_userWasNotFound_and_userIsNull() {
-            doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
+            doReturn(userId).when(authenticationParserUtil).extractUserLongIdFromAuthentication(authentication);
             doThrow(new UserNotFoundException(
                     ExceptionMessageProvider.USER_ID_NOT_FOUND)).when(userCrudService).findById(userId);
 
@@ -140,7 +140,7 @@ class CartFacadeImplTest {
             assertNotNull(exception);
             assertEquals(ExceptionMessageProvider.USER_ID_NOT_FOUND, exception.getMessage());
             verify(userCrudService).findById(longArgumentCaptor.capture());
-            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
+            verify(authenticationParserUtil, times(1)).extractUserLongIdFromAuthentication(authentication);
             verify(userCrudService, times(1)).findById(userId);
             verifyNoMoreInteractions(userCrudService, authenticationParserUtil);
             verifyNoInteractions(cartService);
@@ -149,7 +149,7 @@ class CartFacadeImplTest {
         @Test
         @DisplayName("get existing user cart")
         void shouldReturnExistingUserCart_when_userWasFound() {
-            doReturn(userId).when(authenticationParserUtil).getUserLongIdFromAuthentication(authentication);
+            doReturn(userId).when(authenticationParserUtil).extractUserLongIdFromAuthentication(authentication);
             doReturn(user).when(userCrudService).findById(userId);
             doReturn(existingUserCart).when(cartService).getCartByUserId(userId);
 
@@ -162,7 +162,7 @@ class CartFacadeImplTest {
             assertEquals(user, cart.getUser());
             assertEquals(userId, longArgumentCaptor.getValue());
 
-            verify(authenticationParserUtil, times(1)).getUserLongIdFromAuthentication(authentication);
+            verify(authenticationParserUtil, times(1)).extractUserLongIdFromAuthentication(authentication);
             verify(userCrudService, times(1)).findById(userId);
             verify(cartService, times(1)).getCartByUserId(userId);
             verifyNoMoreInteractions(authenticationParserUtil, userCrudService, cartService);

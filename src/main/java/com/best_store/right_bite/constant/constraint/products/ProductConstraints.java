@@ -1,4 +1,4 @@
-package com.best_store.right_bite.constant.constraint;
+package com.best_store.right_bite.constant.constraint.products;
 
 import lombok.experimental.UtilityClass;
 
