@@ -63,7 +63,7 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
                                     TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class)
                     );
 
-                    if (tokenType != null && tokenType.equalsIgnoreCase(TokenType.REFRESH.name())) {
+                    if (tokenType == null || !(tokenType.equalsIgnoreCase(TokenType.ACCESS.name()))) {
                         log.debug("Request with refreshed token {}", token);
                         throw new InvalidTokenTypeException(String.format(
                                 SecurityExceptionMessageProvider.INVALID_TOKEN_TYPE, tokenType
