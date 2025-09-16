@@ -2,12 +2,14 @@ package com.best_store.right_bite.service.auth.registration;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
-import com.best_store.right_bite.constant.notification.email.EmailLetterContent;
+import com.best_store.right_bite.constant.notification.holder.letter.GreetingVariablesHolder;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.model.user.User;
-import com.best_store.right_bite.service.notificationService.NotificationDispatcherService;
+import com.best_store.right_bite.notification.data.core.DefaultNotification;
+import com.best_store.right_bite.notification.data.payload.SimpleStringContentPayload;
+import com.best_store.right_bite.service.notificationService.dispatch.NotificationDispatcherService;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.user.UserAssembler;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
@@ -18,6 +20,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -90,14 +93,15 @@ public class RegistrationServiceImpl implements RegistrationService {
         userCrudService.save(user);
         log.info("User {} saved successfully", email);
 
-//        TypedNotification<SimpleTextNotification> congratulationLetter = new TypedNotification<>(
-//                NotificationType.TEXT_NOTIFICATION,
-//                NotificationChannel.EMAIL,
-//                email,
-//                EmailLetterContent.GREETING_SUBJECT,
-//                new SimpleTextNotification(EmailLetterContent.GREETING)
-//        );
-//
-//        notificationDispatcherService.send(congratulationLetter);
+        SimpleStringContentPayload greeting = new SimpleStringContentPayload(GreetingVariablesHolder.GREETING);
+        DefaultNotification greetingNotification = new DefaultNotification(
+                NotificationType.SIMPLE_STRING_NOTIFICATION,
+                NotificationChannel.EMAIL,
+                List.of(email),
+                GreetingVariablesHolder.EMAIL_SUBJECT,
+                GreetingVariablesHolder.BODY_TITLE,
+                greeting
+        );
+        notificationDispatcherService.send(greetingNotification);
     }
 }

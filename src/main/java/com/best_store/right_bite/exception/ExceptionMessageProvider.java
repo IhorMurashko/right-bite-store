@@ -24,4 +24,9 @@ public class ExceptionMessageProvider {
     public final String ORDER_ID_NOT_FOUND = "Order with ID: %d not found";
     public final String EMPTY_USER_CART = "Cannot create order from empty cart";
     public final String ORDER_ACCESS_DENIED = "Access denied to order: %d";
+    public final String EMPTY_NOTIFICATION_DATA = "Notification data cant be empty";
+    public final String NOTIFICATION_BUILDER_AND_TYPES_ARE_NOT_INCOMPATIBLE = "Builder and notification types are incompatible %s";
+    public final String FAILED_TO_PROCESS_NOTIFICATION_CONTENT = "Failed to process notification content %s";
+    public final String WRONG_NOTIFICATION_DATA_TYPE = "Wrong notification data type %s";
+    public final String SENDER_BY_CHANNEL_WAS_NOT_FOUND = "Sender with channel type: %s was not found";
 }
