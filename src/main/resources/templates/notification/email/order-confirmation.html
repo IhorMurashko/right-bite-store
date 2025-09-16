@@ -1,0 +1,14 @@
+<div th:fragment="content">
+    <p>Hello <span th:text="${username}"></span>,</p>
+    <p>Thank you for your order! Here are your order details:</p>
+    <ul>
+        <li th:each="item : ${items}">
+            <span th:text="${item.productName}"></span>
+            <span th:text="${item.quantity}"></span>
+            <span th:text="${item.priceSnapshot}"></span>
+        </li>
+    </ul>
+    <p><b>Total:</b> <span th:text="${totalPrice}"></span></p>
+
+    <p>Here are your delivery details:</p>
+</div>

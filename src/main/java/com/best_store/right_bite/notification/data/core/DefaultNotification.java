@@ -6,16 +6,12 @@ import com.best_store.right_bite.notification.data.payload.ContentPayload;
 
 import java.util.List;
 
-public interface BaseNotification<T extends ContentPayload> {
-    NotificationType type();
-
-    NotificationChannel channel();
-
-    List<String> recipients();
-
-    String emailSubject();
-
-    String bodyTitle();
-
-    T data();
+public record DefaultNotification(
+        NotificationType type,
+        NotificationChannel channel,
+        List<String> recipients,
+        String emailSubject,
+        String bodyTitle,
+        ContentPayload data
+) implements BaseNotification<ContentPayload> {
 }
