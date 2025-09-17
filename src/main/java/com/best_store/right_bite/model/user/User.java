@@ -39,6 +39,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+//todo: entity graph
 public class User extends AbstractUser {
 
     private String firstName;

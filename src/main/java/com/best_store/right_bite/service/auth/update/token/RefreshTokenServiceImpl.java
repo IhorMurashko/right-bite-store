@@ -1,9 +1,9 @@
 package com.best_store.right_bite.service.auth.update.token;
 
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.InvalidTokenException;
 import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
-import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.claims.ClaimsProvider;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
@@ -44,8 +44,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public TokenDto refreshToken(@NonNull @Valid TokenDto tokenDto) {
         String refreshToken = tokenDto.refreshToken();
-
-
         if (jwtProvider.validateToken(refreshToken)) {
             String tokenType = claimsProvider.extractClaimFromToken(refreshToken, claims ->
                     claims.get(TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class));
@@ -64,14 +62,22 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                     .parseSignedClaims(refreshToken)
                     .getPayload();
 
-//            String userId = claimsProvider.extractClaimFromToken(tokenType, Claims::getSubject);
             String userId = claims.getSubject();
-            log.debug("refresh token user id: {}", userId);
-
-            Long id = Long.parseLong(userId);
-            User user = userCrudService.findById(id);
+            Long id;
+            try {
+                id = Long.parseLong(userId);
+            } catch (NullPointerException ex) {
+                log.error("Refresh token subject is null");
+                throw new InvalidTokenException(String.format(
+                        ExceptionMessageProvider.INVALID_TOKEN_SUBJECT, "null"));
+            } catch (NumberFormatException ex) {
+                log.error("Refresh token subject is not numeric type: {}", userId.getClass().getSimpleName());
+                throw new InvalidTokenException(String.format(
+                        ExceptionMessageProvider.INVALID_TOKEN_SUBJECT, ex.getClass().getSimpleName()));
+            }
+            log.debug("refresh token user subject is: {}", userId);
+            DefaultUserInfoResponseDto userDto = userCrudService.findById(id);
             log.info("user with id {} was found", id);
-
 
             Date refreshTokenExpiration = claims.getExpiration();
             Instant expirationInstant = refreshTokenExpiration.toInstant();
@@ -80,11 +86,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
             if (hoursUntilExpiration < 23) {
                 log.info("access and refresh tokens will be generated");
-                return tokenManager.generateDefaultClaimsToken(user);
+                return tokenManager.generateDefaultTokens(userDto);
             } else {
-                Map<String, Object> defaultClaims = tokenManager.generateDefaultUserClaims(user);
-                String newAccessToken = tokenManager.generateToken(
-                        String.valueOf(user.getId()),
+                Map<String, Object> defaultClaims = tokenManager.generateDefaultClaims(userDto);
+                String newAccessToken = tokenManager.generateSpecialToken(
+                        String.valueOf(userDto.id()),
                         defaultClaims,
                         TokenType.ACCESS,
                         tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec()

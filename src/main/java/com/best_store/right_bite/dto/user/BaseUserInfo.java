@@ -1,5 +1,10 @@
 package com.best_store.right_bite.dto.user;
 
+import com.best_store.right_bite.model.role.Role;
+import com.best_store.right_bite.model.role.RoleName;
+
+import java.util.Set;
+
 /**
  * Base interface representing minimal user identity information.
  *
@@ -23,5 +28,11 @@ public interface BaseUserInfo {
      * @return user email
      */
     String email();
+    /**
+     * Returns roles of the user.
+     *
+     * @return user roles
+     */
+    Set<String> roles();
 }
 

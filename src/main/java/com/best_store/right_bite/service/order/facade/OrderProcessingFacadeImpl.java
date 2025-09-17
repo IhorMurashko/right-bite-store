@@ -3,9 +3,11 @@ package com.best_store.right_bite.service.order.facade;
 import com.best_store.right_bite.dto.order.request.OrderDeliveryDetailsDto;
 import com.best_store.right_bite.dto.order.request.OrderDto;
 import com.best_store.right_bite.dto.order.response.OrderResponseDto;
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
+import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.service.order.create.OrderCreatorService;
-import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class OrderProcessingFacadeImpl implements OrderProcessingFacade {
 
     private final OrderCreatorService orderCreatorService;
-    private final UserCrudService userCrudService;
+    private final UserRepository userRepository;
     private final AuthenticationParserUtil authenticationParserUtil;
 
     @Override
@@ -30,14 +32,18 @@ public class OrderProcessingFacadeImpl implements OrderProcessingFacade {
         if (authentication != null) {
             log.info("Authentication found, processing order for user");
             Long userId = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
-            user = userCrudService.findById(userId);
+            user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException(String.format(
+                            ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
         }
-       return orderCreatorService.createGuestOrder(orderDto, user);
+        return orderCreatorService.createGuestOrder(orderDto, user);
     }
 
     @Override
-    public OrderResponseDto processOrder(@NotNull Long UserId, @NotNull @Valid OrderDeliveryDetailsDto orderDeliveryDetailsDto) {
-        User user = userCrudService.findById(UserId);
-       return orderCreatorService.createOrderFromCart(user, orderDeliveryDetailsDto);
+    public OrderResponseDto processOrder(@NotNull Long userId, @NotNull @Valid OrderDeliveryDetailsDto orderDeliveryDetailsDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(String.format(
+                        ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
+        return orderCreatorService.createOrderFromCart(user, orderDeliveryDetailsDto);
     }
 }

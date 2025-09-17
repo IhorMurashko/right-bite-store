@@ -1,10 +1,11 @@
 package com.best_store.right_bite.dto.user;
 
-import com.best_store.right_bite.model.user.User;
+import com.best_store.right_bite.model.role.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * DTO representing the full user profile returned in responses.
@@ -64,5 +65,8 @@ public record DefaultUserInfoResponseDto(
         String houseNumber,
 
         @Schema(description = "ZIP code", example = "1000")
-        String zipCode) implements Serializable, BaseUserInfo {
+        String zipCode,
+
+        @Schema(description = "User's roles", examples = {"ROLE_USER", "ROLE_ADMIN"})
+        Set<String> roles) implements Serializable, BaseUserInfo {
 }

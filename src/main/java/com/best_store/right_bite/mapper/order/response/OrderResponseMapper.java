@@ -4,6 +4,7 @@ import com.best_store.right_bite.dto.order.response.OrderResponseDto;
 import com.best_store.right_bite.mapper.BaseMapper;
 import com.best_store.right_bite.mapper.order.orderDeliveryDetails.OrderDeliveryDetailsMapper;
 import com.best_store.right_bite.mapper.order.orderItem.OrderItemDtoMapper;
+import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.order.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
@@ -13,7 +14,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        uses = {OrderDeliveryDetailsMapper.class, OrderItemDtoMapper.class}
+        uses = {OrderDeliveryDetailsMapper.class, OrderItemDtoMapper.class, DefaultUserInfoDtoMapper.class}
 )
 public interface OrderResponseMapper extends BaseMapper<Order, OrderResponseDto> {
 }

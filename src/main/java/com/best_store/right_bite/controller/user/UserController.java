@@ -3,6 +3,7 @@ package com.best_store.right_bite.controller.user;
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
+import com.best_store.right_bite.security.principal.JwtPrincipal;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.service.user.update.UpdatableUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(
@@ -50,8 +51,8 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PatchMapping
     public ResponseEntity<BaseUserInfo> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
-                                                   Authentication authentication) {
-        BaseUserInfo baseUserInfo = updatableUserService.updateUser(userUpdateRequestDto, authentication);
+                                                   @AuthenticationPrincipal JwtPrincipal principal) {
+        BaseUserInfo baseUserInfo = updatableUserService.updateUser(userUpdateRequestDto, principal);
         return new ResponseEntity<>(baseUserInfo, HttpStatus.OK);
     }
 
@@ -66,8 +67,8 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/current")
-    public ResponseEntity<BaseUserInfo> getCurrentUser(Authentication authentication) {
-        BaseUserInfo baseUserInfo = updatableUserService.findUserBy(authentication);
+    public ResponseEntity<BaseUserInfo> getCurrentUser(@AuthenticationPrincipal JwtPrincipal principal) {
+        BaseUserInfo baseUserInfo = userCrudService.findById(Long.parseLong(principal.id()));
         return new ResponseEntity<>(baseUserInfo, HttpStatus.OK);
     }
 
@@ -83,7 +84,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/by-id/{id}")
     public ResponseEntity<BaseUserInfo> getUserById(@PathVariable("id") Long id) {
-        BaseUserInfo baseUserInfo = updatableUserService.findUserBy(id);
+        BaseUserInfo baseUserInfo = userCrudService.findById(id);
         return new ResponseEntity<>(baseUserInfo, HttpStatus.OK);
     }
 
@@ -99,7 +100,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/by-email/{email}")
     public ResponseEntity<BaseUserInfo> getUserByEmail(@PathVariable("email") String email) {
-        BaseUserInfo baseUserInfo = updatableUserService.findUserBy(email);
+        BaseUserInfo baseUserInfo = userCrudService.findByEmail(email);
         return new ResponseEntity<>(baseUserInfo, HttpStatus.OK);
     }
 
@@ -114,8 +115,8 @@ public class UserController {
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteCurrentUser(Authentication authentication) {
-        updatableUserService.deleteUserBy(authentication);
+    public ResponseEntity<HttpStatus> deleteCurrentUser(@AuthenticationPrincipal JwtPrincipal principal) {
+        userCrudService.deleteById(Long.parseLong(principal.id()));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

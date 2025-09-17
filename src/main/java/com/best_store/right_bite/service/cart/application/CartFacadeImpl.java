@@ -4,13 +4,15 @@ import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDt
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
 import com.best_store.right_bite.model.user.User;
+import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.service.cart.domain.CartService;
 import com.best_store.right_bite.service.cart.price.PriceUpdatableService;
-import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.priceCalculator.CartCalculateUtil;
 import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
@@ -46,7 +48,7 @@ import java.util.stream.Collectors;
 public class CartFacadeImpl implements CartFacade {
 
     private final CartService cartService;
-    private final UserCrudService userCrudService;
+    private final UserRepository userRepository;
     private final CartMapper cartMapper;
     private final PriceUpdatableService priceUpdatableService;
     private final AuthenticationParserUtil authenticationParserUtil;
@@ -58,7 +60,9 @@ public class CartFacadeImpl implements CartFacade {
     @Override
     public Cart findCartByAuthUser(@NonNull Authentication authentication) {
         Long userId = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
-        User user = userCrudService.findById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(String.format(
+                        ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
         log.debug("user with id: {} was found", userId);
         Optional<Cart> optionalCart = cartService.getCartByUserId(userId);
         if (optionalCart.isEmpty()) {

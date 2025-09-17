@@ -3,17 +3,18 @@ package com.best_store.right_bite.service.user.update;
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
+import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.mapper.user.UpdatableUserInfoMapper;
 import com.best_store.right_bite.model.user.User;
+import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
+import com.best_store.right_bite.security.principal.JwtPrincipal;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
-import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -30,25 +31,26 @@ import org.springframework.validation.annotation.Validated;
 @Slf4j
 public class UpdatableUserServiceImpl implements UpdatableUserService {
 
-    private final UserCrudService userCrudService;
+    private final UserRepository userRepository;
     private final UpdatableUserInfoMapper updatableUserInfoMapper;
     private final DefaultUserInfoDtoMapper defaultUserInfoDtoMapper;
-    private final AuthenticationParserUtil authenticationParserUtil;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
-                                   @NonNull Authentication authentication) {
-
-        Long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
+                                   @NonNull JwtPrincipal principal) {
 
         try {
-            User user = userCrudService.findById(id);
+            Long id = Long.parseLong(principal.id());
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new UserNotFoundException(
+                            String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id))
+                    );
             log.debug("user with id was {} was found", id);
             updatableUserInfoMapper.updateEntityFromDto(userUpdateRequestDto, user);
-            User saved = userCrudService.save(user);
+            User saved = userRepository.save(user);
             log.info("user with id {} was updated", id);
             return defaultUserInfoDtoMapper.toDTO(saved);
         } catch (NumberFormatException ex) {
@@ -57,42 +59,5 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
                             ExceptionMessageProvider.INVALID_TOKEN_SUBJECT,
                             ex.getClass().getSimpleName()));
         }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BaseUserInfo findUserBy(@NonNull String email) {
-        User user = userCrudService.findByEmail(email);
-        return defaultUserInfoDtoMapper.toDTO(user);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BaseUserInfo findUserBy(@NonNull Long id) {
-        User user = userCrudService.findById(id);
-        return defaultUserInfoDtoMapper.toDTO(user);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BaseUserInfo findUserBy(@NonNull Authentication authentication) {
-        long id = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
-        User user = userCrudService.findById(id);
-        return defaultUserInfoDtoMapper.toDTO(user);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void deleteUserBy(@NonNull Authentication authentication) {
-        userCrudService.deleteById(authenticationParserUtil.extractUserLongIdFromAuthentication(authentication));
     }
 }
