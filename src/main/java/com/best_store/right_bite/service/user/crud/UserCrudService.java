@@ -2,7 +2,6 @@ package com.best_store.right_bite.service.user.crud;
 
 
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import org.springframework.lang.NonNull;
 

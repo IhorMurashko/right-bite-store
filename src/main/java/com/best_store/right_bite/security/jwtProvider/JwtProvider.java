@@ -31,7 +31,7 @@ public interface JwtProvider {
      * Validates a JWT token and checks its signature and expiration.
      *
      * @param token the raw JWT string
-     * @return true if token is valid; false otherwise
+     * @return true if the token is valid; false otherwise
      */
     boolean validateToken(String token);
 

@@ -52,9 +52,7 @@ public class UserAssembler {
     public User create(@NonNull RegistrationCredentialsDto credentials) {
         String encodedPassword = passwordEncoder.encode(credentials.password());
         log.debug("Password encoded successfully");
-
         Role role = getRole(RoleName.ROLE_USER);
-
         return new User(
                 UserFieldAdapter.toLower(credentials.email()),
                 encodedPassword,
@@ -88,32 +86,26 @@ public class UserAssembler {
                 AuthProvider.GOOGLE,
                 null
         );
-
         String firstName = (String) oAuth2User.getAttributes().get(GoogleCredentialsConstants.FIRST_NAME);
         String lastName = (String) oAuth2User.getAttributes().get(GoogleCredentialsConstants.LAST_NAME);
         String imageUrl = (String) oAuth2User.getAttributes().get(GoogleCredentialsConstants.PICTURE);
         String oauthId = (String) oAuth2User.getAttributes().get(GoogleCredentialsConstants.OAUTH_ID);
-
         if (firstName != null && !firstName.isBlank()) {
             log.debug("User first name was set: {}", firstName);
             user.setFirstName(firstName);
         }
-
         if (lastName != null && !lastName.isBlank()) {
             log.debug("User last name was set: {}", lastName);
             user.setLastName(lastName);
         }
-
         if (imageUrl != null && !imageUrl.isBlank()) {
             log.debug("User image URL was set: {}", imageUrl);
             user.setImageUrl(imageUrl);
         }
-
         if (oauthId != null && !oauthId.isBlank()) {
             log.debug("User OAuth ID was set: {}", oauthId);
             user.setOauthId(oauthId);
         }
-
         return user;
     }
 

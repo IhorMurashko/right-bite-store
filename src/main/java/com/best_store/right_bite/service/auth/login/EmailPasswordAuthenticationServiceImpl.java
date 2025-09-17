@@ -1,10 +1,12 @@
 package com.best_store.right_bite.service.auth.login;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.auth.CredentialsException;
 import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.security.dto.TokenDto;
@@ -32,6 +34,7 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenManager tokenManager;
+    private final DefaultUserInfoDtoMapper defaultUserInfoDtoMapper;
 
     /**
      * Authenticates a user by verifying their email and password
@@ -66,6 +69,7 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
             throw new UserAccountIsNotAvailableException(
                     ExceptionMessageProvider.USER_ACCOUNT_IS_EXPIRED);
         }
-        return tokenManager.generateDefaultClaimsToken(user);
+        DefaultUserInfoResponseDto userDto = defaultUserInfoDtoMapper.toDTO(user);
+        return tokenManager.generateDefaultTokens(userDto);
     }
 }

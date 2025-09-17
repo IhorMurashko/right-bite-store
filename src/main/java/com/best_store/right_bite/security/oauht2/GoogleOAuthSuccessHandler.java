@@ -1,5 +1,6 @@
 package com.best_store.right_bite.security.oauht2;
 
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.security.constant.GoogleCredentialsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
@@ -60,17 +61,17 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .getAttributes().get(GoogleCredentialsConstants.EMAIL));
 
 
-        User user;
+        DefaultUserInfoResponseDto userDto;
         if (userCrudService.isEmailExist(email)) {
-            user = userCrudService.findByEmail(email);
+            userDto = userCrudService.findByEmail(email);
             log.debug("user has been found");
         } else {
             log.debug("user wasn't found");
-            user = userCrudService.save(userAssembler.create(oAuth2User));
+            userDto = userCrudService.save(userAssembler.create(oAuth2User));
             log.debug("new google user has been saved");
         }
 
-        TokenDto tokenDto = tokenManager.generateDefaultClaimsToken(user);
+        TokenDto tokenDto = tokenManager.generateDefaultTokens(userDto);
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");

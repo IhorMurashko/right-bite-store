@@ -1,11 +1,9 @@
 package com.best_store.right_bite.service.adminPanel.dashboard;
 
-import com.best_store.right_bite.dto.adminPanel.AdminInfoDTO;
 import com.best_store.right_bite.dto.adminPanel.order.OrderDTO;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.mapper.adminPanel.OrderMapper;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
-import com.best_store.right_bite.model.order.Order;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.security.principal.JwtPrincipal;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

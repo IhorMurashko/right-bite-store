@@ -1,7 +1,7 @@
 package com.best_store.right_bite.security.managment;
 
 
-import com.best_store.right_bite.model.user.AbstractUser;
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
@@ -13,7 +13,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Default implementation of {@link TokenManager} for managing JWT generation.
@@ -33,8 +32,8 @@ public class TokenManagerImpl implements TokenManager {
      * {@inheritDoc}
      */
     @Override
-    public String generateToken(@NonNull String subject, @NonNull Map<String, Object> claims,
-                                @NonNull TokenType tokenType, @NonNull Long lifePeriodTokenInSecond) {
+    public String generateSpecialToken(@NonNull String subject, @NonNull Map<String, Object> claims,
+                                       @NonNull TokenType tokenType, @NonNull Long lifePeriodTokenInSecond) {
         return jwtProvider.generateToken(subject, lifePeriodTokenInSecond, claims, tokenType);
     }
 
@@ -42,18 +41,18 @@ public class TokenManagerImpl implements TokenManager {
      * {@inheritDoc}
      */
     @Override
-    public TokenDto generateDefaultClaimsToken(@NonNull AbstractUser user) {
+    public TokenDto generateDefaultTokens(@NonNull DefaultUserInfoResponseDto defaultUserInfoResponseDto) {
 
-        Map<String, Object> claims = generateDefaultUserClaims(user);
+        Map<String, Object> claims = generateDefaultClaims(defaultUserInfoResponseDto);
 
-        String accessToken = jwtProvider.generateToken(String.valueOf(user.getId()),
+        String accessToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto.id()),
                 tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec(),
                 claims,
                 TokenType.ACCESS
         );
-        String refreshToken = jwtProvider.generateToken(String.valueOf(user.getId()),
+        String refreshToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto),
                 tokensPropertiesDispatcher.getRefreshTokenAvailableValidityPeriodInSec(),
-                Map.of(TokenClaimsConstants.USERNAME_CLAIM, user.getEmail()),
+                Map.of(TokenClaimsConstants.USERNAME_CLAIM, defaultUserInfoResponseDto.email()),
                 TokenType.REFRESH
         );
         return new TokenDto(accessToken, refreshToken);
@@ -63,13 +62,10 @@ public class TokenManagerImpl implements TokenManager {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Object> generateDefaultUserClaims(@NonNull AbstractUser user) {
+    public Map<String, Object> generateDefaultClaims(@NonNull DefaultUserInfoResponseDto defaultUserInfoDto) {
         return Map.of(
-                TokenClaimsConstants.USERNAME_CLAIM, user.getEmail(),
-                TokenClaimsConstants.ROLES_CLAIM, user.getRoles().stream()
-                        .map(role -> role.getName().name())
-                        .collect(Collectors.toList())
-        );
+                TokenClaimsConstants.USERNAME_CLAIM, defaultUserInfoDto.email(),
+                TokenClaimsConstants.ROLES_CLAIM, defaultUserInfoDto.roles());
     }
 
 }
