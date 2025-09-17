@@ -6,8 +6,7 @@ spring:
 #    import: optional:file:.env[.properties]
   data:
     redis:
-      host: localhost
-      port: 6379
+      url: ${REDIS_URL}
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
