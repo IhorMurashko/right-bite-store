@@ -1,8 +1,10 @@
 package com.best_store.right_bite.service.user.crud;
 
 
+import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
@@ -32,27 +34,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCrudServiceImpl implements UserCrudService {
 
     private final UserRepository userRepository;
+    private final DefaultUserInfoDtoMapper defaultUserMapper;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User findByEmail(@NonNull String email) {
+    public DefaultUserInfoResponseDto findByEmail(@NonNull String email) {
         log.info("Find user by email: {}", email);
-        return userRepository.findByEmail(UserFieldAdapter.toLower(email)).orElseThrow(() -> new UserNotFoundException(
+        User user = userRepository.findByEmail(UserFieldAdapter.toLower(email)).orElseThrow(() -> new UserNotFoundException(
                 String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
         ));
+        return defaultUserMapper.toDTO(user);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public User findById(@NonNull Long id) {
+    public DefaultUserInfoResponseDto findById(@NonNull Long id) {
         log.info("Find user by id: {}", id);
-        return userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(
                         String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)));
+        return defaultUserMapper.toDTO(user);
     }
 
     /**
@@ -60,9 +65,10 @@ public class UserCrudServiceImpl implements UserCrudService {
      */
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
-    public User save(@NonNull User user) {
+    public DefaultUserInfoResponseDto save(@NonNull User user) {
         log.info("Save user with email: {}", user.getEmail());
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        return defaultUserMapper.toDTO(saved);
     }
 
     /**
@@ -71,10 +77,12 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteById(@NonNull Long id) {
-        User user = findById(id);
-
-        log.warn("Delete user by id: {}", id);
-        userRepository.delete(user);
+        if (isUserExistById(id)) {
+            log.warn("Delete user by id: {}", id);
+            userRepository.deleteById(id);
+        } else {
+            throw new UserNotFoundException(String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id));
+        }
     }
 
     /**
@@ -83,9 +91,12 @@ public class UserCrudServiceImpl implements UserCrudService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public void deleteByEmail(@NonNull String email) {
-        User user = findByEmail(email);
-        log.warn("Delete user by email: {}", email);
-        userRepository.delete(user);
+        if (isEmailExist(email)) {
+            log.warn("Delete user by email: {}", email);
+            userRepository.deleteByEmail(UserFieldAdapter.toLower(email));
+        } else {
+            throw new UserNotFoundException(String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email));
+        }
     }
 
     /**

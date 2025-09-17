@@ -15,7 +15,7 @@ public interface TokenManager {
      * Generates a JWT token with the specified subject, claims, token type, and expiration.
      *
      * @param subject the token subject (typically user ID)
-     * @param claims custom claims to include in the token
+     * @param claims custom claims to include it in the token
      * @param tokenType type of the token (e.g., ACCESS, REFRESH)
      * @param lifePeriodTokenInSecond token expiration time in seconds
      * @return a signed JWT token as a String
@@ -26,7 +26,7 @@ public interface TokenManager {
     /**
      * Generates a pair of access and refresh tokens with default user claims.
      *
-     * @param user the authenticated user
+     * @param user an authenticated user
      * @return a DTO containing access and refresh tokens
      */
     TokenDto generateDefaultClaimsToken(@NonNull AbstractUser user);
@@ -35,7 +35,7 @@ public interface TokenManager {
      * Constructs default claims to be used in access tokens.
      * Includes roles and username (email).
      *
-     * @param user the authenticated user
+     * @param user an authenticated user
      * @return a map of JWT claims
      */
     Map<String, Object> generateDefaultUserClaims(@NonNull AbstractUser user);

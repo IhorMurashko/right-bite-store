@@ -2,6 +2,7 @@ package com.best_store.right_bite.service.user.update;
 
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
+import com.best_store.right_bite.security.principal.JwtPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
@@ -20,40 +21,10 @@ public interface UpdatableUserService {
      * Only non-null fields will be updated.
      *
      * @param userUpdateRequestDto DTO with updated fields
-     * @param authentication       current authenticated user context
+     * @param principal            current authenticated user context
      * @return updated user info
      */
     BaseUserInfo updateUser(@NonNull @Valid UserUpdateRequestDto userUpdateRequestDto,
-                            @NonNull Authentication authentication);
+                            @NonNull JwtPrincipal principal);
 
-    /**
-     * Finds a user by email.
-     *
-     * @param email user email
-     * @return user info
-     */
-    BaseUserInfo findUserBy(@NonNull String email);
-
-    /**
-     * Finds a user by ID.
-     *
-     * @param id user ID
-     * @return user info
-     */
-    BaseUserInfo findUserBy(@NonNull Long id);
-
-    /**
-     * Finds the current user using authentication token.
-     *
-     * @param authentication current user context
-     * @return user info
-     */
-    BaseUserInfo findUserBy(@NonNull Authentication authentication);
-
-    /**
-     * Deletes the currently authenticated user.
-     *
-     * @param authentication current user context
-     */
-    void deleteUserBy(@NonNull Authentication authentication);
 }
