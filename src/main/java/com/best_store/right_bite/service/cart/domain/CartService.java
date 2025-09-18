@@ -1,35 +1,58 @@
-package com.best_store.right_bite.service.cart.domain;
+package com.best_store.right_bite.service.cart.application;
 
+import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
+import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
+import com.best_store.right_bite.dto.cart.response.CartResponseDto;
 import com.best_store.right_bite.model.cart.Cart;
+import jakarta.validation.Valid;
 import org.springframework.lang.NonNull;
-
-import java.util.Optional;
+import org.springframework.security.core.Authentication;
 
 /**
- * Defines the contract for business operations related to the user's shopping cart.
- * <p>
- * This service provides the core functionalities for retrieving and persisting {@link Cart} entities.
+ * Facade interface for managing shopping cart operations for authenticated users.
+ * Provides methods for retrieving, adding, removing, and clearing cart items.
  */
 public interface CartService {
 
     /**
-     * Retrieves the shopping cart for a specific user.
+     * Retrieves the cart of the authenticated user, creating one if it does not exist.
      *
-     * @param userId the unique identifier of the user whose cart is to be retrieved. Must not be {@code null}.
-     * @return an {@link Optional} containing the user's {@link Cart} if found,
-     * or an empty {@link Optional} if the user does not have a cart yet.
+     * @param authentication current authenticated user
+     * @return the user's cart
      */
-    Optional<Cart> getCartByUserId(@NonNull Long userId);
+    Cart findCartByAuthUser(@NonNull Authentication authentication);
 
     /**
-     * Saves or updates a shopping cart in the database.
-     * <p>
-     * If the cart is new (has a null ID), it will be created. If it already exists,
-     * its state will be updated.
+     * Retrieves the cart of the authenticated user as a DTO,
+     * automatically updating prices if product prices have changed.
      *
-     * @param cart the {@link Cart} entity to save. Must not be {@code null}.
-     * @return the saved cart instance, which may include updates from the persistence layer
-     * (e.g., a generated ID or updated timestamps).
+     * @param authentication current authenticated user
+     * @return cart data as {@link CartResponseDto}
      */
-    Cart save(@NonNull Cart cart);
+    CartResponseDto getUserCart(@NonNull Authentication authentication);
+
+    /**
+     * Adds or updates items in the authenticated user's cart.
+     *
+     * @param addCartItems   DTO with items to add or update
+     * @param authentication current authenticated user
+     * @return updated cart as {@link CartResponseDto}
+     */
+    CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Authentication authentication);
+
+    /**
+     * Removes items from the authenticated user's cart by product IDs.
+     *
+     * @param removeItems    DTO containing IDs of products to remove
+     * @param authentication current authenticated user
+     * @return updated cart as {@link CartResponseDto}
+     */
+    CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Authentication authentication);
+
+    /**
+     * Clears all items from the authenticated user's cart.
+     *
+     * @param authentication current authenticated user
+     */
+    void clear(@NonNull Authentication authentication);
 }
