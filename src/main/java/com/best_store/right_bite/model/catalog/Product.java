@@ -32,6 +32,7 @@ public class Product extends Base {
     private Double fat;
     private Double fiber;
     private String vitamins;
+    private BigDecimal weight;
 
 
     @OneToMany(mappedBy = "product")

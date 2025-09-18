@@ -31,6 +31,7 @@ public class ProductDTO {
     Double fiber;
     String vitamins;
     String indexBody;
+    BigDecimal weight;
 
     List<ProductSalesDTO> productSales;
     BrandDTO brand;
