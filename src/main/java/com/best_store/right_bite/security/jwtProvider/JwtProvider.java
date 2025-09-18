@@ -35,6 +35,5 @@ public interface JwtProvider {
      */
     boolean validateToken(String token);
 
-     String extractTokenFromHeader(@NonNull HttpServletRequest request);
-
+    String extractTokenFromHeader(@NonNull HttpServletRequest request);
 }

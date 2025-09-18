@@ -1,20 +1,16 @@
-package com.best_store.right_bite.service.cart.application;
+package com.best_store.right_bite.service.cart.domain;
 
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDto;
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
-import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.cart.CartRepository;
-import com.best_store.right_bite.repository.user.UserRepository;
+import com.best_store.right_bite.service.cart.helper.CartProvider;
 import com.best_store.right_bite.service.cart.price.PriceUpdatableService;
 import com.best_store.right_bite.utils.priceCalculator.CartCalculateUtil;
-import com.best_store.right_bite.utils.security.AuthenticationParserUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +18,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,14 +28,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Implementation of {@link CartService} providing business logic for managing user carts.
- * Handles cart retrieval, creation, price updates, and persistence.
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -48,41 +39,15 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final UserRepository userRepository;
     private final CartMapper cartMapper;
     private final PriceUpdatableService priceUpdatableService;
-    private final AuthenticationParserUtil authenticationParserUtil;
+    private final CartProvider cartProvider;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-    @Override
-    public Cart findCartByAuthUser(@NonNull Authentication authentication) {
-        Long userId = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(String.format(
-                        ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
-        log.debug("user with id: {} was found", userId);
-        Optional<Cart> optionalCart = cartRepository.getCartByUserId(userId);
-        if (optionalCart.isEmpty()) {
-            log.debug("user cart is not present");
-            Cart created = new Cart(user);
-            Cart persistedCart = cartRepository.save(created);
-            optionalCart = Optional.of(persistedCart);
-            log.info("new user cart was created");
-        }
-        return optionalCart.get();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
+    @Cacheable(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public CartResponseDto getUserCart(@NonNull Authentication authentication) {
-        Cart cart = findCartByAuthUser(authentication);
+    public CartResponseDto getUserCart(@NonNull Long userId) {
+        Cart cart = cartProvider.findCartByAuthUser(userId);
         int modifications = priceUpdatableService.refreshCartPrices(cart);
         log.debug("modifications counter is: {}", modifications);
         if (modifications > 0) {
@@ -95,15 +60,12 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponseDto(cart);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @CachePut(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
+    @CachePut(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
-    public CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Authentication authentication) {
+    public CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Long userId) {
         log.debug("Request contains size {}", addCartItems.cartItems().size());
-        Cart cart = findCartByAuthUser(authentication);
+        Cart cart = cartProvider.findCartByAuthUser(userId);
         Map<Long, CartItem> existingItemsMap = cart.getCartItems().stream()
                 .collect(Collectors.toMap(CartItem::getProductId, Function.identity()));
         log.debug("existingItemsMap size: {}", existingItemsMap.size());
@@ -138,14 +100,11 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponseDto(cart);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
+    @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Authentication authentication) {
-        Cart cart = findCartByAuthUser(authentication);
+    public CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Long userId) {
+        Cart cart = cartProvider.findCartByAuthUser(userId);
         if (removeItems.idsToRemove().isEmpty()) {
             log.warn("No items to remove for user {}", cart.getUser().getId());
         } else {
@@ -159,14 +118,11 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponseDto(cart);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = "cart", key = "@authenticationParserUtil.extractUserLongIdFromAuthentication(#authentication)")
+    @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public void clear(@NonNull Authentication authentication) {
-        Cart cart = findCartByAuthUser(authentication);
+    public void clear(@NonNull Long userId) {
+        Cart cart = cartProvider.findCartByAuthUser(userId);
         cart.clear();
         log.debug("Cleared cart for user {}", cart.getUser().getId());
         BigDecimal totalPrice = CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);

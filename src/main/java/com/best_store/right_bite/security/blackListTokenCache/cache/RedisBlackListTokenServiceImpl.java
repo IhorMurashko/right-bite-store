@@ -49,7 +49,7 @@ public class RedisBlackListTokenServiceImpl implements BlackListTokenService {
      * Checks if a token is present (revoked) in Redis.
      *
      * @param token token to check
-     * @return true if token is revoked
+     * @return true if the token is revoked
      */
     @Override
     public boolean isTokenPresent(@NonNull String token) {

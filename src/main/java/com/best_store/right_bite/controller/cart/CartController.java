@@ -3,7 +3,8 @@ package com.best_store.right_bite.controller.cart;
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
-import com.best_store.right_bite.service.cart.application.CartFacade;
+import com.best_store.right_bite.security.principal.JwtPrincipal;
+import com.best_store.right_bite.service.cart.domain.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CartController {
 
-    private final CartFacade cartFacade;
+    private final CartService cartService;
 
     @Operation(
             summary = "Get current user's cart",
@@ -45,8 +46,8 @@ public class CartController {
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("hasRole(T(com.best_store.right_bite.model.role.RoleName).ROLE_USER.name())")
     @GetMapping
-    public ResponseEntity<CartResponseDto> getUserCart(Authentication authentication) {
-        CartResponseDto userCart = cartFacade.getUserCart(authentication);
+    public ResponseEntity<CartResponseDto> getUserCart(@AuthenticationPrincipal JwtPrincipal principal) {
+        CartResponseDto userCart = cartService.getUserCart(Long.parseLong(principal.id()));
         return new ResponseEntity<>(userCart, HttpStatus.OK);
     }
 
@@ -71,8 +72,8 @@ public class CartController {
     @PreAuthorize("hasRole(T(com.best_store.right_bite.model.role.RoleName).ROLE_USER.name())")
     @PostMapping("/add")
     public ResponseEntity<CartResponseDto> addCartItem(@RequestBody AddCartRequestDto cartDto,
-                                                       Authentication authentication) {
-        CartResponseDto cartResponseDto = cartFacade.addItems(cartDto, authentication);
+                                                       @AuthenticationPrincipal JwtPrincipal principal) {
+        CartResponseDto cartResponseDto = cartService.addItems(cartDto, Long.parseLong(principal.id()));
         return new ResponseEntity<>(cartResponseDto, HttpStatus.OK);
     }
 
@@ -96,8 +97,8 @@ public class CartController {
     @PreAuthorize("hasRole(T(com.best_store.right_bite.model.role.RoleName).ROLE_USER.name())")
     @DeleteMapping("/delete")
     public ResponseEntity<CartResponseDto> deleteCartItem(@RequestBody RemoveItemsRequestDto removeItemsRequestDto,
-                                                          Authentication authentication) {
-        CartResponseDto cartResponseDto = cartFacade.removeItems(removeItemsRequestDto, authentication);
+                                                          @AuthenticationPrincipal JwtPrincipal principal) {
+        CartResponseDto cartResponseDto = cartService.removeItems(removeItemsRequestDto, Long.parseLong(principal.id()));
         return new ResponseEntity<>(cartResponseDto, HttpStatus.OK);
 
     }
@@ -115,8 +116,8 @@ public class CartController {
     )
     @PreAuthorize("hasRole(T(com.best_store.right_bite.model.role.RoleName).ROLE_USER.name())")
     @DeleteMapping("/clear")
-    public ResponseEntity<HttpStatus> clearUserCart(Authentication authentication) {
-        cartFacade.clear(authentication);
+    public ResponseEntity<HttpStatus> clearUserCart(@AuthenticationPrincipal JwtPrincipal principal) {
+        cartService.clear(Long.parseLong(principal.id()));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
