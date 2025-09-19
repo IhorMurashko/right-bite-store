@@ -47,16 +47,19 @@ public class CartServiceImpl implements CartService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
     public CartResponseDto getUserCart(@NonNull Long userId) {
-        Cart cart = cartProvider.findCartByAuthUser(userId);
-        int modifications = priceUpdatableService.refreshCartPrices(cart);
+        Cart cart;
+        int modifications = priceUpdatableService.refreshCartPrices(userId);
         log.debug("modifications counter is: {}", modifications);
         if (modifications > 0) {
+            cart = cartProvider.findCartByAuthUser(userId);
             CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
-            cartRepository.save(cart);
+            cart = cartRepository.save(cart);
             log.debug("User cart was modified: {} items updated", modifications);
             log.info("user's cart prices were modified");
+        }else{
+            cart = cartProvider.findCartByAuthUser(userId);
+            log.debug("User cart was not modified");
         }
-        log.info("user cart was found successfully for user {}", cart.getUser().getId());
         return cartMapper.toCartResponseDto(cart);
     }
 

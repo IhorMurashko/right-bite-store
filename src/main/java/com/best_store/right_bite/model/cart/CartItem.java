@@ -23,6 +23,8 @@ import java.util.Objects;
 @NoArgsConstructor
 public class CartItem {
 
+    @Version
+    private Long version;
     /**
      * Unique identifier for the item.
      */

@@ -11,9 +11,7 @@ public interface CartService {
 
     CartResponseDto getUserCart(@NonNull Long userId);
 
-
     CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Long userId);
-
 
     CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Long userId);
 

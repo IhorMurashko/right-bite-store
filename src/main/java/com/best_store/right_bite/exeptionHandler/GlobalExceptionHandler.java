@@ -2,15 +2,11 @@ package com.best_store.right_bite.exeptionHandler;
 
 import com.best_store.right_bite.dto.exception.ErrorResponseDto;
 import com.best_store.right_bite.exception.ai.OpenAiCallerException;
-import com.best_store.right_bite.exception.auth.CredentialsException;
-import com.best_store.right_bite.exception.auth.InvalidTokenException;
-import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
-import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
-import com.best_store.right_bite.exception.base.IncomingNullObjectException;
+import com.best_store.right_bite.exception.auth.*;
 import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
+import com.best_store.right_bite.exception.db.InternalDataBaseConnectionException;
 import com.best_store.right_bite.exception.notificationSubscription.NewsletterSubscriptionsWasNotFound;
 import com.best_store.right_bite.exception.order.delivery.EmptyDeliveryDetailsException;
-import com.best_store.right_bite.exception.auth.UserAuthenticationException;
 import com.best_store.right_bite.exception.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.user.UserNotFoundException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
@@ -35,10 +31,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserAuthenticationException.class)
     public ResponseEntity<ErrorResponseDto> handleOrderCreatingUserAuthenticationException(UserAuthenticationException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
-    }
-    @ExceptionHandler(IncomingNullObjectException.class)
-    public ResponseEntity<ErrorResponseDto> handleIncomingNullObjectException(IncomingNullObjectException ex, HttpServletRequest request) {
         return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
     }
 
@@ -104,6 +96,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTokenSubjectException.class)
     public ResponseEntity<ErrorResponseDto> handleInvalidTokenSubjectException(InvalidTokenSubjectException ex, HttpServletRequest request) {
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(InternalDataBaseConnectionException.class)
+    public ResponseEntity<ErrorResponseDto> handleInternalDataBaseConnectionException(InternalDataBaseConnectionException ex, HttpServletRequest request) {
         return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 

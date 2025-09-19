@@ -32,6 +32,9 @@ import java.util.function.Predicate;
 @EntityListeners(AuditingEntityListener.class)
 public class Cart {
 
+    @Version
+    private Long version;
+
     /**
      * Constructs a new Cart for the given User.
      *
