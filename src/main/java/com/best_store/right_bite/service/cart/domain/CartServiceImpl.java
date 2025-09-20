@@ -1,9 +1,11 @@
 package com.best_store.right_bite.service.cart.domain;
 
+import com.best_store.right_bite.constant.jpa.JpaConstraints;
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDto;
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
+import com.best_store.right_bite.exception.db.InternalDataBaseConnectionException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
@@ -11,6 +13,7 @@ import com.best_store.right_bite.repository.cart.CartRepository;
 import com.best_store.right_bite.service.cart.helper.CartProvider;
 import com.best_store.right_bite.service.cart.price.PriceUpdatableService;
 import com.best_store.right_bite.utils.priceCalculator.CartCalculateUtil;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,23 +47,34 @@ public class CartServiceImpl implements CartService {
     private final CartProvider cartProvider;
 
     @Cacheable(value = "cart", key = "#userId")
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     @Override
     public CartResponseDto getUserCart(@NonNull Long userId) {
-        Cart cart;
-        int modifications = priceUpdatableService.refreshCartPrices(userId);
-        log.debug("modifications counter is: {}", modifications);
-        if (modifications > 0) {
-            cart = cartProvider.findCartByAuthUser(userId);
-            CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
-            cart = cartRepository.save(cart);
-            log.debug("User cart was modified: {} items updated", modifications);
-            log.info("user's cart prices were modified");
-        }else{
-            cart = cartProvider.findCartByAuthUser(userId);
-            log.debug("User cart was not modified");
+        int attempts = 0;
+        while (true) {
+            try {
+                Cart cart = cartProvider.findCartByAuthUser(userId);
+                int modifications = priceUpdatableService.refreshCartPrices(userId);
+                log.debug("modifications counter is: {}", modifications);
+                if (modifications > 0) {
+                    CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
+                    cart = cartRepository.save(cart);
+                    log.debug("User cart was modified: {} items updated", modifications);
+                    log.info("user's cart prices were modified");
+                    cartRepository.save(cart);
+                }
+                return cartMapper.toCartResponseDto(cart);
+            } catch (OptimisticLockException ex) {
+                attempts++;
+                log.warn("OptimisticLockException was caught, retrying");
+                if (attempts >= JpaConstraints.MAX_RETRY_ATTEMPTS) {
+                    log.error("OptimisticLockException was caught, retry attempts exceeded");
+                    throw new InternalDataBaseConnectionException(ex.getMessage());
+                }
+            }
         }
-        return cartMapper.toCartResponseDto(cart);
+
+
     }
 
     @CachePut(value = "cart", key = "#userId")

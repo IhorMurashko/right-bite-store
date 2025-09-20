@@ -119,7 +119,6 @@ class PriceUpdatableServiceImplTest {
         assertEquals(2, modifyingCounter);
         verify(cartRepository, times(1)).findCartByUserId(anyLong());
         verify(productRepository, times(1)).getProductPriceByProductIds(anySet());
-        verify(cartRepository).save(any(Cart.class));
         verify(cartRepository).findCartByUserId(longArgumentCaptor.capture());
         assertEquals(userId, longArgumentCaptor.getValue());
         verifyNoMoreInteractions(cartRepository, productRepository);
@@ -141,44 +140,4 @@ class PriceUpdatableServiceImplTest {
         assertEquals(userId, longArgumentCaptor.getValue());
         verifyNoMoreInteractions(cartRepository, productRepository);
     }
-
-    @Test
-    void shouldReturnModifyingCountValue_two_when_OptimisticLockExceptionWasThroughAndTwoItemsWereModified() {
-        doReturn(Optional.of(cart)).when(cartRepository).findCartByUserId(anyLong());
-        cart.setCartItems(setWithTwoOldItems);
-        doReturn(itemsWithActualPrice).when(productRepository).getProductPriceByProductIds(anySet());
-        when(cartRepository.save(any(Cart.class)))
-                .thenThrow(new OptimisticLockException("OptimisticLockException"))
-                .thenThrow(new OptimisticLockException("OptimisticLockException"))
-                .thenReturn(cart);
-
-        int modifyingCounter = priceUpdatableService.refreshCartPrices(userId);
-
-        assertEquals(2, modifyingCounter);
-        verify(cartRepository, times(3)).findCartByUserId(anyLong());
-        verify(productRepository, times(3)).getProductPriceByProductIds(anySet());
-        verify(cartRepository, times(3)).save(any(Cart.class));
-        verifyNoMoreInteractions(cartRepository, productRepository);
-    }
-
-    @Test
-    void shouldThrowOptimisticLockException_when_OptimisticLockExceptionWasThrough() {
-        doReturn(Optional.of(cart)).when(cartRepository).findCartByUserId(anyLong());
-        cart.setCartItems(setWithTwoOldItems);
-        doReturn(itemsWithActualPrice).when(productRepository).getProductPriceByProductIds(anySet());
-        when(cartRepository.save(any(Cart.class)))
-                .thenThrow(new OptimisticLockException("OptimisticLockException"))
-                .thenThrow(new OptimisticLockException("OptimisticLockException"))
-                .thenThrow(new OptimisticLockException("OptimisticLockException"));
-
-        InternalDataBaseConnectionException exception = assertThrows(InternalDataBaseConnectionException.class, () ->
-                priceUpdatableService.refreshCartPrices(userId));
-
-        verify(cartRepository, times(3)).findCartByUserId(anyLong());
-        verify(productRepository, times(3)).getProductPriceByProductIds(anySet());
-        verify(cartRepository, times(3)).save(any(Cart.class));
-        verifyNoMoreInteractions(cartRepository, productRepository);
-
-    }
-
 }
