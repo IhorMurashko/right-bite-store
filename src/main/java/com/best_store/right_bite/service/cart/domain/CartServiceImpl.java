@@ -5,8 +5,8 @@ import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDt
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
-import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
 import com.best_store.right_bite.exception.exceptions.db.InternalDataBaseConnectionException;
+import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
@@ -16,12 +16,12 @@ import com.best_store.right_bite.service.cart.price.PriceUpdatableService;
 import com.best_store.right_bite.utils.priceCalculator.CartCalculateUtil;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -51,7 +51,7 @@ public class CartServiceImpl implements CartService {
     @Cacheable(value = "cart", key = "#userId")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     @Override
-    public CartResponseDto getUserCart(@NonNull Long userId) {
+    public CartResponseDto getUserCart(@NotNull Long userId) {
         Cart cart = cartProvider.findCartByAuthUser(userId);
         int attempts = 0;
         while (true) {
@@ -83,7 +83,7 @@ public class CartServiceImpl implements CartService {
     @CachePut(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
-    public CartResponseDto addItems(@NonNull @Valid AddCartRequestDto addCartItems, @NonNull Long userId) {
+    public CartResponseDto addItems(@NotNull @Valid AddCartRequestDto addCartItems, @NotNull Long userId) {
         log.debug("Request contains size {}", addCartItems.cartItems().size());
         Cart cart = cartProvider.findCartByAuthUser(userId);
         Map<Long, CartItem> existingItemsMap = cart.getCartItems().stream()
@@ -117,32 +117,28 @@ public class CartServiceImpl implements CartService {
         cart.setTotalPrice(totalPrice);
         log.debug("total price: {}", totalPrice);
         log.info("Added {} items to cart for user {}", cart.getCartItems().size(), cart.getUser().getId());
-        cartRepository.save(cart);
-        return cartMapper.toCartResponseDto(cart);
+        Cart saved = cartRepository.save(cart);
+        return cartMapper.toCartResponseDto(saved);
     }
 
     @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public CartResponseDto removeItems(@NonNull @Valid RemoveItemsRequestDto removeItems, @NonNull Long userId) {
+    public CartResponseDto removeItems(@NotNull @Valid RemoveItemsRequestDto removeItems, @NotNull Long userId) {
         Cart cart = cartProvider.findCartByAuthUser(userId);
-        if (removeItems.idsToRemove().isEmpty()) {
-            log.warn("No items to remove for user {}", cart.getUser().getId());
-        } else {
-            cart.removeItemsByProductIds(ci -> removeItems.idsToRemove().contains(ci.getProductId()));
-            BigDecimal totalPrice = CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
-            cart.setTotalPrice(totalPrice);
-            log.debug("Total price after removing items is: {} for user: {}", totalPrice, cart.getUser().getId());
-            log.info("Removed {} items from cart for user {}", removeItems.idsToRemove().size(), cart.getUser().getId());
-            cartRepository.save(cart);
-        }
-        return cartMapper.toCartResponseDto(cart);
+        cart.removeItemsByProductIds(ci -> removeItems.idsToRemove().contains(ci.getProductId()));
+        BigDecimal totalPrice = CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
+        cart.setTotalPrice(totalPrice);
+        log.debug("Total price after removing items is: {} for user: {}", totalPrice, cart.getUser().getId());
+        log.info("Removed {} items from cart for user {}", removeItems.idsToRemove().size(), cart.getUser().getId());
+        Cart saved = cartRepository.save(cart);
+        return cartMapper.toCartResponseDto(saved);
     }
 
     @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
-    public void clear(@NonNull Long userId) {
+    public void clear(@NotNull Long userId) {
         Cart cart = cartProvider.findCartByAuthUser(userId);
         cart.clear();
         log.debug("Cleared cart for user {}", cart.getUser().getId());

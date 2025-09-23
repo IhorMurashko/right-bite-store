@@ -1,7 +1,8 @@
 package com.best_store.right_bite.service.cart.helper;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
 import com.best_store.right_bite.model.user.User;
@@ -52,7 +53,7 @@ class CartProviderTest {
         UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> cartProvider.findCartByAuthUser(userId));
 
         assertNotNull(exception);
-        assertEquals(String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, userId), exception.getMessage());
+        assertEquals(String.format(UserExceptionMP.USER_ID_NOT_FOUND, userId), exception.getMessage());
         verifyNoInteractions(cartRepository);
         verify(userRepository, times(1)).findById(any());
     }

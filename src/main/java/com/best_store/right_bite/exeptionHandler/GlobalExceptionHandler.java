@@ -9,7 +9,6 @@ import com.best_store.right_bite.exception.exceptions.auth.UserAccountIsNotAvail
 import com.best_store.right_bite.exception.exceptions.catalog.ProductNotFoundException;
 import com.best_store.right_bite.exception.exceptions.db.InternalDataBaseConnectionException;
 import com.best_store.right_bite.exception.exceptions.notificationSubscription.NewsletterSubscriptionsWasNotFound;
-import com.best_store.right_bite.exception.order.delivery.EmptyDeliveryDetailsException;
 import com.best_store.right_bite.exception.exceptions.role.RoleNotFoundException;
 import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;

@@ -1,8 +1,10 @@
 package com.best_store.right_bite.service.cart.price;
 
 import com.best_store.right_bite.dto.catalog.product.ProductPriceDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.cart.UserCartNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.cart.UserCartNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.CartExceptionMP;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
 import com.best_store.right_bite.model.user.User;
@@ -82,7 +84,7 @@ class PriceUpdatableServiceImplTest {
                 () -> priceUpdatableService.refreshCartPrices(userId));
 
         assertNotNull(exception);
-        assertEquals(String.format(ExceptionMessageProvider.USER_CART_WAS_NOT_FOUND, userId), exception.getMessage());
+        assertEquals(String.format(CartExceptionMP.USER_CART_WAS_NOT_FOUND, userId), exception.getMessage());
         verify(cartRepository).findCartByUserId(longArgumentCaptor.capture());
         assertEquals(userId, longArgumentCaptor.getValue());
         verify(cartRepository, times(1)).findCartByUserId(any(Long.class));
