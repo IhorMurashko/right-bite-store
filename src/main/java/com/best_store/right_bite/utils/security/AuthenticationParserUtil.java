@@ -1,7 +1,7 @@
 package com.best_store.right_bite.utils.security;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.role.InvalidPrincipalCastException;
+import com.best_store.right_bite.exception.messageProvider.SecurityExceptionMP;
+import com.best_store.right_bite.exception.exceptions.role.InvalidPrincipalCastException;
 import com.best_store.right_bite.security.exception.InvalidTokenSubjectException;
 import com.best_store.right_bite.security.principal.JwtPrincipal;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +40,12 @@ public class AuthenticationParserUtil {
                 log.warn("Authentication subject principal is not a long: {}", principal.id().getClass().getSimpleName());
                 throw new InvalidTokenSubjectException(
                         String.format(
-                                ExceptionMessageProvider.INVALID_TOKEN_SUBJECT,
+                                SecurityExceptionMP.INVALID_TOKEN_SUBJECT,
                                 ex.getClass().getSimpleName()));
             }
         } else {
             throw new InvalidPrincipalCastException(
-                    ExceptionMessageProvider.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);
+                    SecurityExceptionMP.AUTHENTICATION_CAST_INSTANCE_CAST_EXCEPTION);
         }
     }
 }

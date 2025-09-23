@@ -5,8 +5,8 @@ import com.best_store.right_bite.constant.bmi.BMICategory;
 import com.best_store.right_bite.dto.catalog.ProductDTO;
 import com.best_store.right_bite.dto.catalog.ProductFilterRequest;
 import com.best_store.right_bite.dto.catalog.ProductSalesDTO;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.catalog.ProductNotFoundException;
+import com.best_store.right_bite.exception.exceptions.catalog.ProductNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.ProductExceptionMP;
 import com.best_store.right_bite.mapper.catalog.ProductMapper;
 import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getProductDTOById(Long id) {
         return productEntityToDTOMapper.toDTO(catalogRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ExceptionMessageProvider.ID_PRODUCT_NOT_FOUND.formatted(id))));
+                .orElseThrow(() -> new ProductNotFoundException(ProductExceptionMP.ID_PRODUCT_NOT_FOUND.formatted(id))));
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.newsLetter.domain.newsLetterCRUDService;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.notificationSubscription.NewsletterSubscriptionsWasNotFound;
+import com.best_store.right_bite.exception.messageProvider.NewsletterExceptionMP;
+import com.best_store.right_bite.exception.exceptions.notificationSubscription.NewsletterSubscriptionsWasNotFound;
 import com.best_store.right_bite.model.newsletterSubscription.NewsletterSubscription;
 import com.best_store.right_bite.repository.newsletterSubscriptions.NewsletterSubscriptionsRepository;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
@@ -51,7 +51,7 @@ public class NewsletterCRUDServiceImpl implements NewsletterCRUDService {
             newsletterSubscriptionsRepository.deleteById(id);
         } else {
             throw new NewsletterSubscriptionsWasNotFound(String.format(
-                    ExceptionMessageProvider.NEWSLETTER_ID_WAS_NOT_FOUND, id
+                    NewsletterExceptionMP.NEWSLETTER_ID_WAS_NOT_FOUND, id
             ));
         }
     }
@@ -65,7 +65,7 @@ public class NewsletterCRUDServiceImpl implements NewsletterCRUDService {
             newsletterSubscriptionsRepository.deleteByEmail(emailLower);
         } else {
             throw new NewsletterSubscriptionsWasNotFound(String.format(
-                    ExceptionMessageProvider.NEWSLETTER_EMAIL_WAS_NOT_FOUND, emailLower
+                    NewsletterExceptionMP.NEWSLETTER_EMAIL_WAS_NOT_FOUND, emailLower
             ));
         }
     }

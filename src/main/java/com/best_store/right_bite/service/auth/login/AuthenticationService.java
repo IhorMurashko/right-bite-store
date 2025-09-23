@@ -1,8 +1,8 @@
 package com.best_store.right_bite.service.auth.login;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
-import com.best_store.right_bite.exception.auth.CredentialsException;
-import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
+import com.best_store.right_bite.exception.exceptions.auth.UserAccountIsNotAvailableException;
 import com.best_store.right_bite.security.dto.TokenDto;
 import jakarta.validation.Valid;
 import org.springframework.lang.NonNull;

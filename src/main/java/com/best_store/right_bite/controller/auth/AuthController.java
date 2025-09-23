@@ -2,9 +2,9 @@ package com.best_store.right_bite.controller.auth;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.auth.CredentialsException;
-import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
+import com.best_store.right_bite.exception.exceptions.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.security.blackListTokenCache.RevokeTokenService;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;

@@ -1,7 +1,7 @@
 package com.best_store.right_bite.utils.notification.contentProcessor;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.notification.NotificationProcessingException;
+import com.best_store.right_bite.exception.messageProvider.NotificationExceptionMP;
+import com.best_store.right_bite.exception.exceptions.notification.NotificationProcessingException;
 import com.best_store.right_bite.notification.data.core.BaseNotification;
 import com.best_store.right_bite.notification.data.payload.ContentPayload;
 import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
@@ -29,13 +29,13 @@ public class NotificationContentProcessorImpl implements NotificationContentProc
                     notification.getClass().getSimpleName(), e);
             throw new NotificationProcessingException(
                     String.format(
-                            ExceptionMessageProvider.NOTIFICATION_BUILDER_AND_TYPES_ARE_NOT_INCOMPATIBLE, e.getMessage()
+                            NotificationExceptionMP.NOTIFICATION_BUILDER_AND_TYPES_ARE_NOT_INCOMPATIBLE, e.getMessage()
                     ));
         } catch (Exception e) {
             log.error("Error processing notification content", e);
             throw new NotificationProcessingException(
                     String.format(
-                            ExceptionMessageProvider.FAILED_TO_PROCESS_NOTIFICATION_CONTENT, e.getMessage()));
+                            NotificationExceptionMP.FAILED_TO_PROCESS_NOTIFICATION_CONTENT, e.getMessage()));
         }
     }
 }

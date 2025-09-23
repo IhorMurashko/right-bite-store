@@ -1,9 +1,9 @@
 package com.best_store.right_bite.service.auth.update.token;
 
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.auth.InvalidTokenException;
-import com.best_store.right_bite.exception.auth.RefreshTokenAccessException;
+import com.best_store.right_bite.exception.exceptions.auth.InvalidTokenException;
+import com.best_store.right_bite.exception.exceptions.auth.RefreshTokenAccessException;
+import com.best_store.right_bite.exception.messageProvider.SecurityExceptionMP;
 import com.best_store.right_bite.security.claims.ClaimsProvider;
 import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
@@ -52,7 +52,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 log.error("Invalid refresh token for");
                 throw new RefreshTokenAccessException(
                         String.format(
-                                ExceptionMessageProvider.TOKEN_ACCESS_EXCEPTION, tokenType
+                                SecurityExceptionMP.TOKEN_ACCESS_EXCEPTION, tokenType
                         )
                 );
             }
@@ -69,11 +69,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             } catch (NullPointerException ex) {
                 log.error("Refresh token subject is null");
                 throw new InvalidTokenException(String.format(
-                        ExceptionMessageProvider.INVALID_TOKEN_SUBJECT, "null"));
+                        SecurityExceptionMP.INVALID_TOKEN_SUBJECT, "null"));
             } catch (NumberFormatException ex) {
                 log.error("Refresh token subject is not numeric type: {}", userId.getClass().getSimpleName());
                 throw new InvalidTokenException(String.format(
-                        ExceptionMessageProvider.INVALID_TOKEN_SUBJECT, ex.getClass().getSimpleName()));
+                        SecurityExceptionMP.INVALID_TOKEN_SUBJECT, ex.getClass().getSimpleName()));
             }
             log.debug("refresh token user subject is: {}", userId);
             DefaultUserInfoResponseDto userDto = userCrudService.findById(id);
@@ -101,7 +101,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         } else {
             throw new InvalidTokenException(
                     String.format(
-                            ExceptionMessageProvider.INVALID_TOKEN
+                            SecurityExceptionMP.INVALID_TOKEN
                     )
             );
         }

@@ -4,6 +4,9 @@ tokens:
   #30 days
   refreshTokenAvailableValidityPeriodInSec: 2592000
 spring:
+#  profiles:
+#    active: dev
+
   application:
     name: right-bite
   cache:

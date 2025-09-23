@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.auth.registration;
 
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.auth.CredentialsException;
+import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
 import jakarta.validation.Valid;
 import org.springframework.lang.NonNull;
 

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
  */
 @Schema(name = "product info")
 public record AddCartItemRequestDto(
+        //todo: exception messages
         @Schema(description = "id of the product", nullable = false)
         @NonNull
         Long productId,

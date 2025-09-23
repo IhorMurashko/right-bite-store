@@ -2,10 +2,11 @@ package com.best_store.right_bite.service.auth.login;
 
 import com.best_store.right_bite.dto.auth.login.AuthRequest;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.auth.CredentialsException;
-import com.best_store.right_bite.exception.auth.UserAccountIsNotAvailableException;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
+import com.best_store.right_bite.exception.exceptions.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.messageProvider.AuthExceptionMP;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
@@ -50,10 +51,10 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
         String email = UserFieldAdapter.toLower(authRequest.email());
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UserNotFoundException(String.format(
-                        ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email))
+                        UserExceptionMP.USER_EMAIL_NOT_FOUND, email))
         );
         if (!passwordEncoder.matches(authRequest.password(), user.getPassword())) {
-            throw new CredentialsException(ExceptionMessageProvider
+            throw new CredentialsException(AuthExceptionMP
                     .PASSWORDS_DONT_MATCH);
         }
 
@@ -67,7 +68,7 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
             log.warn("account credentials is enabled {}", user.isEnabled());
             log.warn("account is expired for user: {}", user.getEmail());
             throw new UserAccountIsNotAvailableException(
-                    ExceptionMessageProvider.USER_ACCOUNT_IS_EXPIRED);
+                    AuthExceptionMP.USER_ACCOUNT_IS_EXPIRED);
         }
         DefaultUserInfoResponseDto userDto = defaultUserInfoDtoMapper.toDTO(user);
         return tokenManager.generateDefaultTokens(userDto);

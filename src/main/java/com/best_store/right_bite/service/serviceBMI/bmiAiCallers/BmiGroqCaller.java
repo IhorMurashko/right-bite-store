@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.serviceBMI.bmiAiCallers;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.ai.OpenAiCallerException;
+import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.ai.OpenAiCallerException;
 import com.best_store.right_bite.service.aiCallers.AiBaseCaller;
 import com.best_store.right_bite.service.serviceBMI.BMIServiceImpl;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
  * @author Ihor Murashko
  * @see OpenAiChatModel
  * @see AiBaseCaller
- * @see ExceptionMessageProvider
+ * @see BaseExceptionMessageProvider
  */
 @Component
 @RequiredArgsConstructor
@@ -60,7 +60,7 @@ public class BmiGroqCaller implements AiBaseCaller<String> {
      *
      * @see OpenAiChatModel
      * @see AiBaseCaller
-     * @see ExceptionMessageProvider
+     * @see BaseExceptionMessageProvider
      * @see OpenAiCallerException
      * @see BMIServiceImpl
      */
@@ -72,7 +72,7 @@ public class BmiGroqCaller implements AiBaseCaller<String> {
         } catch (RuntimeException exception) {
             log.error("Error occurred while calling groq chat model: {}", exception.getMessage());
             throw new OpenAiCallerException(
-                    String.format(ExceptionMessageProvider.INTERNAL_AI_CALL_ERROR, exception.getMessage()));
+                    String.format(BaseExceptionMessageProvider.INTERNAL_AI_CALL_ERROR, exception.getMessage()));
         }
     }
 }

@@ -1,9 +1,5 @@
 jwt.secret.key: ${JWT_SECRET_KEY}
 spring:
-#  config:
-#    activate:
-#      on-profile: prod
-#    import: optional:file:.env[.properties]
   data:
     redis:
       url: ${REDIS_URL}

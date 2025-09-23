@@ -21,7 +21,7 @@ import java.util.Map;
  *
  * <p>
  * Uses HMAC SHA-256 signing with a shared secret key. Supports token generation with
- * subject, claims, type and configurable expiration.
+ * a subject, claims, type and configurable expiration.
  * </p>
  *
  * <p>
@@ -39,6 +39,9 @@ public class JwtProviderImpl implements JwtProvider {
 
     private final SecretKey key;
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String generateToken(@NonNull String subject,
                                 @NonNull Long validityPeriodInSeconds,
@@ -60,7 +63,9 @@ public class JwtProviderImpl implements JwtProvider {
                         .signWith(key)
                         .compact();
     }
-
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public boolean validateToken(@NonNull String token) {
         try {
@@ -73,13 +78,7 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     /**
-     * Extracts the JWT token from the Authorization header of the request.
-     * <p>
-     * The method expects the header to begin with the string "Bearer ".
-     * If the header is absent or does not follow this format, a warning is logged and {@code null} is returned.
-     *
-     * @param request the HttpServletRequest from which the token is to be extracted
-     * @return the JWT token string if present and well-formed; {@code null} otherwise
+     *{@inheritDoc}
      */
     @Override
     public String extractTokenFromHeader(@NonNull HttpServletRequest request) {

@@ -2,8 +2,8 @@ package com.best_store.right_bite.service.user.crud;
 
 
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
@@ -43,7 +43,7 @@ public class UserCrudServiceImpl implements UserCrudService {
     public DefaultUserInfoResponseDto findByEmail(@NonNull String email) {
         log.info("Find user by email: {}", email);
         User user = userRepository.findByEmail(UserFieldAdapter.toLower(email)).orElseThrow(() -> new UserNotFoundException(
-                String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email)
+                String.format(UserExceptionMP.USER_EMAIL_NOT_FOUND, email)
         ));
         return defaultUserMapper.toDTO(user);
     }
@@ -56,7 +56,7 @@ public class UserCrudServiceImpl implements UserCrudService {
         log.info("Find user by id: {}", id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(
-                        String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id)));
+                        String.format(UserExceptionMP.USER_ID_NOT_FOUND, id)));
         return defaultUserMapper.toDTO(user);
     }
 
@@ -81,7 +81,7 @@ public class UserCrudServiceImpl implements UserCrudService {
             log.warn("Delete user by id: {}", id);
             userRepository.deleteById(id);
         } else {
-            throw new UserNotFoundException(String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id));
+            throw new UserNotFoundException(String.format(UserExceptionMP.USER_ID_NOT_FOUND, id));
         }
     }
 
@@ -95,7 +95,7 @@ public class UserCrudServiceImpl implements UserCrudService {
             log.warn("Delete user by email: {}", email);
             userRepository.deleteByEmail(UserFieldAdapter.toLower(email));
         } else {
-            throw new UserNotFoundException(String.format(ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, email));
+            throw new UserNotFoundException(String.format(UserExceptionMP.USER_EMAIL_NOT_FOUND, email));
         }
     }
 

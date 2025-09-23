@@ -33,6 +33,30 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A custom implementation of {@link OncePerRequestFilter} that processes incoming HTTP requests
+ * for JWT-based authentication and authorization. Ensures all security checks related to JWT tokens
+ * are handled once per request.
+ *
+ * <ul>
+ *     <li>Validates the JWT token from the request header.</li>
+ *     <li>Checks if the token is revoked using {@link RevokeTokenService}.</li>
+ *     <li>Determines the token type and extracts user details for authentication.</li>
+ *     <li>Sets the {@link Authentication} object in the {@link SecurityContextHolder}.</li>
+ * </ul>
+ * <p>
+ * Handles invalid tokens and sends appropriate unauthorized responses.
+ * <p>
+ * Usage:
+ * Annotated with {@link Component} for Spring to manage as a bean.
+ *
+ * @author Ihor Murashko
+ * @see JwtProvider
+ * @see ClaimsProvider
+ * @see RevokeTokenService
+ * @see TokenType
+ * @see TokenClaimsConstants
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -42,6 +66,25 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
     private final ClaimsProvider claimsProvider;
     private final RevokeTokenService revokedTokenService;
 
+    /**
+     * Processes each HTTP request and applies authentication logic by validating
+     * JWT tokens and setting the appropriate authentication context.
+     * <p>
+     * Handles token validation, revocation checks, and token type verification.
+     * If the token is valid, an authentication object is created and set into
+     * the {@link SecurityContextHolder}. If token validation fails, an appropriate
+     * response with an error message is issued.
+     * </p>
+     *
+     * @param request     the {@link HttpServletRequest} containing client request details.
+     * @param response    the {@link HttpServletResponse} to modify in case of errors.
+     * @param filterChain the {@link FilterChain} to proceed with the rest of the filter processing.
+     * @throws ServletException in case of request processing errors.
+     * @throws IOException      in case of input/output errors.
+     * @see SecurityContextHolder
+     * @see OncePerRequestFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)
+     * @see JwtProvider#validateToken(String)
+     */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,

@@ -3,8 +3,8 @@ package com.best_store.right_bite.service.order.facade;
 import com.best_store.right_bite.dto.order.request.OrderDeliveryDetailsDto;
 import com.best_store.right_bite.dto.order.request.OrderDto;
 import com.best_store.right_bite.dto.order.response.OrderResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
 import com.best_store.right_bite.service.order.create.OrderCreatorService;
@@ -34,7 +34,7 @@ public class OrderProcessingFacadeImpl implements OrderProcessingFacade {
             Long userId = authenticationParserUtil.extractUserLongIdFromAuthentication(authentication);
             user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserNotFoundException(String.format(
-                            ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
+                            UserExceptionMP.USER_ID_NOT_FOUND, userId)));
         }
         return orderCreatorService.createGuestOrder(orderDto, user);
     }
@@ -43,7 +43,7 @@ public class OrderProcessingFacadeImpl implements OrderProcessingFacade {
     public OrderResponseDto processOrder(@NotNull Long userId, @NotNull @Valid OrderDeliveryDetailsDto orderDeliveryDetailsDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(String.format(
-                        ExceptionMessageProvider.USER_ID_NOT_FOUND, userId)));
+                        UserExceptionMP.USER_ID_NOT_FOUND, userId)));
         return orderCreatorService.createOrderFromCart(user, orderDeliveryDetailsDto);
     }
 }

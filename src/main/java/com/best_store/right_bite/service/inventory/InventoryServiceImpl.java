@@ -1,7 +1,7 @@
 package com.best_store.right_bite.service.inventory;
 
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.inventory.InsufficientInventoryException;
+import com.best_store.right_bite.exception.exceptions.inventory.InsufficientInventoryException;
+import com.best_store.right_bite.exception.messageProvider.OrderExceptionMP;
 import com.best_store.right_bite.model.catalog.Product;
 import com.best_store.right_bite.repository.catalog.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class InventoryServiceImpl implements InventoryService {
                     if (balance < 0) {
                         log.error("Product with id {} has negative quantity", product.getId());
                         throw new InsufficientInventoryException(String.format(
-                                ExceptionMessageProvider.NOT_ENOUGH_QUANTITY_IN_STOCK, product.getId()));
+                                OrderExceptionMP.NOT_ENOUGH_QUANTITY_IN_STOCK, product.getId()));
                     } else {
                         product.setQuantityInStock(balance);
                     }

@@ -1,8 +1,8 @@
 package com.best_store.right_bite.utils.user;
 
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.role.RoleExceptionMessageProvider;
-import com.best_store.right_bite.exception.role.RoleNotFoundException;
+import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.role.RoleNotFoundException;
 import com.best_store.right_bite.model.auth.AuthProvider;
 import com.best_store.right_bite.model.role.Role;
 import com.best_store.right_bite.model.role.RoleName;

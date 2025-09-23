@@ -67,5 +67,4 @@ public class TokenManagerImpl implements TokenManager {
                 TokenClaimsConstants.USERNAME_CLAIM, defaultUserInfoDto.email(),
                 TokenClaimsConstants.ROLES_CLAIM, defaultUserInfoDto.roles());
     }
-
 }

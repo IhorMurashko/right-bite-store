@@ -5,9 +5,9 @@ import com.best_store.right_bite.dto.order.request.OrderDeliveryDetailsDto;
 import com.best_store.right_bite.dto.order.request.OrderDto;
 import com.best_store.right_bite.dto.order.request.OrderItemDto;
 import com.best_store.right_bite.dto.order.response.OrderResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.cart.UserCartNotFoundException;
-import com.best_store.right_bite.exception.order.order.EmptyCartException;
+import com.best_store.right_bite.exception.exceptions.cart.UserCartNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.CartExceptionMP;
+import com.best_store.right_bite.exception.exceptions.order.order.EmptyCartException;
 import com.best_store.right_bite.mapper.order.orderDeliveryDetails.OrderDeliveryDetailsMapper;
 import com.best_store.right_bite.mapper.order.orderItem.OrderItemDtoMapper;
 import com.best_store.right_bite.mapper.order.response.OrderResponseMapper;
@@ -77,12 +77,12 @@ public class OrderCreatorServiceImpl implements OrderCreatorService {
         Cart cart = cartRepository.findCartByUserId(user.getId())
                 .orElseThrow(() -> new UserCartNotFoundException(
                         String.format(
-                                ExceptionMessageProvider.USER_CART_WAS_NOT_FOUND, user.getId()
+                                CartExceptionMP.USER_CART_WAS_NOT_FOUND, user.getId()
                         )));
         log.debug("Found user cart for user {}", user.getId());
         if (cart.getCartItems().isEmpty()) {
             log.warn("User cart is empty");
-            throw new EmptyCartException(ExceptionMessageProvider.EMPTY_USER_CART);
+            throw new EmptyCartException(CartExceptionMP.EMPTY_USER_CART);
         }
         Set<OrderItem> orderItems = cart.getCartItems()
                 .stream()
