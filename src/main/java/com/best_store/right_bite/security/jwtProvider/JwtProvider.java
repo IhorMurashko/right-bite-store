@@ -35,5 +35,14 @@ public interface JwtProvider {
      */
     boolean validateToken(String token);
 
+    /**
+     * Extracts the JWT token from the Authorization header of the given HTTP request.
+     * <p>
+     * The method expects the Authorization header to begin with the string "Bearer ".
+     * If the header is absent or improperly formatted, it logs a warning and returns {@code null}.
+     *
+     * @param request the {@link HttpServletRequest} containing the Authorization header
+     * @return the extracted JWT token as a {@link String}, or {@code null} if not present or improperly formatted
+     */
     String extractTokenFromHeader(@NonNull HttpServletRequest request);
 }

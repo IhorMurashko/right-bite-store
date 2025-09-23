@@ -48,6 +48,11 @@ public class CartServiceImpl implements CartService {
     private final PriceUpdatableService priceUpdatableService;
     private final CartProvider cartProvider;
 
+
+    /**
+     * {@inheritDoc}
+     */
+
     @Cacheable(value = "cart", key = "#userId")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     @Override
@@ -70,9 +75,7 @@ public class CartServiceImpl implements CartService {
                 log.warn("OptimisticLockException was caught, retrying");
                 if (attempts >= JpaConstraints.MAX_RETRY_ATTEMPTS) {
                     log.error("OptimisticLockException was caught, retry attempts exceeded");
-                    throw new InternalDataBaseConnectionException(String.format(
-                            BaseExceptionMessageProvider.OPTIMISTIC_LOCKING_EXCEPTION, userId
-                    ));
+                    throw new InternalDataBaseConnectionException(String.format(BaseExceptionMessageProvider.OPTIMISTIC_LOCKING_EXCEPTION, userId));
                 }
             }
         }
@@ -80,15 +83,16 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @CachePut(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @Override
     public CartResponseDto addItems(@NotNull @Valid AddCartRequestDto addCartItems, @NotNull Long userId) {
         log.debug("Request contains size {}", addCartItems.cartItems().size());
         Cart cart = cartProvider.findCartByAuthUser(userId);
-        Map<Long, CartItem> existingItemsMap = cart.getCartItems().stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(CartItem::getProductId, Function.identity()));
+        Map<Long, CartItem> existingItemsMap = cart.getCartItems().stream().filter(Objects::nonNull).collect(Collectors.toMap(CartItem::getProductId, Function.identity()));
         log.debug("existingItemsMap size: {}", existingItemsMap.size());
         for (AddCartItemRequestDto dto : addCartItems.cartItems()) {
             CartItem existingItem = existingItemsMap.get(dto.productId());
@@ -96,20 +100,11 @@ public class CartServiceImpl implements CartService {
                 log.debug("item with product id: {} is existed", dto.productId());
                 existingItem.setQuantity(dto.quantity());
                 existingItem.setUnitPriceSnapshot(dto.unitPriceSnapshot());
-                existingItem.setTotalPrice(CartCalculateUtil
-                        .calculateTotalItemPrice(dto.unitPriceSnapshot(), dto.quantity()));
+                existingItem.setTotalPrice(CartCalculateUtil.calculateTotalItemPrice(dto.unitPriceSnapshot(), dto.quantity()));
                 existingItem.setThumbnailUrl(dto.thumbnailUrl());
                 log.info("item with product id: {} has been updated", dto.productId());
             } else {
-                cart.addItem(new CartItem(
-                        dto.productId(),
-                        dto.productName(),
-                        dto.quantity(),
-                        dto.unitPriceSnapshot(),
-                        CartCalculateUtil.calculateTotalItemPrice(dto.unitPriceSnapshot(), dto.quantity()),
-                        dto.thumbnailUrl(),
-                        LocalDateTime.now(),
-                        cart));
+                cart.addItem(new CartItem(dto.productId(), dto.productName(), dto.quantity(), dto.unitPriceSnapshot(), CartCalculateUtil.calculateTotalItemPrice(dto.unitPriceSnapshot(), dto.quantity()), dto.thumbnailUrl(), LocalDateTime.now(), cart));
                 log.info("item with product id: {} has been added", dto.productId());
             }
         }
@@ -121,6 +116,9 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponseDto(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override
@@ -135,6 +133,9 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponseDto(saved);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @CacheEvict(value = "cart", key = "#userId")
     @Transactional(isolation = Isolation.READ_COMMITTED)
     @Override

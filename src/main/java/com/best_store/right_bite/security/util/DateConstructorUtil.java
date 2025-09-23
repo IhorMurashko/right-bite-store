@@ -23,4 +23,3 @@ public class DateConstructorUtil {
         return new Date(from.getTime() + validityPeriodInSeconds * 1000);
     }
 }
-

@@ -33,7 +33,6 @@ public class RestAuthEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException)
             throws IOException, ServletException {
         log.error(authException.getMessage(), authException);
-
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(SecurityExceptionMessageProvider.UNAUTHORIZED_EXCEPTION_MESSAGE);
