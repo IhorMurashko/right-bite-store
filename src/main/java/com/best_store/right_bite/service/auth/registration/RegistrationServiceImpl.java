@@ -4,8 +4,8 @@ import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
 import com.best_store.right_bite.constant.notification.holder.letter.GreetingVariablesHolder;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.auth.CredentialsException;
+import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
+import com.best_store.right_bite.exception.messageProvider.AuthExceptionMP;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.notification.data.core.DefaultNotification;
 import com.best_store.right_bite.notification.data.payload.SimpleStringContentPayload;
@@ -80,12 +80,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (userCrudService.isEmailExist(email)) {
             log.warn("Attempt to register already existing email: {}", email);
             throw new CredentialsException(
-                    String.format(ExceptionMessageProvider.EMAIL_ALREADY_EXIST, email));
+                    String.format(AuthExceptionMP.EMAIL_ALREADY_EXIST, email));
         }
 
         if (!Objects.equals(credentials.password(), credentials.confirmationPassword())) {
             log.error("Passwords do not match");
-            throw new CredentialsException(ExceptionMessageProvider.PASSWORDS_DONT_MATCH);
+            throw new CredentialsException(AuthExceptionMP.PASSWORDS_DONT_MATCH);
         }
 
         User user = userAssembler.create(credentials);

@@ -1,8 +1,8 @@
 package com.best_store.right_bite.utils.notification.cache.senders;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.notification.SenderWasNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.NotificationExceptionMP;
+import com.best_store.right_bite.exception.exceptions.notification.SenderWasNotFoundException;
 import com.best_store.right_bite.notification.sender.NotificationSender;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class SenderFactoryImpl implements SenderFactory {
         NotificationSender sender = sendersCache.get(channel);
         if (sender == null) {
             throw new SenderWasNotFoundException(
-                    ExceptionMessageProvider.SENDER_BY_CHANNEL_WAS_NOT_FOUND
+                    NotificationExceptionMP.SENDER_BY_CHANNEL_WAS_NOT_FOUND
             );
         }
         return sender;

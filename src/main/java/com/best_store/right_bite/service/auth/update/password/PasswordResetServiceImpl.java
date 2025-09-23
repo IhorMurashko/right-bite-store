@@ -2,10 +2,9 @@ package com.best_store.right_bite.service.auth.update.password;
 
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
-import com.best_store.right_bite.constant.notification.holder.letter.DefaultSubjectHolder;
 import com.best_store.right_bite.constant.notification.holder.letter.ResetPasswordVariablesHolder;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.notification.data.core.DefaultNotification;
 import com.best_store.right_bite.notification.data.payload.ResetPasswordContentPayload;
 import com.best_store.right_bite.service.notificationService.dispatch.NotificationDispatcherService;
@@ -35,7 +34,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         if (!userCrudService.isEmailExist(adaptedEmail)) {
             throw new UserNotFoundException(
                     String.format(
-                            ExceptionMessageProvider.USER_EMAIL_NOT_FOUND, adaptedEmail
+                            UserExceptionMP.USER_EMAIL_NOT_FOUND, adaptedEmail
                     )
             );
         }

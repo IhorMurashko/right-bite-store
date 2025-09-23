@@ -2,8 +2,8 @@ package com.best_store.right_bite.service.cart.price;
 
 import com.best_store.right_bite.constant.constraint.products.ProductConstraints;
 import com.best_store.right_bite.dto.catalog.product.ProductPriceDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.cart.UserCartNotFoundException;
+import com.best_store.right_bite.exception.exceptions.cart.UserCartNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.CartExceptionMP;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
 import com.best_store.right_bite.repository.cart.CartRepository;
@@ -46,7 +46,7 @@ public class PriceUpdatableServiceImpl implements PriceUpdatableService {
         int modifyingCounter = 0;
         Cart cart = cartRepository.findCartByUserId(userId)
                 .orElseThrow(() -> new UserCartNotFoundException(String.format(
-                        ExceptionMessageProvider.USER_CART_WAS_NOT_FOUND, userId
+                        CartExceptionMP.USER_CART_WAS_NOT_FOUND, userId
                 )));
         if (cart.getCartItems().isEmpty()) {
             return modifyingCounter;

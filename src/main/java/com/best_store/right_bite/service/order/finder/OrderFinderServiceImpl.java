@@ -3,9 +3,9 @@ package com.best_store.right_bite.service.order.finder;
 import com.best_store.right_bite.constant.order.OrderStatus;
 import com.best_store.right_bite.dto.order.response.OrderResponseDto;
 import com.best_store.right_bite.dto.order.response.OrdersPageableDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.order.access.OrderAccessDeniedException;
-import com.best_store.right_bite.exception.order.order.OrderNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.OrderExceptionMP;
+import com.best_store.right_bite.exception.exceptions.order.access.OrderAccessDeniedException;
+import com.best_store.right_bite.exception.exceptions.order.order.OrderNotFoundException;
 import com.best_store.right_bite.mapper.order.response.OrderResponseMapper;
 import com.best_store.right_bite.model.order.Order;
 import com.best_store.right_bite.repository.order.OrderRepository;
@@ -34,7 +34,7 @@ public class OrderFinderServiceImpl implements OrderFinderService {
     public OrderResponseDto findUserOrderById(@NotNull Long orderId, @Nullable Long userId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(
-                        String.format(ExceptionMessageProvider.ORDER_ID_NOT_FOUND, orderId)));
+                        String.format(OrderExceptionMP.ORDER_ID_NOT_FOUND, orderId)));
         validateOrderAccess(order, userId);
         log.info("Order {} found for user {}", orderId, userId);
         return orderResponseMapper.toDTO(order);
@@ -74,7 +74,7 @@ public class OrderFinderServiceImpl implements OrderFinderService {
         }
         if (!order.getUser().getId().equals(userId)) {
             throw new OrderAccessDeniedException(String.format(
-                    ExceptionMessageProvider.ORDER_ACCESS_DENIED, order.getId()
+                    OrderExceptionMP.ORDER_ACCESS_DENIED, order.getId()
             ));
         }
     }

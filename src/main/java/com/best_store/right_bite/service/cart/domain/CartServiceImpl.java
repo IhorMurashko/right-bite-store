@@ -5,8 +5,8 @@ import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDt
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.db.InternalDataBaseConnectionException;
+import com.best_store.right_bite.exception.messageProvider.BaseExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.db.InternalDataBaseConnectionException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
 import com.best_store.right_bite.model.cart.CartItem;
@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,7 @@ public class CartServiceImpl implements CartService {
                 if (attempts >= JpaConstraints.MAX_RETRY_ATTEMPTS) {
                     log.error("OptimisticLockException was caught, retry attempts exceeded");
                     throw new InternalDataBaseConnectionException(String.format(
-                            ExceptionMessageProvider.OPTIMISTIC_LOCKING_EXCEPTION, userId
+                            BaseExceptionMessageProvider.OPTIMISTIC_LOCKING_EXCEPTION, userId
                     ));
                 }
             }
@@ -86,6 +87,7 @@ public class CartServiceImpl implements CartService {
         log.debug("Request contains size {}", addCartItems.cartItems().size());
         Cart cart = cartProvider.findCartByAuthUser(userId);
         Map<Long, CartItem> existingItemsMap = cart.getCartItems().stream()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(CartItem::getProductId, Function.identity()));
         log.debug("existingItemsMap size: {}", existingItemsMap.size());
         for (AddCartItemRequestDto dto : addCartItems.cartItems()) {

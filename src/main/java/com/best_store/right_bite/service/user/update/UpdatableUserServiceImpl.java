@@ -2,8 +2,9 @@ package com.best_store.right_bite.service.user.update;
 
 import com.best_store.right_bite.dto.user.BaseUserInfo;
 import com.best_store.right_bite.dto.user.update.UserUpdateRequestDto;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.user.UserNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.SecurityExceptionMP;
+import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.mapper.user.UpdatableUserInfoMapper;
 import com.best_store.right_bite.model.user.User;
@@ -46,7 +47,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
             Long id = Long.parseLong(principal.id());
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException(
-                            String.format(ExceptionMessageProvider.USER_ID_NOT_FOUND, id))
+                            String.format(UserExceptionMP.USER_ID_NOT_FOUND, id))
                     );
             log.debug("user with id was {} was found", id);
             updatableUserInfoMapper.updateEntityFromDto(userUpdateRequestDto, user);
@@ -56,7 +57,7 @@ public class UpdatableUserServiceImpl implements UpdatableUserService {
         } catch (NumberFormatException ex) {
             throw new InvalidTokenSubjectException(
                     String.format(
-                            ExceptionMessageProvider.INVALID_TOKEN_SUBJECT,
+                            SecurityExceptionMP.INVALID_TOKEN_SUBJECT,
                             ex.getClass().getSimpleName()));
         }
     }

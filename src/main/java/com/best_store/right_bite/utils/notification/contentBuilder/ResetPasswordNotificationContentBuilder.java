@@ -5,8 +5,8 @@ import com.best_store.right_bite.constant.notification.NotificationType;
 import com.best_store.right_bite.constant.notification.holder.ContextVariablesHolder;
 import com.best_store.right_bite.constant.notification.holder.FragmentsReferencesHolder;
 import com.best_store.right_bite.constant.notification.holder.letter.ResetPasswordVariablesHolder;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.notification.WrongNotificationDataException;
+import com.best_store.right_bite.exception.messageProvider.NotificationExceptionMP;
+import com.best_store.right_bite.exception.exceptions.notification.WrongNotificationDataException;
 import com.best_store.right_bite.notification.data.core.BaseNotification;
 import com.best_store.right_bite.notification.data.payload.ContentPayload;
 import com.best_store.right_bite.notification.data.payload.ResetPasswordContentPayload;
@@ -91,11 +91,11 @@ public class ResetPasswordNotificationContentBuilder implements NotificationCont
     public String build(@NonNull BaseNotification<? extends ContentPayload> notification) {
         if (notification.data() == null) {
             log.error("Notification data is null");
-            throw new WrongNotificationDataException(ExceptionMessageProvider.EMPTY_NOTIFICATION_DATA);
+            throw new WrongNotificationDataException(NotificationExceptionMP.EMPTY_NOTIFICATION_DATA);
         }
         if (notification.data().getClass() != ResetPasswordContentPayload.class) {
             log.error("Wrong notification data type: {}", notification.data().getClass().getSimpleName());
-            throw new WrongNotificationDataException(ExceptionMessageProvider.WRONG_NOTIFICATION_DATA_TYPE);
+            throw new WrongNotificationDataException(NotificationExceptionMP.WRONG_NOTIFICATION_DATA_TYPE);
         }
         log.debug("Building notification content for channel: {}", notification.channel());
         log.debug("Notification type: {}", notification.type());

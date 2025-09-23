@@ -3,8 +3,8 @@ package com.best_store.right_bite.utils.notification.cache.builders;
 import com.best_store.right_bite.constant.notification.NotificationChannel;
 import com.best_store.right_bite.constant.notification.NotificationType;
 import com.best_store.right_bite.dto.notification.BuilderInfo;
-import com.best_store.right_bite.exception.ExceptionMessageProvider;
-import com.best_store.right_bite.exception.notification.NotificationBuilderWasNotFoundException;
+import com.best_store.right_bite.exception.messageProvider.NotificationExceptionMP;
+import com.best_store.right_bite.exception.exceptions.notification.NotificationBuilderWasNotFoundException;
 import com.best_store.right_bite.notification.data.core.BaseNotification;
 import com.best_store.right_bite.notification.data.payload.ContentPayload;
 import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
@@ -37,7 +37,7 @@ public class NotificationBuildersInMemoryRegistry implements NotificationBuilder
         if (builder == null) {
             log.warn("Builder was not found for type: {} and channel: {}", notification.type(), notification.channel());
             throw new NotificationBuilderWasNotFoundException(
-                    String.format(ExceptionMessageProvider.NOTIFICATION_BUILDER_WAS_NOT_FOUND,
+                    String.format(NotificationExceptionMP.NOTIFICATION_BUILDER_WAS_NOT_FOUND,
                             notification.type(), notification.channel()));
         }
         return builder;
