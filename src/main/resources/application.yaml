@@ -6,6 +6,7 @@ tokens:
 spring:
 #  profiles:
 #    active: dev
+
   application:
     name: right-bite
   cache:
