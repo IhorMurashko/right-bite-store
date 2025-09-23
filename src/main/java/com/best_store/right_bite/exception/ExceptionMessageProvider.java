@@ -9,7 +9,6 @@ public class ExceptionMessageProvider {
     public final String PASSWORDS_DONT_MATCH = "Passwords don't match";
     public final String EMAIL_ALREADY_EXIST = "Email: %s already exist";
     public final String USER_ACCOUNT_IS_EXPIRED = "User account is expired.";
-    public final String NOTIFICATION_CHANNEL_WAS_NOT_FOUND = "Notification type %s was not found";
     public final String NOTIFICATION_BUILDER_WAS_NOT_FOUND = "Notification builder with type: %s and channel: %s was not found.";
     public final String TOKEN_ACCESS_EXCEPTION = "Token with type %s can't be used for access for this endpoint.";
     public final String INVALID_TOKEN = "Invalid token.";
@@ -29,4 +28,5 @@ public class ExceptionMessageProvider {
     public final String FAILED_TO_PROCESS_NOTIFICATION_CONTENT = "Failed to process notification content %s";
     public final String WRONG_NOTIFICATION_DATA_TYPE = "Wrong notification data type %s";
     public final String SENDER_BY_CHANNEL_WAS_NOT_FOUND = "Sender with channel type: %s was not found";
+    public final String OPTIMISTIC_LOCKING_EXCEPTION = "Optimistic locking exception for user id: %d";
 }

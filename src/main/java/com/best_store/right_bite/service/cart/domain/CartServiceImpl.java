@@ -5,6 +5,7 @@ import com.best_store.right_bite.dto.cart.request.addToCart.AddCartItemRequestDt
 import com.best_store.right_bite.dto.cart.request.addToCart.AddCartRequestDto;
 import com.best_store.right_bite.dto.cart.request.removeFromCart.RemoveItemsRequestDto;
 import com.best_store.right_bite.dto.cart.response.CartResponseDto;
+import com.best_store.right_bite.exception.ExceptionMessageProvider;
 import com.best_store.right_bite.exception.db.InternalDataBaseConnectionException;
 import com.best_store.right_bite.mapper.cart.CartMapper;
 import com.best_store.right_bite.model.cart.Cart;
@@ -50,18 +51,17 @@ public class CartServiceImpl implements CartService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
     @Override
     public CartResponseDto getUserCart(@NonNull Long userId) {
+        Cart cart = cartProvider.findCartByAuthUser(userId);
         int attempts = 0;
         while (true) {
             try {
-                Cart cart = cartProvider.findCartByAuthUser(userId);
                 int modifications = priceUpdatableService.refreshCartPrices(userId);
                 log.debug("modifications counter is: {}", modifications);
                 if (modifications > 0) {
                     CartCalculateUtil.calculateTotalPriceOfCart(cart, 2, RoundingMode.HALF_UP);
-                    cart = cartRepository.save(cart);
                     log.debug("User cart was modified: {} items updated", modifications);
                     log.info("user's cart prices were modified");
-                    cartRepository.save(cart);
+                    cart = cartRepository.save(cart);
                 }
                 return cartMapper.toCartResponseDto(cart);
             } catch (OptimisticLockException ex) {
@@ -69,7 +69,9 @@ public class CartServiceImpl implements CartService {
                 log.warn("OptimisticLockException was caught, retrying");
                 if (attempts >= JpaConstraints.MAX_RETRY_ATTEMPTS) {
                     log.error("OptimisticLockException was caught, retry attempts exceeded");
-                    throw new InternalDataBaseConnectionException(ex.getMessage());
+                    throw new InternalDataBaseConnectionException(String.format(
+                            ExceptionMessageProvider.OPTIMISTIC_LOCKING_EXCEPTION, userId
+                    ));
                 }
             }
         }
