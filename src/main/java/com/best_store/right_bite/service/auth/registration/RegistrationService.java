@@ -3,7 +3,7 @@ package com.best_store.right_bite.service.auth.registration;
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
 import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
 import jakarta.validation.Valid;
-import org.springframework.lang.NonNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Registration service responsible for registering new users.
@@ -21,8 +21,8 @@ public interface RegistrationService {
     /**
      * Registers a new user account using provided credentials.
      *
-     * @param credentials DTO containing user's email, password, and confirmation password.
+     * @param credentials DTO containing the user's email, password, and confirmation password.
      * @throws CredentialsException if email already exists or passwords do not match.
      */
-    void registration(@NonNull @Valid RegistrationCredentialsDto credentials);
+    void registration(@NotNull @Valid RegistrationCredentialsDto credentials);
 }

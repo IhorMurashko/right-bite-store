@@ -14,9 +14,9 @@ import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.user.UserAssembler;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -73,7 +73,7 @@ public class RegistrationServiceImpl implements RegistrationService {
      * @throws CredentialsException if the email already exists or passwords do not match
      */
     @Override
-    public void registration(@NonNull @Valid RegistrationCredentialsDto credentials) {
+    public void registration(@NotNull @Valid RegistrationCredentialsDto credentials) {
 
         String email = UserFieldAdapter.toLower(credentials.email());
 
