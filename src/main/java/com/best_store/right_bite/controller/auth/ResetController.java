@@ -10,10 +10,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +49,7 @@ public class ResetController {
                     @ApiResponse(responseCode = "500", description = "server error")
             })
     @PostMapping("/password")
-    public ResponseEntity<HttpStatus> resetPasswordByEmail(@NonNull @RequestBody @Valid PasswordResetRequest passwordResetRequest) {
+    public ResponseEntity<HttpStatus> resetPasswordByEmail(@NotNull @RequestBody @Valid PasswordResetRequest passwordResetRequest) {
         passwordResetService.resetPassword(passwordResetRequest.email());
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class ResetController {
                     @ApiResponse(responseCode = "500", description = "server error")
             })
     @PostMapping("/refresh-token")
-    public ResponseEntity<TokenDto> refreshToken(@NonNull @RequestBody TokenDto tokenDto) {
+    public ResponseEntity<TokenDto> refreshToken(@NotNull @RequestBody TokenDto tokenDto) {
         TokenDto refreshed = refreshTokenService.refreshToken(tokenDto);
         return new ResponseEntity<>(refreshed, HttpStatus.OK);
     }
