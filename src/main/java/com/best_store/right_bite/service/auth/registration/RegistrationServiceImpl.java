@@ -37,7 +37,7 @@ import java.util.Objects;
  *
  * <p>Delegates user creation to {@link UserAssembler} and persistence to {@link UserCrudService}.</p>
  *
- * <p>Notifies the user via {@link NotificationDispatcherService} using email channel upon success.</p>
+ * <p>Notifies the user via {@link NotificationDispatcherService} using an email channel upon success.</p>
  *
  * <p>Method is validated with {@code javax.validation.constraints} and {@code @Validated} annotation.</p>
  *
@@ -74,25 +74,19 @@ public class RegistrationServiceImpl implements RegistrationService {
      */
     @Override
     public void registration(@NotNull @Valid RegistrationCredentialsDto credentials) {
-
         String email = UserFieldAdapter.toLower(credentials.email());
-
         if (userCrudService.isEmailExist(email)) {
             log.warn("Attempt to register already existing email: {}", email);
             throw new CredentialsException(
                     String.format(AuthExceptionMP.EMAIL_ALREADY_EXIST, email));
         }
-
         if (!Objects.equals(credentials.password(), credentials.confirmationPassword())) {
             log.error("Passwords do not match");
             throw new CredentialsException(AuthExceptionMP.PASSWORDS_DONT_MATCH);
         }
-
         User user = userAssembler.create(credentials);
-
         userCrudService.save(user);
         log.info("User {} saved successfully", email);
-
         SimpleStringContentPayload greeting = new SimpleStringContentPayload(GreetingVariablesHolder.GREETING);
         DefaultNotification greetingNotification = new DefaultNotification(
                 NotificationType.SIMPLE_STRING_NOTIFICATION,

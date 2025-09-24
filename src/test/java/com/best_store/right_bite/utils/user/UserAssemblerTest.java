@@ -1,7 +1,7 @@
 package com.best_store.right_bite.utils.user;
 
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMP;
 import com.best_store.right_bite.exception.exceptions.role.RoleNotFoundException;
 import com.best_store.right_bite.model.auth.AuthProvider;
 import com.best_store.right_bite.model.role.Role;
@@ -83,7 +83,7 @@ class UserAssemblerTest {
             RoleNotFoundException exception = assertThrows(RoleNotFoundException.class, () ->
                     userAssembler.create(registrationCredentialsDto));
 
-            assertEquals(String.format(RoleExceptionMessageProvider.ROLE_NOT_FOUND, role), exception.getMessage());
+            assertEquals(String.format(RoleExceptionMP.ROLE_NOT_FOUND, role), exception.getMessage());
             verify(passwordEncoder, times(1)).encode(password);
             verify(roleRepository, times(1)).findByName(any(RoleName.class));
             verifyNoMoreInteractions(passwordEncoder, roleRepository);
@@ -125,7 +125,7 @@ class UserAssemblerTest {
             RoleNotFoundException exception = assertThrows(RoleNotFoundException.class, () ->
                     userAssembler.create(oAuth2User));
 
-            assertEquals(String.format(RoleExceptionMessageProvider.ROLE_NOT_FOUND, role), exception.getMessage());
+            assertEquals(String.format(RoleExceptionMP.ROLE_NOT_FOUND, role), exception.getMessage());
             verify(roleRepository, times(1)).findByName(any(RoleName.class));
             verifyNoMoreInteractions(roleRepository);
             verifyNoInteractions(passwordEncoder);

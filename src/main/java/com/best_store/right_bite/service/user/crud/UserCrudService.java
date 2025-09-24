@@ -5,6 +5,7 @@ import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.model.user.User;
 import org.springframework.lang.NonNull;
 
+//todo: docs, notnull
 public interface UserCrudService {
 
     DefaultUserInfoResponseDto findByEmail(@NonNull String email);

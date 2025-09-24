@@ -252,6 +252,4 @@ class EmailPasswordAuthenticationServiceImplTest {
         verify(tokenManager).generateDefaultTokens(userInfoResponseDto);
         verifyNoMoreInteractions(userRepository, passwordEncoder, tokenManager);
     }
-
-
 }

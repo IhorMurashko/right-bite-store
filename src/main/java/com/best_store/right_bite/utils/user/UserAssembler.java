@@ -1,7 +1,7 @@
 package com.best_store.right_bite.utils.user;
 
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMP;
 import com.best_store.right_bite.exception.exceptions.role.RoleNotFoundException;
 import com.best_store.right_bite.model.auth.AuthProvider;
 import com.best_store.right_bite.model.role.Role;
@@ -118,7 +118,7 @@ public class UserAssembler {
     private Role getRole(RoleName roleName) {
         return roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RoleNotFoundException(
-                        String.format(RoleExceptionMessageProvider.ROLE_NOT_FOUND, roleName)
+                        String.format(RoleExceptionMP.ROLE_NOT_FOUND, roleName)
                 ));
     }
 }
