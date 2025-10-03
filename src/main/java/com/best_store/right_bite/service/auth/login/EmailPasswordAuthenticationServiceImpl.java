@@ -4,9 +4,9 @@ import com.best_store.right_bite.dto.auth.login.AuthRequest;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.exception.exceptions.auth.CredentialsException;
 import com.best_store.right_bite.exception.exceptions.auth.UserAccountIsNotAvailableException;
+import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.exception.messageProvider.AuthExceptionMP;
 import com.best_store.right_bite.exception.messageProvider.UserExceptionMP;
-import com.best_store.right_bite.exception.exceptions.user.UserNotFoundException;
 import com.best_store.right_bite.mapper.user.DefaultUserInfoDtoMapper;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.user.UserRepository;
@@ -14,9 +14,9 @@ import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.managment.TokenManager;
 import com.best_store.right_bite.utils.user.UserFieldAdapter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -47,7 +47,7 @@ public class EmailPasswordAuthenticationServiceImpl implements AuthenticationSer
      * @throws UserAccountIsNotAvailableException if the user's account is expired, locked, or disabled
      */
     @Override
-    public TokenDto authenticate(@NonNull @Valid AuthRequest authRequest) {
+    public TokenDto authenticate(@NotNull @Valid AuthRequest authRequest) {
         String email = UserFieldAdapter.toLower(authRequest.email());
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UserNotFoundException(String.format(

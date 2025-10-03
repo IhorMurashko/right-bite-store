@@ -2,7 +2,7 @@ package com.best_store.right_bite.dto.auth.reset;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import org.springframework.lang.NonNull;
+import jakarta.validation.constraints.NotNull;
 
 import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_MESSAGE;
 import static com.best_store.right_bite.constant.constraint.user.UserFieldsConstraint.EMAIL_PATTERN;
@@ -12,7 +12,7 @@ public record PasswordResetRequest(
         @Schema(description = "email",
                 nullable = false,
                 pattern = EMAIL_PATTERN)
-        @NonNull
+        @NotNull(message = EMAIL_MESSAGE)
         @Email(regexp = EMAIL_PATTERN,
                 message = EMAIL_MESSAGE)
         String email) {

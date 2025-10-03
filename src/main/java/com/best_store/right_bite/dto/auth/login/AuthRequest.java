@@ -1,14 +1,16 @@
 package com.best_store.right_bite.dto.auth.login;
 
+import com.best_store.right_bite.exception.messageProvider.AuthExceptionMP;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.lang.NonNull;
+import jakarta.validation.constraints.NotNull;
 
+//todo: interface
 public record AuthRequest(
-        @NonNull
-        @NotBlank
+        @NotNull(message = AuthExceptionMP.EMAIL_FIELD_CANT_BE_EMPTY_OR_NULL)
+        @NotBlank(message = AuthExceptionMP.EMAIL_FIELD_CANT_BE_EMPTY_OR_NULL)
         String email,
-        @NonNull
-        @NotBlank
+        @NotNull(message = AuthExceptionMP.PASSWORD_FIELD_CANT_BE_EMPTY_OR_NULL)
+        @NotBlank(message = AuthExceptionMP.PASSWORD_FIELD_CANT_BE_EMPTY_OR_NULL)
         String password
 ) {
 }

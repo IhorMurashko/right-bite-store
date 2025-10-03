@@ -22,4 +22,6 @@ public class AuthExceptionMP {
     public final String USER_ACCOUNT_IS_EXPIRED = "User account is expired.";
     public final String PASSWORDS_DONT_MATCH = "Passwords don't match";
     public final String EMAIL_ALREADY_EXIST = "Email: %s already exist";
+    public final String EMAIL_FIELD_CANT_BE_EMPTY_OR_NULL = "Email can't be empty or null";
+    public final String PASSWORD_FIELD_CANT_BE_EMPTY_OR_NULL = "Password can't be empty or null";
 }

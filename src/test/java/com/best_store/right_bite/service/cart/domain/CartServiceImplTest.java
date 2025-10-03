@@ -109,9 +109,7 @@ class CartServiceImplTest {
         };
         this.removeItemsRequestDto = new RemoveItemsRequestDto(Set.of(1L, 2L));
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.
-
-                getValidator();
+        validator = factory.getValidator();
     }
 
 

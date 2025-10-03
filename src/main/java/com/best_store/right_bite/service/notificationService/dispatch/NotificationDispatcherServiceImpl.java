@@ -8,9 +8,9 @@ import com.best_store.right_bite.utils.notification.cache.senders.SenderFactory;
 import com.best_store.right_bite.utils.notification.contentBuilder.NotificationContentBuilder;
 import com.best_store.right_bite.utils.notification.contentProcessor.NotificationContentProcessor;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,7 +25,7 @@ public class NotificationDispatcherServiceImpl implements NotificationDispatcher
     private final SenderFactory senderFactory;
 
     @Override
-    public void send(@NonNull @Valid BaseNotification<? extends ContentPayload> notification) {
+    public void send(@NotNull @Valid BaseNotification<? extends ContentPayload> notification) {
         NotificationContentBuilder<? extends ContentPayload> builder = notificationBuildersCache.findBuilder(notification);
         String content = contentProcessor.processContent(builder, notification);
         NotificationSender sender = senderFactory.getNotificationSender(notification.channel());
@@ -33,7 +33,7 @@ public class NotificationDispatcherServiceImpl implements NotificationDispatcher
     }
 
     @Override
-    public boolean canSendNotification(@NonNull @Valid BaseNotification<? extends ContentPayload> notification) {
+    public boolean canSendNotification(@NotNull @Valid BaseNotification<? extends ContentPayload> notification) {
         return notificationBuildersCache.hasBuilder(notification);
     }
 }

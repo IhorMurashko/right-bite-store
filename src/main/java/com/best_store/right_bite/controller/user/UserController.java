@@ -41,13 +41,13 @@ public class UserController {
                     description = "Fields to update",
                     content = @Content(schema = @Schema(implementation = UserUpdateRequestDto.class))
             ),
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "User updated successfully"),
                     @ApiResponse(responseCode = "400", description = "Invalid input"),
                     @ApiResponse(responseCode = "500", description = "Server error")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @PatchMapping
     public ResponseEntity<BaseUserInfo> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
@@ -59,12 +59,12 @@ public class UserController {
     @Operation(
             summary = "Get current user",
             description = "Returns the user data extracted from JWT token.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Current user data",
                             content = @Content(schema = @Schema(implementation = DefaultUserInfoResponseDto.class)))
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/current")
     public ResponseEntity<BaseUserInfo> getCurrentUser(@AuthenticationPrincipal JwtPrincipal principal) {
@@ -75,12 +75,12 @@ public class UserController {
     @Operation(
             summary = "Find user by ID",
             description = "Returns user by their unique ID.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "User found"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/by-id/{id}")
     public ResponseEntity<BaseUserInfo> getUserById(@PathVariable("id") Long id) {
@@ -91,12 +91,12 @@ public class UserController {
     @Operation(
             summary = "Find user by email",
             description = "Returns user by their unique email address.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "User found"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/by-email/{email}")
     public ResponseEntity<BaseUserInfo> getUserByEmail(@PathVariable("email") String email) {
@@ -107,12 +107,12 @@ public class UserController {
     @Operation(
             summary = "Delete current user",
             description = "Deletes the authenticated user based on the JWT token.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "User deleted"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping
     public ResponseEntity<HttpStatus> deleteCurrentUser(@AuthenticationPrincipal JwtPrincipal principal) {
@@ -123,12 +123,12 @@ public class UserController {
     @Operation(
             summary = "Delete user by email",
             description = "Deletes a user by their email address.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "User deleted"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/by-email/{email}")
     public ResponseEntity<HttpStatus> deleteUserByEmail(@PathVariable("email") String email) {
@@ -139,12 +139,12 @@ public class UserController {
     @Operation(
             summary = "Delete user by ID",
             description = "Deletes a user by their unique ID.",
+            security = @SecurityRequirement(name = "JWT"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "User deleted"),
                     @ApiResponse(responseCode = "404", description = "User not found")
             }
     )
-    @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/by-id/{id}")
     public ResponseEntity<HttpStatus> deleteUserById(@PathVariable("id") Long id) {

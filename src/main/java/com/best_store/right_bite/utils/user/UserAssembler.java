@@ -1,7 +1,7 @@
 package com.best_store.right_bite.utils.user;
 
 import com.best_store.right_bite.dto.auth.registration.RegistrationCredentialsDto;
-import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMessageProvider;
+import com.best_store.right_bite.exception.exceptions.role.RoleExceptionMP;
 import com.best_store.right_bite.exception.exceptions.role.RoleNotFoundException;
 import com.best_store.right_bite.model.auth.AuthProvider;
 import com.best_store.right_bite.model.role.Role;
@@ -9,9 +9,9 @@ import com.best_store.right_bite.model.role.RoleName;
 import com.best_store.right_bite.model.user.User;
 import com.best_store.right_bite.repository.role.RoleRepository;
 import com.best_store.right_bite.security.constant.GoogleCredentialsConstants;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,6 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//todo: create interface
 public class UserAssembler {
 
     private final PasswordEncoder passwordEncoder;
@@ -49,7 +48,7 @@ public class UserAssembler {
      * @param credentials DTO containing email and raw password
      * @return a new {@link User} entity ready for persistence
      */
-    public User create(@NonNull RegistrationCredentialsDto credentials) {
+    public User create(@NotNull RegistrationCredentialsDto credentials) {
         String encodedPassword = passwordEncoder.encode(credentials.password());
         log.debug("Password encoded successfully");
         Role role = getRole(RoleName.ROLE_USER);
@@ -72,7 +71,7 @@ public class UserAssembler {
      * @param oAuth2User the user object returned by the OAuth2 provider
      * @return a new {@link User} entity with OAuth2 profile data.sql
      */
-    public User create(@NonNull OAuth2User oAuth2User) {
+    public User create(@NotNull OAuth2User oAuth2User) {
         String email = UserFieldAdapter.toLower(Objects.requireNonNull(
                 oAuth2User.getAttribute(GoogleCredentialsConstants.EMAIL)));
 
@@ -119,7 +118,7 @@ public class UserAssembler {
     private Role getRole(RoleName roleName) {
         return roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RoleNotFoundException(
-                        String.format(RoleExceptionMessageProvider.ROLE_NOT_FOUND, roleName)
+                        String.format(RoleExceptionMP.ROLE_NOT_FOUND, roleName)
                 ));
     }
 }
