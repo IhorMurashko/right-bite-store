@@ -1,10 +1,9 @@
 package com.best_store.right_bite.dto.adminPanel.order;
 
 import com.best_store.right_bite.constant.order.OrderStatus;
+import com.best_store.right_bite.dto.order.request.OrderItemDto;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.model.order.OrderDeliveryDetails;
-import com.best_store.right_bite.model.order.OrderItem;
-
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -16,11 +15,9 @@ public record OrderDTO(
         Long id,
         DefaultUserInfoResponseDto user,
         OrderStatus orderStatus,
-        Set<OrderItem> items,
+        Set<OrderItemDto> items,
         BigDecimal totalPrice,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        OrderDeliveryDetails orderDeliveryDetails)
-{
-
+        OrderDeliveryDetails orderDeliveryDetails) {
 }
