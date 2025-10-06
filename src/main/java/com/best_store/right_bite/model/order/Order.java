@@ -88,10 +88,8 @@ public class Order {
 
 
     public void setOrderDeliveryDetails(@NotNull OrderDeliveryDetails orderDeliveryDetails) {
-        if (this.orderDeliveryDetails != null) {
-            this.orderDeliveryDetails = orderDeliveryDetails;
-            orderDeliveryDetails.setOrder(this);
-        }
+        this.orderDeliveryDetails = orderDeliveryDetails;
+        orderDeliveryDetails.setOrder(this);
     }
 
     public void setOrderStatus(@NotNull OrderStatus orderStatus) {

@@ -1,6 +1,7 @@
 package com.best_store.right_bite.dto.adminPanel.order;
 
 import com.best_store.right_bite.constant.order.OrderStatus;
+import com.best_store.right_bite.dto.order.request.OrderDeliveryDetailsDto;
 import com.best_store.right_bite.dto.order.request.OrderItemDto;
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
 import com.best_store.right_bite.model.order.OrderDeliveryDetails;
@@ -19,5 +20,5 @@ public record OrderDTO(
         BigDecimal totalPrice,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        OrderDeliveryDetails orderDeliveryDetails) {
+        OrderDeliveryDetailsDto orderDeliveryDetails) {
 }

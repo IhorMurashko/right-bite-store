@@ -9,7 +9,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+@Mapper(unmappedTargetPolicy = ReportingPolicy.WARN,
         componentModel = MappingConstants.ComponentModel.SPRING,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface OrderDeliveryDetailsMapper extends BaseMapper<OrderDeliveryDetails, OrderDeliveryDetailsDto> {
