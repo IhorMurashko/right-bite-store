@@ -46,7 +46,7 @@ public class TokenManagerImpl implements TokenManager {
         Map<String, Object> claims = generateDefaultClaims(defaultUserInfoResponseDto);
 
         String accessToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto.id()),
-                tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec(),
+                tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec()*48,
                 claims,
                 TokenType.ACCESS
         );

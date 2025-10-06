@@ -44,11 +44,11 @@ public class OrderDeliveryDetails {
     @JoinColumn(name = "order_id", nullable = false, unique = true)
     private Order order;
 
-    void setOrder(@NotNull Order order) {
+    public void setOrder(@NotNull Order order) {
         this.order = order;
     }
 
-    void setDeliveryMethod(@NotNull DeliveryMethod deliveryMethod) {
+    public void setDeliveryMethod(@NotNull DeliveryMethod deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
     }
 

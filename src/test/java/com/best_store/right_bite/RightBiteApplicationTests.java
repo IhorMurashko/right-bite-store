@@ -5,12 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class RightBiteApplicationTests {
-
-
-
-
 	@Test
 	void contextLoads() {
 	}
-
 }
