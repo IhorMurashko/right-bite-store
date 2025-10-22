@@ -10,6 +10,7 @@ import com.best_store.right_bite.security.exception.SecurityExceptionMessageProv
 import com.best_store.right_bite.security.exception.TokenRevokedException;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
 import com.best_store.right_bite.security.principal.JwtPrincipal;
+import com.best_store.right_bite.security.util.ApplicationSecretKeysHolder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -65,6 +66,7 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final ClaimsProvider claimsProvider;
     private final RevokeTokenService revokedTokenService;
+    private final ApplicationSecretKeysHolder applicationSecretKeysHolder;
 
     /**
      * Processes each HTTP request and applies authentication logic by validating
@@ -83,7 +85,6 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
      * @throws IOException      in case of input/output errors.
      * @see SecurityContextHolder
      * @see OncePerRequestFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)
-     * @see JwtProvider#validateToken(String)
      */
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -95,13 +96,13 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
 
                 final String token = jwtProvider.extractTokenFromHeader(request);
 
-                if (token != null && jwtProvider.validateToken(token)) {
+                if (token != null && jwtProvider.validateToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey())) {
                     if (revokedTokenService.isTokenRevoked(token)) {
                         log.error("Token has benn revoked {}", token);
                         throw new TokenRevokedException(SecurityExceptionMessageProvider
                                 .TOKEN_WAS_REVOKED);
                     }
-                    String tokenType = claimsProvider.extractClaimFromToken(token,
+                    String tokenType = claimsProvider.extractClaimFromToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey(),
                             claims -> claims.get(
                                     TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class)
                     );
@@ -113,14 +114,14 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
                         ));
                     }
 
-                    String id = claimsProvider.extractClaimFromToken(token,
+                    String id = claimsProvider.extractClaimFromToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey(),
                             Claims::getSubject);
                     log.debug("User id is {}", id);
-                    String email = claimsProvider.extractClaimFromToken(token,
+                    String email = claimsProvider.extractClaimFromToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey(),
                             claims -> claims.get(
                                     TokenClaimsConstants.USERNAME_CLAIM, String.class));
                     log.debug("Username is {}", email);
-                    List<?> rawRoles = claimsProvider.extractClaimFromToken(token,
+                    List<?> rawRoles = claimsProvider.extractClaimFromToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey(),
                             claims -> claims.get("roles", List.class));
 
                     List<String> roles = rawRoles.stream()

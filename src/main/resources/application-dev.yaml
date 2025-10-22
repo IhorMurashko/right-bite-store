@@ -1,6 +1,7 @@
 jwt:
   secret:
-    key: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
+    access: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
+    refresh: hBk45vRQ2pgxN1TFpQetkiOspeNClSEQU
 spring:
   config:
     activate:

@@ -6,12 +6,14 @@ import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
+import com.best_store.right_bite.security.util.ApplicationSecretKeysHolder;
 import com.best_store.right_bite.utils.auth.TokensPropertiesDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Map;
 
 /**
@@ -27,14 +29,16 @@ public class TokenManagerImpl implements TokenManager {
 
     private final TokensPropertiesDispatcher tokensPropertiesDispatcher;
     private final JwtProvider jwtProvider;
+    private final ApplicationSecretKeysHolder applicationSecretKeysHolder;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public String generateSpecialToken(@NonNull String subject, @NonNull Map<String, Object> claims,
-                                       @NonNull TokenType tokenType, @NonNull Long lifePeriodTokenInSecond) {
-        return jwtProvider.generateToken(subject, lifePeriodTokenInSecond, claims, tokenType);
+                                       @NonNull TokenType tokenType, @NonNull Long lifePeriodTokenInSecond,
+                                       @NonNull SecretKey key) {
+        return jwtProvider.generateToken(subject, lifePeriodTokenInSecond, claims, tokenType, key);
     }
 
     /**
@@ -46,14 +50,16 @@ public class TokenManagerImpl implements TokenManager {
         Map<String, Object> claims = generateDefaultClaims(defaultUserInfoResponseDto);
 
         String accessToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto.id()),
-                tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec()*48,
+                tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec() * 48,
                 claims,
-                TokenType.ACCESS
+                TokenType.ACCESS,
+                applicationSecretKeysHolder.getJwtAccessSecretKey()
         );
-        String refreshToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto),
+        String refreshToken = jwtProvider.generateToken(String.valueOf(defaultUserInfoResponseDto.id()),
                 tokensPropertiesDispatcher.getRefreshTokenAvailableValidityPeriodInSec(),
                 Map.of(TokenClaimsConstants.USERNAME_CLAIM, defaultUserInfoResponseDto.email()),
-                TokenType.REFRESH
+                TokenType.REFRESH,
+                applicationSecretKeysHolder.getJwtRefreshSecretKey()
         );
         return new TokenDto(accessToken, refreshToken);
     }

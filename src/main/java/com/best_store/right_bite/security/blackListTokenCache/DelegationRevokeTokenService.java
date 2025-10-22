@@ -1,10 +1,13 @@
 package com.best_store.right_bite.security.blackListTokenCache;
 
 import com.best_store.right_bite.security.blackListTokenCache.cache.BlackListTokenService;
+import com.best_store.right_bite.security.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
 
 /**
  * Default implementation of {@link RevokeTokenService} that delegates token storage and lookup
@@ -26,14 +29,9 @@ public class DelegationRevokeTokenService implements RevokeTokenService {
 
     private final BlackListTokenService blackListTokenService;
 
-    /**
-     * Revokes given tokens by saving them in the blacklist store.
-     *
-     * @param token tokens to revoke
-     */
     @Override
-    public void revokeToken(@NonNull String... token) {
-        blackListTokenService.saveToken(token);
+    public void revokeToken( @NonNull TokenDto... tokenDtos) {
+        blackListTokenService.saveToken(tokenDtos);
     }
 
     /**

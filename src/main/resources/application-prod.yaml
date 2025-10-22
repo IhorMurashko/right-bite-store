@@ -1,4 +1,5 @@
-jwt.secret.key: ${JWT_SECRET_KEY}
+jwt.secret.access: ${JWT_SECRET_KEY_ACCESS}
+jwt.secret.refresh: ${JWT_SECRET_KEY_REFRESH}
 spring:
   data:
     redis:

@@ -1,10 +1,12 @@
 package com.best_store.right_bite.service.order.create;
 
+import com.best_store.right_bite.constant.constraint.order.OrderFieldConstraint;
 import com.best_store.right_bite.constant.order.DeliveryMethod;
 import com.best_store.right_bite.dto.order.request.OrderDeliveryDetailsDto;
 import com.best_store.right_bite.dto.order.request.OrderDto;
 import com.best_store.right_bite.dto.order.request.OrderItemDto;
 import com.best_store.right_bite.dto.order.response.OrderResponseDto;
+import com.best_store.right_bite.exception.exceptions.inventory.InsufficientInventoryException;
 import com.best_store.right_bite.mapper.order.orderDeliveryDetails.OrderDeliveryDetailsMapper;
 import com.best_store.right_bite.mapper.order.orderItem.OrderItemDtoMapper;
 import com.best_store.right_bite.mapper.order.response.OrderResponseMapper;
@@ -14,7 +16,13 @@ import com.best_store.right_bite.model.order.OrderItem;
 import com.best_store.right_bite.repository.cart.CartRepository;
 import com.best_store.right_bite.repository.order.OrderRepository;
 import com.best_store.right_bite.service.inventory.InventoryService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,6 +30,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderCreatorServiceImplTest {
@@ -47,6 +60,8 @@ class OrderCreatorServiceImplTest {
     private Set<OrderItem> orderItems;
     private OrderDeliveryDetails orderDeliveryDetails;
     private OrderResponseDto orderResponseDto;
+    private static Validator validator;
+
 
     @BeforeEach
     void setUp() {
@@ -77,8 +92,36 @@ class OrderCreatorServiceImplTest {
                 null,
                 DeliveryMethod.PICKUP
         );
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
+    //todo:
+    @Nested
+    class ValidateOrderDtoTest {
+        @Test
+        void shouldThrowValidationConstraintViolationException_when_OrderDtoIsNull() {
+            OrderDto request = new OrderDto(null, null);
+            Set<ConstraintViolation<OrderDto>> violations = validator.validate(request);
+
+            assertEquals(2, violations.size());
+            Set<String> messages = violations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.toSet());
+            assertTrue(messages.contains(OrderFieldConstraint.NULL_ORDER_ITEMS_EXCEPTION_MESSAGE));
+            assertTrue(messages.contains(OrderFieldConstraint.NULL_ORDER_DELIVERY_DETAILS_EXCEPTION_MESSAGE));
+
+            verifyNoInteractions(orderResponseMapper, orderItemDtoMapper, orderDeliveryDetailsMapper, orderRepository,
+                    cartRepository, inventoryService);
+        }
+
 
     }
 
+
+    @Nested
+    class CreateGuestOrderTest {
+
+    }
 
 }

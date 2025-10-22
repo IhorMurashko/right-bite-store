@@ -31,6 +31,7 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
+
     @ExceptionHandler(EmptyStackException.class)
     public ResponseEntity<ErrorResponseDto> handleEmptyStackException(EmptyStackException ex, HttpServletRequest request) {
         return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.BAD_REQUEST, request);
@@ -83,7 +84,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenRevokedException.class)
     public ResponseEntity<ErrorResponseDto> handleTokenRevokedException(TokenRevokedException ex, HttpServletRequest request) {
-        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.FORBIDDEN, request);
+        return ErrorResponseBuilder.buildErrorResponse(ex, HttpStatus.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler(InvalidTokenSubjectException.class)

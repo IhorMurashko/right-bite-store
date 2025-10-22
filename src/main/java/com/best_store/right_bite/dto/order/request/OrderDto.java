@@ -16,10 +16,10 @@ import static com.best_store.right_bite.constant.constraint.order.OrderFieldCons
  */
 public record OrderDto(
         @ArraySchema(arraySchema = @Schema(description = "Order items"))
-        @NotNull
+        @NotNull(message = NULL_ORDER_ITEMS_EXCEPTION_MESSAGE)
         @Size(min = MIN_ITEMS_QUANTITY, max = MAX_ITEMS_QUANTITY, message = ITEMS_QUANTITY_EXCEPTION_MESSAGE)
         Set<OrderItemDto> items,
         @Schema(description = "Delivery details")
-        @NotNull
+        @NotNull(message = NULL_ORDER_DELIVERY_DETAILS_EXCEPTION_MESSAGE)
         OrderDeliveryDetailsDto deliveryDetails) implements OrderRequestAssigner, Serializable {
 }
