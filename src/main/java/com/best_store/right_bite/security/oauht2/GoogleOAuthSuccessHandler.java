@@ -50,81 +50,81 @@ public class GoogleOAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHan
      * @param authentication an authenticated OAuth2 user
      * @throws IOException if writing to response fails
      */
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication) throws IOException {
-
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        log.debug("Google login success. Extracting user data...");
-
-        String email = (String) oAuth2User.getAttributes().get("email");
-        DefaultUserInfoResponseDto userDto = userCrudService.isEmailExist(email)
-                ? userCrudService.findByEmail(email)
-                : userCrudService.save(userAssembler.create(oAuth2User));
-
-        TokenDto tokenDto = tokenManager.generateDefaultTokens(userDto);
-
-        // Создаём безопасные cookies
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokenDto.accessToken())
-                .httpOnly(true)      // JS не имеет доступа к cookie
-                .secure(true)        // только по HTTPS
-                .sameSite("None")    // нужно для кросс-доменных запросов
-                .path("/")
-                .maxAge(Duration.ofHours(1))
-                .build();
-
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokenDto.refreshToken())
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
-                .path("/")
-                .maxAge(Duration.ofDays(7))
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-
-        // Восстанавливаем redirect URL из параметра state
-        String redirectUri = request.getParameter("state");
-        if (redirectUri == null || redirectUri.isBlank()) {
-            redirectUri = "https://the-right-bit-frontend-shop.vercel.app"; // fallback
-        }
-
-        log.debug("Redirecting user to {}", redirectUri);
-        response.sendRedirect(redirectUri);
-    }
 //    @Override
 //    public void onAuthenticationSuccess(HttpServletRequest request,
 //                                        HttpServletResponse response,
 //                                        Authentication authentication) throws IOException {
 //
 //        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-//        log.debug("user has been logged in");
-//        oAuth2User.getAttributes().forEach((k, v) -> log.debug("OAuth attr: {} -> {}", k, v));
+//        log.debug("Google login success. Extracting user data...");
 //
-//        String email = UserFieldAdapter.toLower((String) oAuth2User
-//                .getAttributes().get(GoogleCredentialsConstants.EMAIL));
-//
-//
-//        DefaultUserInfoResponseDto userDto;
-//        if (userCrudService.isEmailExist(email)) {
-//            userDto = userCrudService.findByEmail(email);
-//            log.debug("user has been found");
-//        } else {
-//            log.debug("user wasn't found");
-//            userDto = userCrudService.save(userAssembler.create(oAuth2User));
-//            log.debug("new google user has been saved");
-//        }
+//        String email = (String) oAuth2User.getAttributes().get("email");
+//        DefaultUserInfoResponseDto userDto = userCrudService.isEmailExist(email)
+//                ? userCrudService.findByEmail(email)
+//                : userCrudService.save(userAssembler.create(oAuth2User));
 //
 //        TokenDto tokenDto = tokenManager.generateDefaultTokens(userDto);
 //
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//        response.setCharacterEncoding("UTF-8");
-//        String json = new ObjectMapper().writeValueAsString(Map.of(
-//                TokenType.ACCESS, tokenDto.accessToken(),
-//                TokenType.REFRESH, tokenDto.refreshToken()
-//        ));
-//        response.getWriter().write(json);
+//        // Создаём безопасные cookies
+//        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokenDto.accessToken())
+//                .httpOnly(true)      // JS не имеет доступа к cookie
+//                .secure(true)        // только по HTTPS
+//                .sameSite("None")    // нужно для кросс-доменных запросов
+//                .path("/")
+//                .maxAge(Duration.ofHours(1))
+//                .build();
+//
+//        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokenDto.refreshToken())
+//                .httpOnly(true)
+//                .secure(true)
+//                .sameSite("None")
+//                .path("/")
+//                .maxAge(Duration.ofDays(7))
+//                .build();
+//
+//        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+//        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+//
+//        // Восстанавливаем redirect URL из параметра state
+//        String redirectUri = request.getParameter("state");
+//        if (redirectUri == null || redirectUri.isBlank()) {
+//            redirectUri = "https://the-right-bit-frontend-shop.vercel.app"; // fallback
+//        }
+//
+//        log.debug("Redirecting user to {}", redirectUri);
+//        response.sendRedirect(redirectUri);
 //    }
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Authentication authentication) throws IOException {
+
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        log.debug("user has been logged in");
+        oAuth2User.getAttributes().forEach((k, v) -> log.debug("OAuth attr: {} -> {}", k, v));
+
+        String email = UserFieldAdapter.toLower((String) oAuth2User
+                .getAttributes().get(GoogleCredentialsConstants.EMAIL));
+
+
+        DefaultUserInfoResponseDto userDto;
+        if (userCrudService.isEmailExist(email)) {
+            userDto = userCrudService.findByEmail(email);
+            log.debug("user has been found");
+        } else {
+            log.debug("user wasn't found");
+            userDto = userCrudService.save(userAssembler.create(oAuth2User));
+            log.debug("new google user has been saved");
+        }
+
+        TokenDto tokenDto = tokenManager.generateDefaultTokens(userDto);
+
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+        String json = new ObjectMapper().writeValueAsString(Map.of(
+                TokenType.ACCESS, tokenDto.accessToken(),
+                TokenType.REFRESH, tokenDto.refreshToken()
+        ));
+        response.getWriter().write(json);
+    }
 }
