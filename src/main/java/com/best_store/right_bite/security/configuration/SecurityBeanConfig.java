@@ -13,12 +13,19 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class SecurityBeanConfig {
 
-    @Value("${jwt.secret.key}")
-    private String secret;
+    @Value("${jwt.secret.access}")
+    private String accessSecret;
+    @Value("${jwt.secret.refresh}")
+    private String refreshSecret;
 
     @Bean
-    public SecretKey jwtSecretKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    public SecretKey jwtAccessSecretKey() {
+        return Keys.hmacShaKeyFor(accessSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Bean
+    public SecretKey jwtRefreshSecretKey() {
+        return Keys.hmacShaKeyFor(refreshSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     @Bean

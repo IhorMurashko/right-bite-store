@@ -4,6 +4,7 @@ import com.best_store.right_bite.security.constant.TokenType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.lang.NonNull;
 
+import javax.crypto.SecretKey;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public interface JwtProvider {
      * @return encoded JWT token string
      */
     String generateToken(String subject, Long validityPeriodInSeconds,
-                         Map<String, Object> claims, TokenType type);
+                         Map<String, Object> claims, TokenType type, SecretKey key);
 
     /**
      * Validates a JWT token and checks its signature and expiration.
@@ -33,7 +34,7 @@ public interface JwtProvider {
      * @param token the raw JWT string
      * @return true if the token is valid; false otherwise
      */
-    boolean validateToken(String token);
+    boolean validateToken(String token, SecretKey key);
 
     /**
      * Extracts the JWT token from the Authorization header of the given HTTP request.

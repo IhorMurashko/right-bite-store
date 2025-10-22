@@ -1,10 +1,13 @@
 package com.best_store.right_bite.security.managment;
 
 import com.best_store.right_bite.dto.user.DefaultUserInfoResponseDto;
+import com.best_store.right_bite.security.constant.TokenClaimsConstants;
 import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.lang.NonNull;
 
+import javax.crypto.SecretKey;
 import java.util.Map;
 
 /**
@@ -25,7 +28,7 @@ public interface TokenManager {
      * @return a signed token string based on the provided parameters.
      */
     String generateSpecialToken(@NotNull String subject, @NotNull Map<String, Object> claims,
-                                @NotNull TokenType tokenType, @NotNull Long lifePeriodTokenInSecond);
+                                @NotNull TokenType tokenType, @NotNull Long lifePeriodTokenInSecond,@NonNull SecretKey key);
 
     /**
      * Generates default JWT tokens (access and refresh) for a given user.

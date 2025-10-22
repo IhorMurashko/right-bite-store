@@ -37,16 +37,16 @@ import java.util.Map;
 @Slf4j
 public class JwtProviderImpl implements JwtProvider {
 
-    private final SecretKey key;
 
     /**
-     *{@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public String generateToken(@NonNull String subject,
                                 @NonNull Long validityPeriodInSeconds,
                                 @NonNull Map<String, Object> claims,
-                                @NonNull TokenType tokenType) {
+                                @NonNull TokenType tokenType,
+                                @NonNull SecretKey key) {
 
         Date now = new Date();
         Date expiryDate = DateConstructorUtil.dateExpirationGenerator(now, validityPeriodInSeconds);
@@ -63,11 +63,12 @@ public class JwtProviderImpl implements JwtProvider {
                         .signWith(key)
                         .compact();
     }
+
     /**
-     *{@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
-    public boolean validateToken(@NonNull String token) {
+    public boolean validateToken(@NonNull String token, @NonNull SecretKey key) {
         try {
             Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
@@ -78,7 +79,7 @@ public class JwtProviderImpl implements JwtProvider {
     }
 
     /**
-     *{@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public String extractTokenFromHeader(@NonNull HttpServletRequest request) {

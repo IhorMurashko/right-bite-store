@@ -15,9 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -143,33 +142,35 @@ public class AuthController {
                     @ApiResponse(responseCode = "400", description = "validation error"),
                     @ApiResponse(responseCode = "404", description = "email wasn't found")
             })
+//    @PreAuthorize("isAnonymous()")
+//    @GetMapping("/google")
+//    public void login(HttpServletResponse response) throws IOException {
+//        response.sendRedirect("/oauth2/authorization/google");
+//    }
     @PreAuthorize("isAnonymous()")
     @GetMapping("/google")
-    public void login(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/oauth2/authorization/google");
+    public void login(@RequestParam(required = false) String redirectUrl,
+                      HttpServletResponse response) throws IOException {
+        String redirect = UriComponentsBuilder
+                .fromPath("/oauth2/authorization/google")
+                .queryParam("state", redirectUrl)
+                .build()
+                .toUriString();
+
+        response.sendRedirect(redirect);
     }
 
-    /**
-     * Logs out the current authenticated user by revoking the JWT token.
-     *
-     * <p>The request must contain a valid JWT token in the Authorization header.
-     * The token is extracted and marked as revoked to prevent further use.</p>
-     *
-     * @param request the HTTP servlet request containing the Authorization header with JWT token
-     * @return HTTP 204 No Content on successful logout
-     */
+
     @Operation(
             summary = "logout",
-            description = "logout. request must contains jwt token.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "no content")
             })
-    @SecurityRequirement(name = "JWT")
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@NonNull HttpServletRequest request) {
-        String token = jwtProvider.extractTokenFromHeader(request);
-        revokeTokenService.revokeToken(token);
+//    @SecurityRequirement(name = "JWT")
+//    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/logout")
+    public ResponseEntity<HttpStatus> logout(@RequestBody @NonNull TokenDto tokenDto) {
+        revokeTokenService.revokeToken(tokenDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -31,10 +31,9 @@ import java.util.function.Function;
 @Slf4j
 public class DefaultClaimsProvider implements ClaimsProvider {
 
-    private final SecretKey key;
 
     @Override
-    public <T> T extractClaimFromToken(String token, Function<Claims, T> function) {
+    public <T> T extractClaimFromToken(String token, SecretKey key, Function<Claims, T> function) {
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(key).build()

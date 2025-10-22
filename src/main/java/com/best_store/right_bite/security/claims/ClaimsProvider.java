@@ -2,6 +2,7 @@ package com.best_store.right_bite.security.claims;
 
 import io.jsonwebtoken.Claims;
 
+import javax.crypto.SecretKey;
 import java.util.function.Function;
 
 /**
@@ -24,5 +25,5 @@ public interface ClaimsProvider {
      * @param <T>      the type of the value to be extracted
      * @return the extracted claim value
      */
-    <T> T extractClaimFromToken(String token, Function<Claims, T> function);
+    <T> T extractClaimFromToken(String token, SecretKey key, Function<Claims, T> function);
 }

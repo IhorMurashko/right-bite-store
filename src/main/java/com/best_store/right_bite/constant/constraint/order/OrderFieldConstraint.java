@@ -9,4 +9,7 @@ public class OrderFieldConstraint {
     public final String ITEMS_QUANTITY_EXCEPTION_MESSAGE = "Quantity must be greater than 0 and less than 100";
     public final int MIN_SCALE_VALUE = 0;
     public final int MAX_SCALE_VALUE = 10;
+    public final String NULL_ORDER_DELIVERY_DETAILS_EXCEPTION_MESSAGE = "Order delivery details must be provided";
+    public final String NULL_ORDER_ITEMS_EXCEPTION_MESSAGE = "Order set must not be null";
+
 }

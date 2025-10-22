@@ -10,6 +10,7 @@ import com.best_store.right_bite.security.constant.TokenType;
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
 import com.best_store.right_bite.security.managment.TokenManager;
+import com.best_store.right_bite.security.util.ApplicationSecretKeysHolder;
 import com.best_store.right_bite.service.user.crud.UserCrudService;
 import com.best_store.right_bite.utils.auth.TokensPropertiesDispatcher;
 import io.jsonwebtoken.Claims;
@@ -21,7 +22,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -38,14 +38,14 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final JwtProvider jwtProvider;
     private final UserCrudService userCrudService;
     private final ClaimsProvider claimsProvider;
-    private final SecretKey key;
+    private final ApplicationSecretKeysHolder applicationSecretKeysHolder;
     private final TokensPropertiesDispatcher tokensPropertiesDispatcher;
 
     @Override
     public TokenDto refreshToken(@NonNull @Valid TokenDto tokenDto) {
         String refreshToken = tokenDto.refreshToken();
-        if (jwtProvider.validateToken(refreshToken)) {
-            String tokenType = claimsProvider.extractClaimFromToken(refreshToken, claims ->
+        if (jwtProvider.validateToken(refreshToken, applicationSecretKeysHolder.getJwtRefreshSecretKey())) {
+            String tokenType = claimsProvider.extractClaimFromToken(refreshToken, applicationSecretKeysHolder.getJwtRefreshSecretKey(), claims ->
                     claims.get(TokenClaimsConstants.TOKEN_TYPE_CLAIM, String.class));
             log.debug("refresh token type: {}", tokenType);
             if (!Objects.equals(tokenType, TokenType.REFRESH.name())) {
@@ -57,7 +57,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                 );
             }
             Claims claims = Jwts.parser()
-                    .verifyWith(key)
+                    .verifyWith(applicationSecretKeysHolder.getJwtRefreshSecretKey())
                     .build()
                     .parseSignedClaims(refreshToken)
                     .getPayload();
@@ -93,7 +93,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                         String.valueOf(userDto.id()),
                         defaultClaims,
                         TokenType.ACCESS,
-                        tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec()
+                        tokensPropertiesDispatcher.getAccessTokenAvailableValidityPeriodInSec(),
+                        applicationSecretKeysHolder.getJwtAccessSecretKey()
                 );
                 log.info("new access token was generated");
                 return new TokenDto(refreshToken, newAccessToken);
