@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -142,23 +141,23 @@ public class AuthController {
                     @ApiResponse(responseCode = "400", description = "validation error"),
                     @ApiResponse(responseCode = "404", description = "email wasn't found")
             })
-//    @PreAuthorize("isAnonymous()")
-//    @GetMapping("/google")
-//    public void login(HttpServletResponse response) throws IOException {
-//        response.sendRedirect("/oauth2/authorization/google");
-//    }
     @PreAuthorize("isAnonymous()")
     @GetMapping("/google")
-    public void login(@RequestParam(required = false) String redirectUrl,
-                      HttpServletResponse response) throws IOException {
-        String redirect = UriComponentsBuilder
-                .fromPath("/oauth2/authorization/google")
-                .queryParam("state", redirectUrl)
-                .build()
-                .toUriString();
-
-        response.sendRedirect(redirect);
+    public void login(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/oauth2/authorization/google");
     }
+//    @PreAuthorize("isAnonymous()")
+//    @GetMapping("/google")
+//    public void login(@RequestParam(required = false) String redirectUrl,
+//                      HttpServletResponse response) throws IOException {
+//        String redirect = UriComponentsBuilder
+//                .fromPath("/oauth2/authorization/google")
+//                .queryParam("state", redirectUrl)
+//                .build()
+//                .toUriString();
+//
+//        response.sendRedirect(redirect);
+//    }
 
 
     @Operation(
