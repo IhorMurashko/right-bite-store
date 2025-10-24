@@ -98,7 +98,7 @@ public class DefaultOncePerRequestFilter extends OncePerRequestFilter {
 
                 if (token != null && jwtProvider.validateToken(token, applicationSecretKeysHolder.getJwtAccessSecretKey())) {
                     if (revokedTokenService.isTokenRevoked(token)) {
-                        log.error("Token has benn revoked {}", token);
+                        log.error("Token has been revoked {}", token);
                         throw new TokenRevokedException(SecurityExceptionMessageProvider
                                 .TOKEN_WAS_REVOKED);
                     }

@@ -1,5 +1,11 @@
-jwt.secret.access: ${JWT_SECRET_KEY_ACCESS}
-jwt.secret.refresh: ${JWT_SECRET_KEY_REFRESH}
+jwt:
+  secret:
+    access: ${JWT_SECRET_KEY_ACCESS}
+    refresh: ${JWT_SECRET_KEY_REFRESH}
+auth:
+  redirect:
+    default-url: ${DEFAULT_FRONTEND_REDIRECT_URL}
+    session-attribute-name: oauth2_redirect_uri
 spring:
   data:
     redis:

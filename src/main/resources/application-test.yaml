@@ -2,6 +2,10 @@ jwt:
   secret:
     access: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
     refresh: hBkhevRQ2pgxN1TFpQetX9fgpeNC5sEQU
+auth:
+  redirect:
+    default-url: dummy
+    session-attribute-name: oauth2_redirect_uri
 spring:
   data:
     redis:

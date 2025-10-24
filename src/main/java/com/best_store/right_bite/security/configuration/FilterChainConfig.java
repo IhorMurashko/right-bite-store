@@ -38,7 +38,7 @@ public class FilterChainConfig {
                 .headers(HeadersConfigurer::disable
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler)
@@ -56,18 +56,6 @@ public class FilterChainConfig {
         return http.build();
     }
 
-    // @Bean
-    // public CorsConfigurationSource corsConfigurationSource() {
-    //     CorsConfiguration config = new CorsConfiguration();
-    //     config.setAllowedOrigins(List.of("https://the-right-bit-frontend-shop.vercel.app"));
-    //     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    //     config.setAllowedHeaders(List.of("*"));
-    //     config.setAllowCredentials(true);
-    //     config.setMaxAge(3600L);
-    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    //     source.registerCorsConfiguration("/**", config);
-    //     return source;
-    // }
        @Bean
    public CorsConfigurationSource corsConfigurationSource() {
        CorsConfiguration config = new CorsConfiguration();

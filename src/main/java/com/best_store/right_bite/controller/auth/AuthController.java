@@ -9,13 +9,16 @@ import com.best_store.right_bite.security.blackListTokenCache.RevokeTokenService
 import com.best_store.right_bite.security.dto.TokenDto;
 import com.best_store.right_bite.security.jwtProvider.JwtProvider;
 import com.best_store.right_bite.security.oauht2.GoogleOAuthSuccessHandler;
+import com.best_store.right_bite.security.propertiesManagement.OAuthRedirectProperties;
 import com.best_store.right_bite.service.auth.login.AuthenticationService;
 import com.best_store.right_bite.service.auth.registration.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,7 +57,8 @@ public class AuthController {
     private final RegistrationService registrationService;
     private final AuthenticationService authenticationService;
     private final RevokeTokenService revokeTokenService;
-    private final JwtProvider jwtProvider;
+    private final OAuthRedirectProperties oAuthRedirectProperties;
+
 
     /**
      * Registers a new user using email and password.
@@ -132,32 +136,33 @@ public class AuthController {
      * @param response the HTTP response used to redirect the client
      * @throws IOException if redirection fails
      */
+
     @Operation(
-            summary = "google sing in",
-            description = "sign in using google. request can't contains any jwt token.",
+            summary = "Google OAuth2 login",
+            description = "Initiates Google OAuth2 login flow by redirecting to Google's authorization endpoint. " +
+                    "Request must not contain any JWT token.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "success",
-                            content = @Content(schema = @Schema(implementation = TokenDto.class))),
-                    @ApiResponse(responseCode = "400", description = "validation error"),
-                    @ApiResponse(responseCode = "404", description = "email wasn't found")
-            })
+                    @ApiResponse(responseCode = "302", description = "Redirect to Google OAuth2 authorization"),
+                    @ApiResponse(responseCode = "400", description = "Invalid redirect URL")
+            }
+    )
+    @Parameter(
+            name = "redirect_url",
+            description = "Optional URL to redirect after successful authentication",
+            required = false,
+            schema = @Schema(type = "string", format = "uri")
+    )
     @PreAuthorize("isAnonymous()")
     @GetMapping("/google")
-    public void login(HttpServletResponse response) throws IOException {
+    public void login(
+            @RequestParam(required = false, name = "redirect_url") String redirectUri,
+            HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+        if (redirectUri != null && !redirectUri.isBlank()) {
+            request.getSession().setAttribute(oAuthRedirectProperties.getSessionAttributeName(), redirectUri);
+        }
         response.sendRedirect("/oauth2/authorization/google");
     }
-//    @PreAuthorize("isAnonymous()")
-//    @GetMapping("/google")
-//    public void login(@RequestParam(required = false) String redirectUrl,
-//                      HttpServletResponse response) throws IOException {
-//        String redirect = UriComponentsBuilder
-//                .fromPath("/oauth2/authorization/google")
-//                .queryParam("state", redirectUrl)
-//                .build()
-//                .toUriString();
-//
-//        response.sendRedirect(redirect);
-//    }
 
 
     @Operation(
@@ -165,12 +170,9 @@ public class AuthController {
             responses = {
                     @ApiResponse(responseCode = "204", description = "no content")
             })
-//    @SecurityRequirement(name = "JWT")
-//    @PreAuthorize("isAuthenticated()")
     @PostMapping("/logout")
     public ResponseEntity<HttpStatus> logout(@RequestBody @NonNull TokenDto tokenDto) {
         revokeTokenService.revokeToken(tokenDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
