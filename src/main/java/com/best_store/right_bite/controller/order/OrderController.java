@@ -124,7 +124,7 @@ public class OrderController {
     @SecurityRequirement(name = "JWT")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/my-orders")
-    public ResponseEntity<OrdersPageableDto> getOrderForCurrentUSer(
+    public ResponseEntity<OrdersPageableDto> getOrderForCurrentUser(
             @Parameter(description = "Page number (0-based)")
             @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
             @Parameter(description = "Page size")

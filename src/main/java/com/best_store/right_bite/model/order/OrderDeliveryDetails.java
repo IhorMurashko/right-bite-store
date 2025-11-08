@@ -25,6 +25,8 @@ public class OrderDeliveryDetails {
     private String lastname;
     @Column(nullable = false, length = 15)
     private String phoneNumber;
+    @Column(nullable = false, length = 100)
+    private String email;
     @Column(nullable = true, length = 10)
     private String houseNumber;
     @Column(nullable = true, length = 100)
