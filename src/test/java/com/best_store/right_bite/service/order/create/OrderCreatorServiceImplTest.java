@@ -84,6 +84,7 @@ class OrderCreatorServiceImplTest {
                 "John",
                 "Doe",
                 "123456789",
+                "email@email.com",
                 "12",
                 "street",
                 "New York",
@@ -117,11 +118,4 @@ class OrderCreatorServiceImplTest {
 
 
     }
-
-
-    @Nested
-    class CreateGuestOrderTest {
-
-    }
-
 }

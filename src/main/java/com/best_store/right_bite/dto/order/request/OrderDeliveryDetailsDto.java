@@ -18,7 +18,7 @@ public record OrderDeliveryDetailsDto(
         @NotNull
         @NotBlank
         @Pattern(regexp = UserFieldsConstraint.NAME_PATTERN,
-        message = UserFieldsConstraint.NAME_MESSAGE)
+                message = UserFieldsConstraint.NAME_MESSAGE)
         String firstname,
         @Schema(description = "Recipient's last name", example = "Doe")
         String lastname,
@@ -26,8 +26,13 @@ public record OrderDeliveryDetailsDto(
         @NotNull
         @NotBlank
         @Pattern(regexp = UserFieldsConstraint.PHONE_PATTERN,
-        message = UserFieldsConstraint.PHONE_MESSAGE)
+                message = UserFieldsConstraint.PHONE_MESSAGE)
         String phoneNumber,
+        @Schema(description = "Recipient's email address", example = "email@email.com")
+        @NotNull
+        @NotBlank
+        @Pattern(regexp = UserFieldsConstraint.EMAIL_PATTERN, message = UserFieldsConstraint.EMAIL_MESSAGE)
+        String email,
         @Schema(description = "House or apartment number", example = "221B")
         String houseNumber,
         @Schema(description = "Street name", example = "Baker Street")
