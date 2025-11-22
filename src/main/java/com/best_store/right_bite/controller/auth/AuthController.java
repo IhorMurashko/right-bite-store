@@ -86,7 +86,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "400", description = "validation error")
             })
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/sing-up")
+    @PostMapping("/sign-up")
     public ResponseEntity<HttpStatus> singUp(@RequestBody RegistrationCredentialsDto credentialsDto) {
         registrationService.registration(credentialsDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -120,7 +120,7 @@ public class AuthController {
                     @ApiResponse(responseCode = "404", description = "email wasn't found")
             })
     @PreAuthorize("isAnonymous()")
-    @PostMapping("/sing-in")
+    @PostMapping("/sign-in")
     public ResponseEntity<TokenDto> singIn(@RequestBody AuthRequest authRequest) {
         TokenDto tokenDto = authenticationService.authenticate(authRequest);
         return new ResponseEntity<>(tokenDto, HttpStatus.OK);
